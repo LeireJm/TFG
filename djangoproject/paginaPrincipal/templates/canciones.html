@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Canciones</title>
+</head>
+<body>
+    <h1>Lista de Canciones</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Artista</th>
+            </tr>
+        </thead>
+        <tbody>
+            <p>Total de Canciones: {{ cantidad_canciones }}</p>
+            {% for cancion in canciones %}
+                <tr>
+                    <td>{{ cancion.title }}</td>
+                    <td>{{ cancion.artist }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
