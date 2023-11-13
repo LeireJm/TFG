@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('lista_canciones/', views.lista_canciones, name='lista_canciones'),
     path('carga_csv/', views.cargar_csv, name='carga CSV'),
+    path('lista_canciones/', views.lista_canciones, name='lista_canciones'),
+    path('recomendar_canciones/', views.recomendar_canciones, name='recomendar_canciones'),
 ]

@@ -1,11 +1,20 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# ## Recomendador básico
+
+
+# Importamos las bibliotecas necesarias para nuestro recomendador
+
+# In[2]:
+
+
 # Cargamos las librerías necesarias de Pandas
 import pandas as pd
 import numpy as np
 
-import surprise
+# In[3]:
+
 
 # Cargamos las librerías necesarias de Surprise
 from surprise import Dataset
@@ -15,10 +24,12 @@ from surprise.model_selection import train_test_split
 from surprise.model_selection import cross_validate
 from surprise import accuracy
 
+from .models import Cancion
+
 
 # Cargamos el dataset en pandas para luego pasarlo a surprise
 
-# In[106]:
+# In[4]:
 
 
 # Cargamos el CSV con el dataframe de Pandas
@@ -149,7 +160,7 @@ similar_songs
 # #### Recomendador sin surprise
 # Dado una canción o el nombre de un artista, se recomienda más canciones del artista (en el caso de por canción no se recomienda esa canción)
 
-# In[109]:
+# In[5]:
 
 
 df = df.sort_values(by='pop') # ordena por popularidad
@@ -165,13 +176,13 @@ for key, group in df3_grouped:
     df3 = pd.concat([df3, group], axis=0)
 
 
-# In[110]:
+# In[6]:
 
 
 df2.loc[df2['top genre'] == "dance pop"]
 
 
-# In[111]:
+# In[7]:
 
 
 def recommender_by_artist(artist, song_excl):
@@ -183,7 +194,7 @@ def recommender_by_artist(artist, song_excl):
         return songs[['id', 'title', 'artist', 'top genre']]
 
 
-# In[119]:
+# In[8]:
 
 
 def recommender_by_genre(genre, song_excl):
@@ -195,56 +206,75 @@ def recommender_by_genre(genre, song_excl):
         return songs[['id', 'title', 'artist', 'top genre']]
 
 
-# In[113]:
+# In[15]:
 
 
 def get_id(songs):
-    return songs['id']  
+    return songs.id  
 
 
-# In[114]:
+# In[16]:
 
 
 def recommender_manual(song_artist):
-    if song_artist in df['title'].values: #lo que se ha pasado por parámetro es el título de la canción
-        fil = df.loc[df['title'] == song_artist]
-        artist = fil['artist'].values[0]
+    if Cancion.objects.filter(id=song_artist).exists(): #lo que se ha pasado por parámetro es el título de la canción
+        print("11111111111111\n")
+        cancion = Cancion.objects.get(id=song_artist)
+        artist = cancion.artist
+        song_name = cancion.title
         
-        songs = recommender_by_artist(artist, song_artist)
+        songs = recommender_by_artist(artist, song_name)
 
-        if len(songs) < 15:
-            genre = fil['top genre'].values[0] 
-            print(genre)
-            songs_genre = recommender_by_genre(genre, song_artist)
+        if len(songs) < 10:
+            genre = cancion.top_genre
+            songs_genre = recommender_by_genre(genre, song_name)
             
-            songs_ret = pd.concat([songs, songs_genre])[:15]
+            songs_ret = pd.concat([songs, songs_genre])[:10]
 
             return get_id(songs_ret)
         
-        elif len(songs) > 15:
-            return get_id(songs[:15])
+        elif len(songs) > 10:
+            return get_id(songs[:10])
         
         else:
             return get_id(songs)
-
+        
     elif song_artist in df['artist'].values: #se ha pasado por parámetro el nombre del artista
+        print("2222222222222222222222\n")
         songs = recommender_by_artist(song_artist, None)
 
-        return get_id(songs[:15]) #no hay genero asociado por artista, lo que muestre si hay 15 o menos del artista
-    
+        return get_id(songs[:10]) #no hay genero asociado por artista, lo que muestre si hay 15 o menos del artista 
     else: #no exista tal artista o canción
         print("Error: no existe tal artista o canción en la base de datos\n")
         return []
 
 
-# In[120]:
+# In[17]:
 
 
-recommender_manual("#thatPOWER")
+def recommender_no_surprise(songs_arists):
+    songs = []
+    for song_artist in songs_arists:
+        songs_aux = recommender_manual(song_artist)
+        songs.extend(songs_aux)
+    
+    return songs
 
 
-# In[116]:
+# In[18]:
 
 
-recommender_manual('Rihanna')
+# recommender_manual(174) # "#thatPower"
+
+
+# In[23]:
+#
+
+#recommender_manual('Rihanna')
+
+
+# In[22]:
+
+
+#recommender_no_surprise([174, 'Rihanna'])
 
