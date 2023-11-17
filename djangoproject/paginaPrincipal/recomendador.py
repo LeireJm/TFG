@@ -23,8 +23,10 @@ from surprise import KNNBasic
 from surprise.model_selection import train_test_split
 from surprise.model_selection import cross_validate
 from surprise import accuracy
+from django_pandas.io import read_frame
 
 from .models import Cancion
+from django.db import models
 
 
 # Cargamos el dataset en pandas para luego pasarlo a surprise
@@ -163,54 +165,73 @@ similar_songs
 # In[5]:
 
 
-df = df.sort_values(by='pop') # ordena por popularidad
-df2_grouped = df.groupby('artist') # pone las canciones del mismo artista juntos
-df3_grouped = df.groupby('top genre') # por géneros porque en el caso de que no haya suficientes del mismo artista será por las canciones más populares del género
+# df = df.sort_values(by='pop') # ordena por popularidad
+# df2_grouped = df.groupby('artist') # pone las canciones del mismo artista juntos
 
-df2 = pd.DataFrame()
-for key, group in df2_grouped:
-    df2 = pd.concat([df2, group], axis=0)
+# df2 = pd.DataFrame()
+# for key, group in df2_grouped:
+#     df2 = pd.concat([df2, group], axis=0)
 
-df3 = pd.DataFrame()
-for key, group in df3_grouped:
-    df3 = pd.concat([df3, group], axis=0)
+#agrupo por artista y género, y lo ordeno por popularidad
+queryset_grouped  = (Cancion.objects.values('artist', 'top_genre', 'title')
+                        .order_by('-pop'))  # Ordenar por popularidad en orden descendente
+#convierto el queryset en un dataframe
+df2 = read_frame(queryset_grouped)
 
+queryset_grouped2  = (Cancion.objects.values('artist', 'top_genre', 'title')
+                      .order_by('-pop')) 
+df3 = read_frame(queryset_grouped2)
+#df3_grouped = df.groupby('top genre') # por géneros porque en el caso de que no haya suficientes del mismo artista será por las canciones más populares del género
+# df3 = pd.DataFrame()
+# for key, group in df3_grouped:
+#     df3 = pd.concat([df3, group], axis=0)
 
-# In[6]:
-
-
-df2.loc[df2['top genre'] == "dance pop"]
-
-
-# In[7]:
 
 
 def recommender_by_artist(artist, song_excl):
+    
+    print('DF2')
+    print(df2)
+    print("Holaaaaaaaaaaaaaaa")
     songs = df2.loc[df2['artist'] == artist]
+    print(songs['title'])
+    print ('SONG EXC1')
+    print(song_excl)
     if song_excl != None: 
-        songs_ret = songs.loc[songs['title'] != song_excl, ['id', 'title', 'artist', 'top genre']]
+        print('Nooooooo\n')
+        songs_ret = songs.loc[songs['title'] != song_excl, ['title', 'artist', 'top_genre']]
+        #songs_ret son las canciones del artista sin la canción seleccionada.
+        print('CANCIONES BIEN')
+        print(songs_ret)
         return songs_ret
     else: 
-        return songs[['id', 'title', 'artist', 'top genre']]
+        print('Aquiiiiiiiiiii\n')
+        return songs[['id', 'title', 'artist', 'top_genre']]
 
 
 # In[8]:
 
 
 def recommender_by_genre(genre, song_excl):
-    songs = df3.loc[df3['top genre'] == genre]
+    print("SEGUNDA RONDA")
+    print(df3)
+    songs = df3.loc[df3['top_genre'] == genre]
+   
+    print(songs)
     if song_excl != None: 
-        songs_ret = songs.loc[songs['title'] != song_excl, ['id', 'title', 'artist', 'top genre']]
+        songs_ret = songs.loc[songs['title'] != song_excl, ['title', 'artist', 'top_genre']]
+        print('SONG_RET')
+        print(songs_ret)
         return songs_ret
     else: 
-        return songs[['id', 'title', 'artist', 'top genre']]
+        return songs[['id', 'title', 'artist', 'top_genre']]
 
 
 # In[15]:
 
 
 def get_id(songs):
-    return songs.id  
+    return df['id'].tolist()
 
 
 # In[16]:
@@ -224,13 +245,25 @@ def recommender_manual(song_artist):
         song_name = cancion.title
         
         songs = recommender_by_artist(artist, song_name)
+        print('LO QUE DEVUELVE EN LA FUNCION GRANDE POR ARTISTA')
+        print(songs)
 
         if len(songs) < 10:
             genre = cancion.top_genre
+            print('GENERO')
+            print(genre)
             songs_genre = recommender_by_genre(genre, song_name)
             
+            print("RECOMENDACIONES POR GENERO")
+            print(songs_genre)
             songs_ret = pd.concat([songs, songs_genre])[:10]
+            print('LO QUE DEVUELVE DE VERDAD')
+            print(songs_ret)
 
+
+            ##AQUI ME HE QUEDADO
+            print('GET_ID')
+            print(get_id(songs_ret))
             return get_id(songs_ret)
         
         elif len(songs) > 10:
@@ -253,10 +286,17 @@ def recommender_manual(song_artist):
 
 
 def recommender_no_surprise(songs_arists):
+    print("PRUEBA\n")
+    print(songs_arists)
     songs = []
+    print("HASTA AQUI SE PASA BIEN\n")
+
     for song_artist in songs_arists:
         songs_aux = recommender_manual(song_artist)
         songs.extend(songs_aux)
+
+    print('EL FINAL')
+    print (songs)
     
     return songs
 

@@ -28,7 +28,10 @@ def lista_canciones(request):
 def recomendar_canciones(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         canciones_seleccionadas = request.POST.getlist("canciones[]", [])
+        print("CANCIONES SELECCIONADAS\n")
+        print(canciones_seleccionadas)
         canciones_similares = recommender_no_surprise(canciones_seleccionadas)
+        print("CANCIONES SELECCIONADAS\n")
 
         return JsonResponse({"recomendaciones": canciones_similares})
 
