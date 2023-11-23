@@ -32,19 +32,11 @@ def recomendar_canciones(request):
         print(canciones_seleccionadas)
         canciones_similares = recommender_no_surprise(canciones_seleccionadas)
         print("CANCIONES SELECCIONADAS\n")
+        print(canciones_similares)
+        print('\n')
+        recomendaciones_dict = [serie.to_dict() for serie in canciones_similares]
+        return JsonResponse({"recomendaciones": recomendaciones_dict})
 
-        return JsonResponse({"recomendaciones": canciones_similares})
-
-    # try:
-    #     # Lógica principal aquí
-    #     canciones_seleccionadas = request.POST.getlist("canciones[]", [])
-    #     canciones_similares = recommender_no_surprise(canciones_seleccionadas)
-
-    #     return JsonResponse({"recomendaciones": canciones_similares})
-
-    # except Exception as e:
-    #     print(f"Error en la vista recomendar_canciones: {e}")
-    #     return JsonResponse({"error": "Error interno del servidor"}, status=500)
 
 def cargar_csv(request):
     #cancion = Cancion(title="Roar", artist="Katty Pe", top_genre="Género de ejemplo", year=2023, dur=180, pop=90)

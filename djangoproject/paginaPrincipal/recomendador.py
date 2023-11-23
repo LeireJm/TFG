@@ -262,28 +262,43 @@ def recommender_manual(song_artist):
 
 
             ##AQUI ME HE QUEDADO
-            print('GET_ID')
-            print(get_id(songs_ret))
-            return get_id(songs_ret)
+            print('LISTA IDS')
+            lista_ids = songs_ret.index.tolist() #devuelve la lista de ids de songs_ret
+
+            print(lista_ids)
+            return lista_ids
         
         elif len(songs) > 10:
-            return get_id(songs[:10])
+            canciones_10 = songs[:10] #al tener más de 10 canciones, cojo las 10 primeras
+            lista_ids = canciones_10.index.tolist()
+            return lista_ids
         
         else:
-            return get_id(songs)
-        
-    elif song_artist in df['artist'].values: #se ha pasado por parámetro el nombre del artista
-        print("2222222222222222222222\n")
-        songs = recommender_by_artist(song_artist, None)
+            lista_ids = canciones_10.index.tolist()
+            return lista_ids
 
-        return get_id(songs[:10]) #no hay genero asociado por artista, lo que muestre si hay 15 o menos del artista 
-    else: #no exista tal artista o canción
-        print("Error: no existe tal artista o canción en la base de datos\n")
-        return []
+    
+    # elif song_artist in df['artist'].values: #se ha pasado por parámetro el nombre del artista
+    #     print("2222222222222222222222\n")
+    #     songs = recommender_by_artist(song_artist, None)
+
+    #     return get_id(songs[:10]) #no hay genero asociado por artista, lo que muestre si hay 15 o menos del artista 
+    # else: #no exista tal artista o canción
+    #     print("Error: no existe tal artista o canción en la base de datos\n")
+    #     return []
 
 
 # In[17]:
 
+def idANombre(songs_id):
+    nombres_canciones = []
+
+    print("id a nombre")
+    for song_id in songs_id:
+        #aquí puedo escoger los campos que quiero devolver
+        nombre_cancion = df2.loc[df2.index == song_id, ['title', 'artist']]
+        nombres_canciones.append(nombre_cancion)
+    return nombres_canciones
 
 def recommender_no_surprise(songs_arists):
     print("PRUEBA\n")
@@ -295,26 +310,10 @@ def recommender_no_surprise(songs_arists):
         songs_aux = recommender_manual(song_artist)
         songs.extend(songs_aux)
 
-    print('EL FINAL')
-    print (songs)
+    print('EL FINAL') #pasar los nombres de las canciones
+    print(songs_aux)
+    songs = idANombre(songs_aux)
+    print("VALE VALE")
+    print(songs)
     
     return songs
-
-
-# In[18]:
-
-
-# recommender_manual(174) # "#thatPower"
-
-
-# In[23]:
-#
-
-#recommender_manual('Rihanna')
-
-
-# In[22]:
-
-
-#recommender_no_surprise([174, 'Rihanna'])
-

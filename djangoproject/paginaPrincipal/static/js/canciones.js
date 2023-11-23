@@ -46,8 +46,11 @@ $(document).ready(function() {
         // Limpiar el contenido anterior en #resultados-seleccion
         var resultadosDiv = $("#resultados-seleccion");
         resultadosDiv.empty();
-    
+
+        console.log("holi holi");
+        console.log("SI SI SI");
         if (cancionesRecomendadas.length > 0) {
+            console.log("SI SI SI");
             var resultadosHTML = "<h2>Canciones recomendadas:</h2><ul>";
     
             // Iterar sobre las canciones recomendadas y construir la lista
