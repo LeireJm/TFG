@@ -31,11 +31,11 @@ def recomendar_canciones(request):
         print("CANCIONES SELECCIONADAS\n")
         print(canciones_seleccionadas)
         canciones_similares = recommender_no_surprise(canciones_seleccionadas)
-        print("CANCIONES SELECCIONADAS\n")
+        print("\nCANCIONES SIMILARES\n")
         print(canciones_similares)
         print('\n')
-        recomendaciones_dict = [serie.to_dict() for serie in canciones_similares]
-        return JsonResponse({"recomendaciones": recomendaciones_dict})
+        #recomendaciones_dict = [serie.to_dict() for serie in canciones_similares]
+        return HttpResponse({"recomendaciones": canciones_similares})
 
 
 def cargar_csv(request):

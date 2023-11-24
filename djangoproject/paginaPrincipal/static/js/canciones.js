@@ -49,12 +49,25 @@ $(document).ready(function() {
 
         console.log("holi holi");
         console.log("SI SI SI");
+
+        //AQUI ME HE QUEDADO
+        console.log(cancionesRecomendadas);
         if (cancionesRecomendadas.length > 0) {
-            console.log("SI SI SI");
+            console.log(cancionesRecomendadas);
             var resultadosHTML = "<h2>Canciones recomendadas:</h2><ul>";
     
             // Iterar sobre las canciones recomendadas y construir la lista
             cancionesRecomendadas.forEach(function(cancion) {
+                console.log(cancion);
+                // var titleIndex = 40; // El índice asociado al título en el objeto
+                // var artistIndex = 40; // El índice asociado al artista en el objeto
+
+                // // Acceder a las propiedades utilizando los índices
+                // var title = obj.title[titleIndex];
+                // var artist = obj.artist[artistIndex];
+
+                // console.log("Título:", title);
+                // console.log("Artista:", artist);
                 resultadosHTML += "<li>" + cancion.title + " - " + cancion.artist + "</li>";
             });
     

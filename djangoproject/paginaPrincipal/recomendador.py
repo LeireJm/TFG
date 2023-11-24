@@ -298,7 +298,12 @@ def idANombre(songs_id):
         #aquí puedo escoger los campos que quiero devolver
         nombre_cancion = df2.loc[df2.index == song_id, ['title', 'artist']]
         nombres_canciones.append(nombre_cancion)
-    return nombres_canciones
+
+    #pasar a df
+    nombres_canciones_df = pd.concat(nombres_canciones)
+    print("AQUI CAGADA")
+    print(nombres_canciones_df)
+    return nombres_canciones_df
 
 def recommender_no_surprise(songs_arists):
     print("PRUEBA\n")
@@ -315,5 +320,14 @@ def recommender_no_surprise(songs_arists):
     songs = idANombre(songs_aux)
     print("VALE VALE")
     print(songs)
+
+    # #paso el JSON songs a dataframe
+    # new_songs= []
     
+    # for song in songs:
+
+
+    # print("NEW SONGS")
+    # print(new_songs)
+
     return songs
