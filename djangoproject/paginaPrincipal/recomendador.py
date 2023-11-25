@@ -268,27 +268,12 @@ def recommender_manual(song_artist):
             print(lista_ids)
             return lista_ids
         
-        elif len(songs) > 10:
+        elif len(songs) >= 10:
             canciones_10 = songs[:10] #al tener más de 10 canciones, cojo las 10 primeras
             lista_ids = canciones_10.index.tolist()
             return lista_ids
-        
-        else:
-            lista_ids = canciones_10.index.tolist()
-            return lista_ids
-
-    
-    # elif song_artist in df['artist'].values: #se ha pasado por parámetro el nombre del artista
-    #     print("2222222222222222222222\n")
-    #     songs = recommender_by_artist(song_artist, None)
-
-    #     return get_id(songs[:10]) #no hay genero asociado por artista, lo que muestre si hay 15 o menos del artista 
-    # else: #no exista tal artista o canción
-    #     print("Error: no existe tal artista o canción en la base de datos\n")
-    #     return []
 
 
-# In[17]:
 
 def idANombre(songs_id):
     nombres_canciones = []

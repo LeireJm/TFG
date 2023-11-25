@@ -41,6 +41,7 @@ $(document).ready(function() {
     });
 
     function mostrarResultadosRecomendacion(resultados) {
+        console.log(resultados);
         var cancionesRecomendadas = resultados.recomendaciones;
     
         // Limpiar el contenido anterior en #resultados-seleccion
@@ -51,25 +52,32 @@ $(document).ready(function() {
         console.log("SI SI SI");
 
         //AQUI ME HE QUEDADO
-        console.log(cancionesRecomendadas);
         if (cancionesRecomendadas.length > 0) {
             console.log(cancionesRecomendadas);
             var resultadosHTML = "<h2>Canciones recomendadas:</h2><ul>";
-    
+            
+            var jsonArray = JSON.parse(cancionesRecomendadas);
+            console.log(jsonArray);
+
+            for (var i = 0; i < jsonArray.length; i++) {
+                var song = jsonArray[i];
+                resultadosHTML += "<li>" + song.title + " - " + song.artist + "</li>";
+            }
+
             // Iterar sobre las canciones recomendadas y construir la lista
-            cancionesRecomendadas.forEach(function(cancion) {
-                console.log(cancion);
-                // var titleIndex = 40; // El índice asociado al título en el objeto
-                // var artistIndex = 40; // El índice asociado al artista en el objeto
+            // cancionesRecomendadas.forEach(function(cancion) {
+            //     console.log(cancion);
+            //     // var titleIndex = 40; // El índice asociado al título en el objeto
+            //     // var artistIndex = 40; // El índice asociado al artista en el objeto
 
-                // // Acceder a las propiedades utilizando los índices
-                // var title = obj.title[titleIndex];
-                // var artist = obj.artist[artistIndex];
+            //     // // Acceder a las propiedades utilizando los índices
+            //     // var title = obj.title[titleIndex];
+            //     // var artist = obj.artist[artistIndex];
 
-                // console.log("Título:", title);
-                // console.log("Artista:", artist);
-                resultadosHTML += "<li>" + cancion.title + " - " + cancion.artist + "</li>";
-            });
+            //     // console.log("Título:", title);
+            //     // console.log("Artista:", artist);
+            //     resultadosHTML += "<li>" + cancion.title + " - " + cancion.artist + "</li>";
+            // });
     
             resultadosHTML += "</ul>";
     

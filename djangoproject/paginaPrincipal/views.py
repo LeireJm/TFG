@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import csv
 import os
+import json
 
 
 # Create your views here.
@@ -32,10 +33,17 @@ def recomendar_canciones(request):
         print(canciones_seleccionadas)
         canciones_similares = recommender_no_surprise(canciones_seleccionadas)
         print("\nCANCIONES SIMILARES\n")
-        print(canciones_similares)
+
+        #como js acepta JS, lo pasamos
+        #orient='record' es para crear diccionarios y que cada uno represente una fila del dataframe
+        canciones_similares_JSON = canciones_similares.to_json(orient='records')
+        print(canciones_similares_JSON)
         print('\n')
+
         #recomendaciones_dict = [serie.to_dict() for serie in canciones_similares]
-        return HttpResponse({"recomendaciones": canciones_similares})
+        #return HttpResponse({"recomendaciones": canciones_similares_JSON})
+        return JsonResponse({"recomendaciones": canciones_similares_JSON})
+
 
 
 def cargar_csv(request):
