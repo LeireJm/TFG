@@ -20,12 +20,21 @@ from sklearn.neighbors import NearestNeighbors
 
 # Comenzamos cargando los datasets de las canciones junto a los ratings. El archivo original del dataset de las canciones incluía 1.2 millones de canciones por lo que se ha reducido el dataset a 50000 porque al no usar librerías específicas como Surprise no es eficiente y sobrepasa el uso de la memoria si utilizamos el dataset no reducido.
 
+import os
 
-songs = pd.read_csv('spotify_data_mod3.csv')
+script_dir = os.path.dirname('C:/hlocal/TFG CODIGO/TFG/djangoproject/paginaPrincipal/spotify_data_mod3.csv')
+file_path = os.path.join(script_dir, 'spotify_data_mod3.csv')
+
+songs = pd.read_csv(file_path)
+
+#songs = pd.read_csv('spotify_data_mod3.csv')
 #songs = pd.read_csv('spotify_data_red.csv') Solo un género
 #songs = pd.read_csv('spotify_data.csv') Dataset original
 
-ratings = pd.read_csv('rating2.csv')
+script_dir2 = os.path.dirname('C:/hlocal/TFG CODIGO/TFG/djangoproject/paginaPrincipal/rating2.csv')
+file_path2 = os.path.join(script_dir2, 'rating2.csv')
+
+ratings = pd.read_csv(file_path2)
 
 
 # ### Explicación de los atributos de las canciones
@@ -107,8 +116,10 @@ def create_X(df):
         song_inv_mapper: dict que asigna índices de canciones a ID de canciones
         
     """
-    M = df['userId'].nunique()
-    N = df['songId'].nunique()
+    print(df.columns)
+    
+    M = df["userId"].nunique()
+    N = df["songId"].nunique()
 
     user_mapper = dict(zip(np.unique(df["userId"]), list(range(M))))
     song_mapper = dict(zip(np.unique(df["songId"]), list(range(N))))
@@ -116,8 +127,8 @@ def create_X(df):
     user_inv_mapper = dict(zip(list(range(M)), np.unique(df["userId"])))
     song_inv_mapper = dict(zip(list(range(N)), np.unique(df["songId"])))
     
-    user_index = [user_mapper[i] for i in df['userId']]
-    item_index = [song_mapper[i] for i in df['songId']]
+    user_index = [user_mapper[i] for i in df["userId"]]
+    item_index = [song_mapper[i] for i in df["songId"]]
 
     X = csr_matrix((df["rating"], (user_index,item_index)), shape=(M,N))
     
