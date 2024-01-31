@@ -22,19 +22,24 @@ from sklearn.neighbors import NearestNeighbors
 
 import os
 
-script_dir = os.path.dirname('C:/hlocal/TFG CODIGO/TFG/djangoproject/paginaPrincipal/spotify_data_mod3.csv')
-file_path = os.path.join(script_dir, 'spotify_data_mod3.csv')
+# script_dir = os.path.dirname('C:/hlocal/TFG CODIGO/TFG/djangoproject/paginaPrincipal/spotify_data_mod3.csv')
+# file_path = os.path.join(script_dir, 'spotify_data_mod3.csv')
 
-songs = pd.read_csv(file_path)
+# songs = pd.read_csv(file_path)
 
-#songs = pd.read_csv('spotify_data_mod3.csv')
-#songs = pd.read_csv('spotify_data_red.csv') Solo un género
-#songs = pd.read_csv('spotify_data.csv') Dataset original
+# #songs = pd.read_csv('spotify_data_mod3.csv')
+# #songs = pd.read_csv('spotify_data_red.csv') Solo un género
+# #songs = pd.read_csv('spotify_data.csv') Dataset original
 
-script_dir2 = os.path.dirname('C:/hlocal/TFG CODIGO/TFG/djangoproject/paginaPrincipal/rating2.csv')
-file_path2 = os.path.join(script_dir2, 'rating2.csv')
+# script_dir2 = os.path.dirname('C:/hlocal/TFG CODIGO/TFG/djangoproject/paginaPrincipal/rating2.csv')
+# file_path2 = os.path.join(script_dir2, 'rating2.csv')
 
-ratings = pd.read_csv(file_path2)
+# ratings = pd.read_csv(file_path2)
+
+
+###REALMENTE NO HACE FALTA QUE COGER LOS DATOS DEL CSV PORQUE YA LOS HEMOS CARGADO
+songs = pd.read_csv('spotify_data_mod3.csv')
+ratings = pd.read_csv('rating2.csv')
 
 
 # ### Explicación de los atributos de las canciones
@@ -194,7 +199,15 @@ def find_similar_songs(song_id, X, song_mapper, song_inv_mapper, k, metric='cosi
     X = X.T
     neighbour_ids = []
     
-    song_ind = song_mapper[song_id]
+    #####EL PROBLEMA ES QUE SONG_ID ES UNA LISTA Y NO LO SOPORTA.
+    ##TENGO QUE COGER EL PRIMER ELEMENTO DE ESA LISTA.
+    ##CUANDO TENGAMOS MAS CANCIONES VER COMO SE TRATA
+
+    clave_buscada = int(song_id[0])
+    song_ind = song_mapper[clave_buscada]
+
+    print(song_ind)
+    
     song_vec = X[song_ind]
     if isinstance(song_vec, (np.ndarray)):
         song_vec = song_vec.reshape(1,-1)
@@ -426,15 +439,28 @@ def intercalate_lists(l1, l2):
 
     return list_final[:l]
 
+##Función que devuelve la información de una canción a partir del índice
+def idANombre(songs_id):
+    nombres_canciones = []
+
+    for song_id in songs_id:
+        #aquí puedo escoger los campos que quiero devolver
+        nombre_cancion = songs.loc[songs.index == song_id, ['track_name', 'artist_name']]
+        nombres_canciones.append(nombre_cancion)
+
+    #pasar a df
+    nombres_canciones_df = pd.concat(nombres_canciones)
+
+    return nombres_canciones_df
 
 # La función ***recommender*** es el recomendador final que devuelve las canciones más parecidas dada una canción seleccionada y los atributos a tener en cuenta, estos últimos pueden ser ninguno y directamente se pasa a un filtrado colaborativo.
 # ÚNICA FUNCIÓN A USAR!!!
-
 def recommender(song_id, options):
     # Primera fase: consiste en la obtención de la lista de canciones parecidas que cumplan con los atributos que el usuario ha elegido.
+   
     list_songs_content = [] # Lista de canciones recomendadas basadas
     
-    if len(options) != 0: 
+    if len(options) != 0:  #si hemos marcado opciones
         list_songs_content = first_stage(song_id, options)
 
     # Segunda fase: filtrado colaborativo (si la lista es demasiado grande)
@@ -447,8 +473,17 @@ def recommender(song_id, options):
         list_final = list_songs_collaborative
     else:
         list_final = list_songs_content
+
     
-    return list_final
+
+    #La lista final devuelve los ids de las canciones que se recomiendan.
+    #Cambiamos los ids para devolver el nombre de la canción y el artista
+    songs = idANombre(list_final)
+
+    print("SONGS")
+    print(songs)
+    
+    return songs
 
 
 # Hacemos unas pruebas y parece ser que funciona bien

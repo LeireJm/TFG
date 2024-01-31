@@ -1,162 +1,162 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ## Recomendador básico
+# # ## Recomendador básico
 
 
-# Importamos las bibliotecas necesarias para nuestro recomendador
+# # Importamos las bibliotecas necesarias para nuestro recomendador
 
-# In[2]:
+# # In[2]:
 
 
-# Cargamos las librerías necesarias de Pandas
+# # Cargamos las librerías necesarias de Pandas
 import pandas as pd
 import numpy as np
 
-# In[3]:
+# # In[3]:
 
 
-# Cargamos las librerías necesarias de Surprise
-from surprise import Dataset
-from surprise import Reader
-from surprise import KNNBasic
-from surprise.model_selection import train_test_split
-from surprise.model_selection import cross_validate
-from surprise import accuracy
+# # Cargamos las librerías necesarias de Surprise
+# from surprise import Dataset
+# from surprise import Reader
+# from surprise import KNNBasic
+# from surprise.model_selection import train_test_split
+# from surprise.model_selection import cross_validate
+# from surprise import accuracy
 from django_pandas.io import read_frame
 
 from .models import Cancion
 from django.db import models
 
 
-# Cargamos el dataset en pandas para luego pasarlo a surprise
+# # Cargamos el dataset en pandas para luego pasarlo a surprise
 
-# In[4]:
+# # In[4]:
 
 
-# Cargamos el CSV con el dataframe de Pandas
+# # Cargamos el CSV con el dataframe de Pandas
 df = pd.read_csv('songs_dataset.csv')
 
-reader = Reader(rating_scale=(1, 30))
+# reader = Reader(rating_scale=(1, 30))
 
-# Vamos a transformar los distintos géneros a números para que el recomendador funcione por recomendación por género
-# Con esto evitamos los repetidos
-distinct_genres = df['top genre'].unique()
+# # Vamos a transformar los distintos géneros a números para que el recomendador funcione por recomendación por género
+# # Con esto evitamos los repetidos
+# distinct_genres = df['top genre'].unique()
 
-# Asignamos números a los géneros
-value_to_number = {genre: i+1 for i, genre in enumerate(distinct_genres)}
+# # Asignamos números a los géneros
+# value_to_number = {genre: i+1 for i, genre in enumerate(distinct_genres)}
 
-# Creamos una nueva columna que es la misma que géneros pero en números
-df['genre number'] = df['top genre'].map(value_to_number)
+# # Creamos una nueva columna que es la misma que géneros pero en números
+# df['genre number'] = df['top genre'].map(value_to_number)
 
-# Load the Pandas DataFrame into a Surprise Dataset
-data = Dataset.load_from_df(df[['artist', 'title', 'genre number']], reader)
-
-
-# In[107]:
+# # Load the Pandas DataFrame into a Surprise Dataset
+# data = Dataset.load_from_df(df[['artist', 'title', 'genre number']], reader)
 
 
-df
+# # In[107]:
 
 
-# Entrenar los datos
-
-# In[108]:
+# df
 
 
-# Crear un modelo modelo k-NN
-sim_options = {
-    'name': 'cosine',  
-    'user_based': False  # Recomendador basado en contenidos
-}
-clf = KNNBasic(sim_options=sim_options, k=50, verbose=True)
+# # Entrenar los datos
+
+# # In[108]:
 
 
-# In[ ]:
+# # Crear un modelo modelo k-NN
+# sim_options = {
+#     'name': 'cosine',  
+#     'user_based': False  # Recomendador basado en contenidos
+# }
+# clf = KNNBasic(sim_options=sim_options, k=50, verbose=True)
 
 
-#Measures probar con RMSE o MAE, cuál sea el mejor
-cv = cross_validate(clf, data, measures=['RMSE', 'MAE'], cv=7, verbose=True)
+# # In[ ]:
 
 
-# Función para determinar canciones similares
-
-# In[ ]:
-
-
-#Para hacer la búsqueda si la canción está en los datos entrenados
-items_ids = [clf.trainset.to_raw_iid(iid) for iid in clf.trainset.all_items()]
+# #Measures probar con RMSE o MAE, cuál sea el mejor
+# cv = cross_validate(clf, data, measures=['RMSE', 'MAE'], cv=7, verbose=True)
 
 
-# In[ ]:
+# # Función para determinar canciones similares
+
+# # In[ ]:
 
 
-def get_similar_songs(song_title, k=10):
-    try: 
-        # Comprueba si la canción está en los datos entrenados
-        if song_title not in items_ids:
-            return []  # Devuelve una lista vacía si no está entre los datos entrenados
-
-        # Obtiene el id de la canción para luego pasarlo al algoritmo
-        song_id = clf.trainset.to_inner_iid(song_title)
-
-        # Usa el modelo k-NN para encontrar canciones similares
-        similar_items = clf.get_neighbors(song_id, k)
-
-        # Una vez tiene los ids de las canciones similares se pasa a los nombres reales de las canciones
-        similar_songs = [clf.trainset.to_raw_iid(item_id) for item_id in similar_items]
-
-        return similar_songs
-
-    except IndexError as e:
-        return []
+# #Para hacer la búsqueda si la canción está en los datos entrenados
+# items_ids = [clf.trainset.to_raw_iid(iid) for iid in clf.trainset.all_items()]
 
 
-# Generar una "playlist" random con 10 canciones
-
-# In[ ]:
+# # In[ ]:
 
 
-import random
+# def get_similar_songs(song_title, k=10):
+#     try: 
+#         # Comprueba si la canción está en los datos entrenados
+#         if song_title not in items_ids:
+#             return []  # Devuelve una lista vacía si no está entre los datos entrenados
 
-random_songs = df.sample(n=10)
+#         # Obtiene el id de la canción para luego pasarlo al algoritmo
+#         song_id = clf.trainset.to_inner_iid(song_title)
+
+#         # Usa el modelo k-NN para encontrar canciones similares
+#         similar_items = clf.get_neighbors(song_id, k)
+
+#         # Una vez tiene los ids de las canciones similares se pasa a los nombres reales de las canciones
+#         similar_songs = [clf.trainset.to_raw_iid(item_id) for item_id in similar_items]
+
+#         return similar_songs
+
+#     except IndexError as e:
+#         return []
 
 
-# In[ ]:
+# # Generar una "playlist" random con 10 canciones
+
+# # In[ ]:
 
 
-random_songs
+# import random
+
+# random_songs = df.sample(n=10)
 
 
-# Conseguir las recomendaciones 
-
-# In[ ]:
+# # In[ ]:
 
 
-similar_songs = []
+# random_songs
 
-for song_title in random_songs['title']:
-    sim_songs = get_similar_songs(song_title, k=10)    
+
+# # Conseguir las recomendaciones 
+
+# # In[ ]:
+
+
+# similar_songs = []
+
+# for song_title in random_songs['title']:
+#     sim_songs = get_similar_songs(song_title, k=10)    
     
-    #Para evitar canciones ya recomendadas antes
-    for s in sim_songs:
-        if s not in similar_songs:
-            similar_songs.append(s)
+#     #Para evitar canciones ya recomendadas antes
+#     for s in sim_songs:
+#         if s not in similar_songs:
+#             similar_songs.append(s)
 
 
-# In[ ]:
+# # In[ ]:
 
 
-similar_songs
+# similar_songs
 
 
-# Vamos a probar recomendación con una canción
+# # Vamos a probar recomendación con una canción
 
-# In[ ]:
+# # In[ ]:
 
 
-similar_songs = get_similar_songs('Find U Again (feat. Camila Cabello)', k=10)
-similar_songs
+# similar_songs = get_similar_songs('Find U Again (feat. Camila Cabello)', k=10)
+# similar_songs
 
 
 # #### Recomendador sin surprise
@@ -207,9 +207,6 @@ def recommender_by_artist(artist, song_excl):
     else: 
         print('Aquiiiiiiiiiii\n')
         return songs[['id', 'title', 'artist', 'top_genre']]
-
-
-# In[8]:
 
 
 def recommender_by_genre(genre, song_excl):
@@ -267,7 +264,7 @@ def recommender_manual(song_artist):
 
             print(lista_ids)
             return lista_ids
-        
+    
         elif len(songs) >= 10:
             canciones_10 = songs[:10] #al tener más de 10 canciones, cojo las 10 primeras
             lista_ids = canciones_10.index.tolist()
@@ -286,7 +283,7 @@ def idANombre(songs_id):
 
     #pasar a df
     nombres_canciones_df = pd.concat(nombres_canciones)
-    print("AQUI CAGADA")
+
     print(nombres_canciones_df)
     return nombres_canciones_df
 

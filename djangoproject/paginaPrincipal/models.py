@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-#creo una nueva tabla en la bd
 
 class Cancion(models.Model):
     title = models.CharField(max_length=200)
@@ -21,3 +20,13 @@ class Cancion(models.Model):
 
     class Meta:
         db_table = 'cancion'
+
+
+class Rating(models.Model):
+    userId = models.IntegerField()
+    songId = models.IntegerField()
+    rating = models.IntegerField()
+    timestamp = models.BigIntegerField()
+
+    class Meta:
+        db_table = 'rating'

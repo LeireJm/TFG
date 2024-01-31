@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from .models import Cancion  
+from .models import Cancion 
+from .models import Rating 
 from random import sample
 from django.http import HttpResponse
-from .recomendador import recommender_no_surprise
+#from .recomendador import recommender_no_surprise
+from .recomendador_v2 import recommender
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -29,27 +31,29 @@ def lista_canciones(request):
 def recomendar_canciones(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         canciones_seleccionadas = request.POST.getlist("canciones[]", [])
-        print("CANCIONES SELECCIONADAS\n")
-        print(canciones_seleccionadas)
-        canciones_similares = recommender_no_surprise(canciones_seleccionadas)
-        print("\nCANCIONES SIMILARES\n")
+        print("AQUI ESTAMOS\n")
+        #canciones_similares = recommender_no_surprise(canciones_seleccionadas)
+        canciones_similares = recommender(canciones_seleccionadas, "") #por ahora sólo se pasa una canción y no hay argumentos
 
-        #como js acepta JS, lo pasamos
-        #orient='record' es para crear diccionarios y que cada uno represente una fila del dataframe
+        
+ 
         canciones_similares_JSON = canciones_similares.to_json(orient='records')
+        print("\nCANCIONES SIMILARES\n")
         print(canciones_similares_JSON)
-        print('\n')
+
+        # canciones_similares_list = [int(item) for item in canciones_similares]
+        # print(canciones_similares_list)
 
         #recomendaciones_dict = [serie.to_dict() for serie in canciones_similares]
         #return HttpResponse({"recomendaciones": canciones_similares_JSON})
+
+        ####EL PROBELMA ES QUE SE PASA UN DATAFRAME A UN JSON
+
         return JsonResponse({"recomendaciones": canciones_similares_JSON})
 
 
 
 def cargar_csv(request):
-    #cancion = Cancion(title="Roar", artist="Katty Pe", top_genre="Género de ejemplo", year=2023, dur=180, pop=90)
-    #cancion.save()
-
     archivo_csv = os.path.join(os.path.dirname(__file__), 'songs_dataset.csv')
     
     with open(archivo_csv, 'r', newline='', encoding='utf-8') as csvfile:
@@ -76,5 +80,25 @@ def cargar_csv(request):
                 pop = row[14],
             )
             cancion.save()
+
+    return render(request, 'canciones.html')
+
+def cargar_rating(request):
+    archivo_csv = os.path.join(os.path.dirname(__file__), 'rating2.csv')
+    
+    with open(archivo_csv, 'r', newline='', encoding='utf-8') as csvfile:
+        csv_data = csv.reader(csvfile)
+        
+        #salta la primera linea
+        next(csv_data, None)
+        for row in csv_data:
+
+            rating = Rating(
+                userId=row[0],
+                songId=row[1],
+                rating=row[2],
+                timestamp = row[3],   
+            )
+            rating.save()
 
     return render(request, 'canciones.html')

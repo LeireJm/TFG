@@ -21,51 +21,44 @@
         <div class="container my-4">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
-                    <h1 class="mb-4">Lista de canciones</h1>
+                    <h1 class="mb-4">Inicio</h1>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
-                    <div class="table-responsive">
-                        <table id="datatable-traducciones" class="table">
-                            <caption>
-                                Traductor
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th class="centered">Nombre</th>
-                                    <th class="centered">Artista</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody_Traducciones"></tbody>
-                        </table>
-                    </div>
+                    <form method="get" action="/lista_canciones">
+                        <th class="centered">Selecciona los atributos que prefieras:</th><br/>           
+                        <input name="genre" type="checkbox" />Género<br/>
+                        <input name="year" type="checkbox" />Año<br/>
+                        <input name="duration_ms" type="checkbox" />Duración<br/>
+                        <input name="popularity" type="checkbox" />Popularidad<br/>
+                        <br/>
 
-                    <form id="frmBusquedaTraduccion" class="row g-3">
-                        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
-                            <input type="text" id="txtTexto" class="form-control" placeholder="Ingrese una palabra o expresión" aria-label="Ingrese una palabra o expresión" minlength="1" required />
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary">Consultar</button>
+                        <button type="submit">Enviar</button>
+
+                        <!-- Es el mismo botón que el de arriba -->
+                        <!-- <div class="container">
+                            <div class="row">
+                                <a href="/lista_canciones" class="btn btn-primary">></a>
                             </div>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>
         </div>
 
+        <!-- una vez no tengamos que cargar el csv, esto se puede borrar -->
         <div class="container">
             <div class="row">
                 <a href="/carga_csv" class="btn btn-primary">Carga CSV</a>
             </div>
         </div>
 
-        <div class="my-3"></div>
-        
         <div class="container">
             <div class="row">
-                <a href="/lista_canciones" class="btn btn-primary">></a>
+                <a href="/cargar_rating" class="btn btn-primary">Carga Rating</a>
             </div>
         </div>
+
+        <div class="my-3"></div>
         
     </body>
 </html>

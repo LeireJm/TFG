@@ -19,7 +19,7 @@ $(document).ready(function() {
             // resultadosDiv.append(resultadosHTML);
             $.ajax({
                 type: "POST",
-                url: "/recomendar_canciones/",  // Cambia esto a tu URL de Django
+                url: "/recomendar_canciones/",  
                 data: {
                     canciones: selecciones,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
@@ -48,12 +48,10 @@ $(document).ready(function() {
         var resultadosDiv = $("#resultados-seleccion");
         resultadosDiv.empty();
 
-        console.log("holi holi");
-        console.log("SI SI SI");
-
         //AQUI ME HE QUEDADO
         if (cancionesRecomendadas.length > 0) {
             console.log(cancionesRecomendadas);
+            console.log(cancionesRecomendadas.length);
             var resultadosHTML = "<h2>Canciones recomendadas:</h2><ul>";
             
             var jsonArray = JSON.parse(cancionesRecomendadas);
@@ -61,25 +59,16 @@ $(document).ready(function() {
 
             for (var i = 0; i < jsonArray.length; i++) {
                 var song = jsonArray[i];
-                resultadosHTML += "<li>" + song.title + " - " + song.artist + "</li>";
+                resultadosHTML += "<li>" + song.track_name + " - " + song.artist_name + "</li>";
             }
-
-            // Iterar sobre las canciones recomendadas y construir la lista
-            // cancionesRecomendadas.forEach(function(cancion) {
-            //     console.log(cancion);
-            //     // var titleIndex = 40; // El índice asociado al título en el objeto
-            //     // var artistIndex = 40; // El índice asociado al artista en el objeto
-
-            //     // // Acceder a las propiedades utilizando los índices
-            //     // var title = obj.title[titleIndex];
-            //     // var artist = obj.artist[artistIndex];
-
-            //     // console.log("Título:", title);
-            //     // console.log("Artista:", artist);
-            //     resultadosHTML += "<li>" + cancion.title + " - " + cancion.artist + "</li>";
-            // });
-    
             resultadosHTML += "</ul>";
+
+            // for (var i = 0; i < cancionesRecomendadas.length; i++) {
+            //     var song = cancionesRecomendadas[i];
+            //     console.log(cancionesRecomendadas[i]);
+            //     resultadosHTML += "<li>" + song.track_name + " - " + song.artist_name + "</li>";
+            // }
+            // resultadosHTML += "</ul>";
     
             // Agregar la lista al contenedor #resultados-seleccion
             resultadosDiv.html(resultadosHTML);
