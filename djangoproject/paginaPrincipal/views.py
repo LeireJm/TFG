@@ -11,6 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 import csv
 import os
 import json
+import pandas as pd
+
+opciones_globales = []
 
 
 # Create your views here.
@@ -18,25 +21,43 @@ def index(request):
     return render(request, 'index.html')
 
 def lista_canciones(request):
-    #para mostrar todas las canciones.
+    global opciones_globales
+
+    #para mostrar todas las canciones desde la base de datos
     canciones = Cancion.objects.all()  # Consulta la base de datos
     cantidad_canciones = canciones.count() 
+
+    opciones_globales = request.GET.getlist("options")
 
     #lo que queremos es mostrar diez canciones aleatorias.
     random_songs = sample(list(Cancion.objects.all()), 10)
 
+    # songs = pd.read_csv('spotify_data_mod3.csv')
+    # cantidad_canciones = songs.count() 
+    # random_songs = sample(list(songs), 10)
+    # print("RANDOM SONGS")
+    # print(songs)
+
     return render(request, 'canciones.html', {'canciones': random_songs, 'cantidad_canciones': cantidad_canciones})
+
 
 @csrf_exempt
 def recomendar_canciones(request):
+    global opciones_globales
+
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         canciones_seleccionadas = request.POST.getlist("canciones[]", [])
-        print("AQUI ESTAMOS\n")
-        #canciones_similares = recommender_no_surprise(canciones_seleccionadas)
-        canciones_similares = recommender(canciones_seleccionadas, "") #por ahora sólo se pasa una canción y no hay argumentos
+
+        opciones = opciones_globales
+        print("POR AQUI")
+        print(opciones)
+        
+        print("CANCIONES SELECCIONADAS AHORA")
+        print(canciones_seleccionadas)
+
+        canciones_similares = recommender(canciones_seleccionadas, opciones) #pasamos la cancion seleccionada y las opciones
 
         
- 
         canciones_similares_JSON = canciones_similares.to_json(orient='records')
         print("\nCANCIONES SIMILARES\n")
         print(canciones_similares_JSON)
@@ -50,7 +71,6 @@ def recomendar_canciones(request):
         ####EL PROBELMA ES QUE SE PASA UN DATAFRAME A UN JSON
 
         return JsonResponse({"recomendaciones": canciones_similares_JSON})
-
 
 
 def cargar_csv(request):

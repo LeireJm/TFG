@@ -24,22 +24,14 @@
                     <h1 class="mb-4">Inicio</h1>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
-                    <form method="get" action="/lista_canciones">
-                        <th class="centered">Selecciona los atributos que prefieras:</th><br/>           
-                        <input name="genre" type="checkbox" />Género<br/>
-                        <input name="year" type="checkbox" />Año<br/>
-                        <input name="duration_ms" type="checkbox" />Duración<br/>
-                        <input name="popularity" type="checkbox" />Popularidad<br/>
-                        <br/>
+                    <form action="/lista_canciones" method="get">
+                        <td>Selecciona los atributos que prefieras:</td><br/>           
+                        <input name="options" id="genre" type="checkbox" value="genre" /> Género<br/>
+                        <input name="options" id="year" type="checkbox" value="year" /> Año<br/>
+                        <input name="options" id="duration_ms" type="checkbox" value="duration_ms" /> Duración<br/>
+                        <input name="options" id="popularity" type="checkbox" value="popularity" /> Popularidad<br/>
 
                         <button type="submit">Enviar</button>
-
-                        <!-- Es el mismo botón que el de arriba -->
-                        <!-- <div class="container">
-                            <div class="row">
-                                <a href="/lista_canciones" class="btn btn-primary">></a>
-                            </div>
-                        </div> -->
                     </form>
                 </div>
             </div>

@@ -355,6 +355,7 @@ def content_based_features(title):
 def sim_cosine_total(options):
     # Excluir si una de las opciones es género porque ese ya está calculado
     num_opt = len(options) #para distribuir los porcentajes
+
     is_genre = 0
     if "genres" in options:
         options.remove("genres")
@@ -385,7 +386,7 @@ def sim_cosine_total(options):
     matrix_opt = np.array(cosine_sim_opt)
     matrix_specific = np.array(cosine_sim_specific)
 
-    percent_specific = 0.01 # No le damos mucho porque no es lo más importante
+    percent_specific = 0.00 # No le damos mucho porque no es lo más importante
     
     cosine_sim_final = (1-percent_specific)*matrix_opt + percent_specific*matrix_specific
 
@@ -398,7 +399,7 @@ def sim_cosine_total(options):
 def first_stage(song_id, options):
     # 1. Hay que comprobar si hay atributos a tener en cuenta (options)
     cosine_sim = sim_cosine_total(options)
-    
+
     song_idx = dict(zip(songs['songId'], list(songs.index)))
     n_recommendations = 20
 
