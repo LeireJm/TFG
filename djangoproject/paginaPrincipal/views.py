@@ -49,7 +49,7 @@ def recomendar_canciones(request):
         canciones_seleccionadas = request.POST.getlist("canciones[]", [])
 
         opciones = opciones_globales
-        print("POR AQUI")
+        print("OPCIONES")
         print(opciones)
         
         print("CANCIONES SELECCIONADAS AHORA")

@@ -82,7 +82,7 @@ def cosine_genre():
     genre = set(g for G in songsAux['genres'] for g in G)
 
     for g in genre:
-        songsAux[g] = songsAux.genre.transform(lambda x: int(g in x))
+        songsAux[g] = songsAux.genres.transform(lambda x: int(g in x))
         
     song_genre = songsAux.drop(columns=col_del)
 
@@ -354,11 +354,13 @@ def content_based_features(title):
 
 def sim_cosine_total(options):
     # Excluir si una de las opciones es género porque ese ya está calculado
-    num_opt = len(options) #para distribuir los porcentajes
+    num_opt = len(options) #para distribuir los porcentaje  
 
     is_genre = 0
-    if "genres" in options:
-        options.remove("genres")
+
+    if "genre" in options:
+        print("Opciones después", options)
+        options.remove("genre")
         is_genre = 1
 
         if len(options) == 0:
@@ -378,17 +380,18 @@ def sim_cosine_total(options):
             matrix_genre = np.array(cosine_sim_genre)
             matrix_no_genre = np.array(cosine_sim_opt_no_genre)
 
-            cosine_sim_opt = percent_genre * matrix_genre + (1-percent_genre) * matrix_no_genre
-
+            cosine_sim_opt = np.multiply(percent_genre, matrix_genre) + np.multiply(1 - percent_genre, matrix_no_genre)
         else: # no hay género en la lista
             cosine_sim_opt = cosine_sim_opt_no_genre
     
     matrix_opt = np.array(cosine_sim_opt)
-    matrix_specific = np.array(cosine_sim_specific)
+    # # matrix_specific = np.array(cosine_sim_specific)
 
-    percent_specific = 0.00 # No le damos mucho porque no es lo más importante
+    # # percent_specific = 0.00 # No le damos mucho porque no es lo más importante
     
-    cosine_sim_final = (1-percent_specific)*matrix_opt + percent_specific*matrix_specific
+    # # cosine_sim_final = (1-percent_specific)*matrix_opt + percent_specific*matrix_specific
+    cosine_sim_final = matrix_opt
+
 
     return cosine_sim_final
 
@@ -400,13 +403,17 @@ def first_stage(song_id, options):
     # 1. Hay que comprobar si hay atributos a tener en cuenta (options)
     cosine_sim = sim_cosine_total(options)
 
+    print("cosine_sim: ", cosine_sim)
+
     song_idx = dict(zip(songs['songId'], list(songs.index)))
     n_recommendations = 20
 
-    idx = song_idx[song_id]
+    #pongo song_id[0] porque solo hay una cancion en la lista song_id
+    idx = song_idx.get(song_id[0])
     sim_scores = list(enumerate(cosine_sim[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:(n_recommendations+1)] # (id, puntuacion)
+
     similar_songs = [i[0] for i in sim_scores]
 
     return similar_songs
@@ -458,8 +465,8 @@ def idANombre(songs_id):
 # ÚNICA FUNCIÓN A USAR!!!
 def recommender(song_id, options):
     # Primera fase: consiste en la obtención de la lista de canciones parecidas que cumplan con los atributos que el usuario ha elegido.
-   
     list_songs_content = [] # Lista de canciones recomendadas basadas
+
     
     if len(options) != 0:  #si hemos marcado opciones
         list_songs_content = first_stage(song_id, options)
