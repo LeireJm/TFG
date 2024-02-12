@@ -16,10 +16,10 @@ import pandas as pd
 opciones_globales = []
 
 
-# Create your views here.
 def index(request):
     return render(request, 'index.html')
 
+#lista de canciones
 def lista_canciones(request):
     global opciones_globales
 
@@ -68,7 +68,7 @@ def recomendar_canciones(request):
         #recomendaciones_dict = [serie.to_dict() for serie in canciones_similares]
         #return HttpResponse({"recomendaciones": canciones_similares_JSON})
 
-        ####EL PROBELMA ES QUE SE PASA UN DATAFRAME A UN JSON
+        ####EL PROBLEMA ES QUE SE PASA UN DATAFRAME A UN JSON
 
         return JsonResponse({"recomendaciones": canciones_similares_JSON})
 

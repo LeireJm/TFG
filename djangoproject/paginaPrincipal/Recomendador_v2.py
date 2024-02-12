@@ -466,7 +466,6 @@ def idANombre(songs_id):
 def recommender(song_id, options):
     # Primera fase: consiste en la obtención de la lista de canciones parecidas que cumplan con los atributos que el usuario ha elegido.
     list_songs_content = [] # Lista de canciones recomendadas basadas
-
     
     if len(options) != 0:  #si hemos marcado opciones
         list_songs_content = first_stage(song_id, options)
@@ -514,4 +513,3 @@ def recommender(song_id, options):
 #    popularity_i = row_i['popularity'].values[0]
 #    year_i = row_i['year'].values[0]
 #    print(f"{song_titles[i]} de {artist_i} ({genre_i}, {year_i}). Popularidad: {popularity_i}")
-
