@@ -12,33 +12,41 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <!-- CSS -->
         <link rel="stylesheet" href="{% static '/usuarios/css/inicioSesion.css' %}" />
+        <!-- JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
-        <tr>Cantidad usuarios: {{ cantidad_usuarios }}</tr><br>
+        <!-- <tr>Cantidad usuarios: {{ cantidad_usuarios }}</tr><br>
         {% for usuario in usuarios %}
             <tr>
                 <td>{{ usuario.userName }}</td>
                 <td>{{ usuario.email }}</td>
             </tr>
-        {% endfor %}
+        {% endfor %} -->
+        
         <div class="global-container">
             <div class="card login-form">
             <div class="card-body">
                 <h3 class="card-title">Inicio de sesión</h3>
                 <div class="card-text">
-                    <form>
+                    <!-- si el inicio de sesión se realiza correctamente, te manda a la página principal -->
+                    <form method="post" action="/usuarios/login/">
+                        {% csrf_token %}
+                        <!-- inicio sesión -->
                         <div class="campo_email">
                             <label for="email">Correo electrónico</label><br>
-                            <input type="email" id="email" placeholder="Ingrese su correo">
+                            <input type="email" id="email" name="email" placeholder="Ingrese su correo">
                         </div>
                         <div class="campo_password">
                             <label for="password">Contraseña</label>
-                            <input type="password" id="password" placeholder="Ingrese su contraseña">
+                            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña">
                             <button id="mostrar-ocultar" type="button">
                                 <i class="fa-solid fa-eye"></i>
                             </button><br>
+                            <!-- ha olvidado la contraseña -->
                             <a href="/usuarios/olvidoPassword">¿Has olvidado la contraseña?</a>
                         </div>
+                        
                         
                         <!-- Esto es para mostrar o no la contraseña -->
                         <script>
@@ -56,8 +64,17 @@
                             });
                         </script>
 
-                        <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
-                        
+                        <!-- Botón de iniciar sesión -->
+                        <button type="submit" id='iniciarSesion' class="btn btn-primary btn-block">
+                            Iniciar sesión
+                        </button>
+
+                        <!-- si no se ha podido iniciar sesión, se muestra un mensaje -->
+                        {% if error_message %}
+                        <div class="alert alert-danger">{{ error_message }}</div></br>
+                        {% endif %}
+
+                        <!-- Registrarse -->
                         <div class="sign-up">
                             ¿No tienes cuenta? <a href="/usuarios/registro">Registrarse</a>
                         </div>
@@ -66,7 +83,5 @@
             </div>
         </div>
         </div>
-        
-        
     </body>
 </html>

@@ -11,12 +11,6 @@ $(document).ready(function() {
 
         //si hemos marcado alguna casilla, la muestra
         if (selecciones.length > 0) {
-            // var resultadosHTML = "<h2>Canciones seleccionadas:</h2><ul>";
-            // selecciones.forEach(function(valor) {
-            //     resultadosHTML += "<li>" + valor + "</li>";
-            // });
-            // resultadosHTML += "</ul>";
-            // resultadosDiv.append(resultadosHTML);
             $.ajax({
                 type: "POST",
                 url: "/recomendar_canciones/",  
