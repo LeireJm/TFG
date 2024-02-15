@@ -21,25 +21,24 @@ def login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        print("email", email)
-        print("password", password)
+        if password == '':
+            error_message = 'Por favor, escribe la contraseña'
+        else:
+            print("email", email)
+            print("password", password)
+            try:
+                user = Usuario.objects.get(email=email)
+                if password == user.password:# El usuario se encontró en la base de datos
+                    return redirect('/lista_canciones') #si es correcto, se inicia la sesión
+                else:
+                    error_message = 'Credenciales inválidas. Por favor, inténtalo de nuevo.' #no se ha conseguido iniciar sesión     
+            except Usuario.DoesNotExist: # El usuario no se encontró en la base de datos
+                error_message = 'Credenciales inválidas. Por favor, inténtalo de nuevo.' #no se ha conseguido iniciar sesión  
         
         # Autenticar al usuario
         #user = authenticate(request, email=email, password=password)
 
-        try:
-            user = Usuario.objects.get(email=email)
-            # El usuario se encontró en la base de datos
-        except Usuario.DoesNotExist:
-            # El usuario no se encontró en la base de datos
-            user = None  # o cualquier otra acción que desees realizar en este caso
-
-        print("user", user)
-
-        if password == user.password:
-            return redirect('/lista_canciones') #si es correcto, se inicia la sesión
-        else:
-            error_message = 'Credenciales inválidas. Por favor, inténtalo de nuevo.' #no se ha conseguido iniciar sesión
+        
 
         # if user is not None:
         #     if user.is_authenticated:
