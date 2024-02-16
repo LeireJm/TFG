@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título -->
+  <title>Página principal</title> <!-- CAMBIAR A NOMBRE DE LA APLICACION -->
+   <!-- JavaScript -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- CSS -->
+  <link rel="stylesheet" href="{% static '/paginaPrincipal/css/paginaPrincipal.css' %}" />
+</head>
+<body>
+
+    <header id="myHeader">
+        <section>
+            <h1>Nombre Aplicacion</h1>
+            <div class="conte">
+                <br>
+                <a href="#">Inicio</a>
+                <a href="#">Mi perfil</a>
+            </div>
+        </section>
+    </header>
+
+    <div class="content">
+        <a href="/lista_canciones"><button>¡Haz clic!</button></a>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'paginaPrincipal/js/paginaPrincipal.js' %}"></script>
+</body>
+</html>

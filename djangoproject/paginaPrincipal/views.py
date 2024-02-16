@@ -19,7 +19,11 @@ opciones_globales = []
 def index(request):
     return render(request, 'index.html')
 
-#lista de canciones
+#página principal
+def pagina_principal(request):
+    return render(request, 'paginaPrincipal.html')
+
+#lista de canciones (recomendador)
 def lista_canciones(request):
     global opciones_globales
 

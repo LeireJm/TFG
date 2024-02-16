@@ -11,7 +11,7 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('login/', views.login, name='login'),
 
-    #si el inicio es correcto, muestra la lista de canciones
-    path('lista_canciones/', viewsPaginaPrincipal.lista_canciones, name='lista_canciones')
+    #si el inicio es correcto, lleva a la página principal de la aplicación
+    path('pagina_principal/', viewsPaginaPrincipal.pagina_principal, name='paginaPrincipal')
     
 ]

@@ -15,6 +15,7 @@ def index(request):
 def registro(request):
     return render(request, 'registro.html')
 
+#iniciar sesión
 def login(request):
     error_message = ''
     if request.method == 'POST':
@@ -29,7 +30,7 @@ def login(request):
             try:
                 user = Usuario.objects.get(email=email)
                 if password == user.password:# El usuario se encontró en la base de datos
-                    return redirect('/lista_canciones') #si es correcto, se inicia la sesión
+                    return redirect('/pagina_principal') #si es correcto, se inicia la sesión
                 else:
                     error_message = 'Credenciales inválidas. Por favor, inténtalo de nuevo.' #no se ha conseguido iniciar sesión     
             except Usuario.DoesNotExist: # El usuario no se encontró en la base de datos
