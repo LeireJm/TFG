@@ -45,3 +45,19 @@ form{
     cursor: pointer;
     font-size: 16px;
 }
+
+.boton_atras {
+	border-radius: 10px; /*curvatura del botón*/
+    font-weight: bold; /*letra en negrita*/
+    padding: 10px 20px;
+    background-color: #484242; /*color del fondo*/
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.boton_atras a {
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: inherit; /* Usa el color del texto del botón */
+}

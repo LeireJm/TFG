@@ -13,7 +13,7 @@ $(document).ready(function() {
         if (selecciones.length > 0) {
             $.ajax({
                 type: "POST",
-                url: "/recomendar_canciones/",  
+                url: "/paginaPrincipal/recomendar_canciones/",  
                 data: {
                     canciones: selecciones,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
@@ -42,7 +42,6 @@ $(document).ready(function() {
         var resultadosDiv = $("#resultados-seleccion");
         resultadosDiv.empty();
 
-        //AQUI ME HE QUEDADO
         if (cancionesRecomendadas.length > 0) {
             console.log(cancionesRecomendadas);
             console.log(cancionesRecomendadas.length);

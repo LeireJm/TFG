@@ -1,0 +1,82 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+/* Header */
+#myHeader {
+    background-color: #333; /* Color de fondo del encabezado */
+    color: #fff; /* Color del texto en el encabezado */
+    padding: 20px 0; /* Espaciado interno del encabezado */
+    text-align: center; /* Alineación del texto en el centro */
+}
+
+#myHeader h1 {
+    margin: 0; /* Elimina el margen superior e inferior del título */
+}
+
+.conte {
+    margin-top: 20px; /* Espacio superior entre los enlaces y el título */
+}
+
+.conte a {
+    color: #fff; /* Color del texto de los enlaces */
+    text-decoration: none; /* Elimina la subrayado de los enlaces */
+    margin-right: 20px; /* Espacio a la derecha entre los enlaces */
+}
+
+.conte a:hover {
+    text-decoration: underline; /* Subrayado de los enlaces al pasar el mouse */
+}
+
+
+/* Resto de página */
+.container {
+    max-width: 800px; /* Ajusta el ancho máximo del contenedor según sea necesario */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+}
+
+.profile {
+    background-color: #f9f9f9; /* Color de fondo del perfil */
+    padding: 20px; /* Espaciado interno del perfil */
+    border-radius: 10px; /* Bordes redondeados del perfil */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave alrededor del perfil */
+}
+
+.profile h1 {
+    font-size: 36px; /* Tamaño de fuente del título */
+    color: #333; /* Color del texto del título */
+}
+
+.profile p {
+    font-size: 18px; /* Tamaño de fuente del texto */
+    color: #555; /* Color del texto */
+    margin-bottom: 10px; /* Espaciado inferior entre los párrafos */
+}
+
+.btn-edit { /* botón de editar perfil */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border: none; /* Borde del botón */
+    border-radius: 5px; /* Bordes redondeados del botón */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
+}
+
+.btn-edit:hover {
+    background-color: #0056b3; /* Color de fondo del botón al pasar el mouse */
+}
+
+
+.btn-logout { /* botón de cerrar sesión */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border: none; /* Borde del botón */
+    border-radius: 5px; /* Bordes redondeados del botón */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del botón */
+}
+
+.btn-logout:hover {
+    background-color: #0056b3; /* Color de fondo del botón al pasar el mouse */
+}

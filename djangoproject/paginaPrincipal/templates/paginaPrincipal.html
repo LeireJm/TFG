@@ -7,29 +7,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Título -->
   <title>Página principal</title> <!-- CAMBIAR A NOMBRE DE LA APLICACION -->
+    <!-- Para los iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
    <!-- JavaScript -->
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <!-- CSS -->
   <link rel="stylesheet" href="{% static '/paginaPrincipal/css/paginaPrincipal.css' %}" />
 </head>
-<body>
 
+<body>
+    <!-- Header -->
     <header id="myHeader">
         <section>
             <h1>Nombre Aplicacion</h1>
             <div class="conte">
                 <br>
-                <a href="#">Inicio</a>
-                <a href="#">Mi perfil</a>
+
+                <a href="/paginaPrincipal"><i class="fas fa-home"></i></a>
+
+                {% if user.is_authenticated %} <!-- si el usuario está auntenticado, le muestra su perfil-->
+                    <a href="/usuarios/miPerfil"><i class="fas fa-user"></i>{{ user.userName }}</a>
+                {% else %} <!-- si el usuario no está auntenticado, inicia sesión -->
+                    <a href="/usuarios">Iniciar sesión</a>
+                {% endif %}
+
             </div>
         </section>
     </header>
 
+    <!-- Contenido de la página -->
     <div class="content">
-        <a href="/lista_canciones"><button>¡Haz clic!</button></a>
+        <!-- barra lateral -->
+        <div class="sidebar" id="sidebar">
+            <div class="scrollable-list">
+                <!-- Nombre web -->
+                <h1>Nombre de la web</h1>
+
+                <!-- Barra separadora -->
+                <hr class="separator"> 
+    
+                <!-- Biblioteca -->
+                <h1 class ='biblioteca'>Biblioteca</h1>
+
+                <span class="favorites">
+                    <i class="far fa-heart"></i>
+                    Mis favoritos
+                </span>
+
+                <!-- Barra separadora -->
+                <hr class="separator"> 
+
+                <span h1 class ='playlists-titulo'>Playlists</h1>
+                <i class="fas fa-trash-alt"></i></span>
+                <br>
+
+                <div class="playlists">
+                    <!-- Mostrar las playlists del usuario -->
+                    <a>Poner las playlists</a>
+                </div>
+
+            </div>
+            <!-- redimensionar la sidebar -->
+            <!-- <div class="resize-handle" id="resizeHandle"></div>  -->
+        </div>
+
+        <div class="main-content">
+            <!-- Descubre nuevas canciones -->
+            <div class="section">
+                <h2>Descubre nuevas canciones</h2>
+                <p>¡Explora nuevas canciones y encuentra nueva música a partir de las canciones que te gustan!</p>
+                {% if user.is_authenticated %}
+                    <!-- Si el usuario está autenticado, el botón estará habilitado -->
+                    <a href="/paginaPrincipal/lista_canciones"><button>Descubrir</button></a>
+                    <img src="ruta_de_la_imagen.jpg" alt="Imagen rectangular">
+                {% else %}
+                <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
+                    <p>Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
+                    <button disabled>Descubrir</button>
+                {% endif %}
+            </div>
+            <!-- Crear nueva playlist -->
+            <div class="section">
+                <h2>Crear playlist</h2>
+                <p>¡Crea tu playlist perfecta y fusiona las canciones que prefieras!</p>
+                {% if user.is_authenticated %}
+                    <!-- Si el usuario está autenticado, el botón estará habilitado -->
+                    <a href="/paginaPrincipal/lista_canciones"><button>Crear</button></a>
+                {% else %}
+                <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
+                    <p>Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
+                    <button disabled>Crear</button>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
+    
+
     <!-- JavaScript -->
-    <script src="{% static 'paginaPrincipal/js/paginaPrincipal.js' %}"></script>
+    <!-- <script src="{% static 'paginaPrincipal/js/paginaPrincipal.js' %}"></script> -->
 </body>
 </html>

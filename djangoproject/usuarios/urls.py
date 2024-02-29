@@ -8,10 +8,17 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    
+    path('login/', views.loginUser, name='login'),
+    path('logout/', views.logoutUser, name='logout'),
+    path('miPerfil/', views.perfil, name='miPerfil'),
+
+
     path('registro/', views.registro, name='registro'),
-    path('login/', views.login, name='login'),
+    path('registro/validarRegistro/', views.validarRegistro, name='validar_registro'),
+
 
     #si el inicio es correcto, lleva a la página principal de la aplicación
-    path('pagina_principal/', viewsPaginaPrincipal.pagina_principal, name='paginaPrincipal')
+    path('paginaPrincipal/', viewsPaginaPrincipal.pagina_principal, name='paginaPrincipal')
     
 ]

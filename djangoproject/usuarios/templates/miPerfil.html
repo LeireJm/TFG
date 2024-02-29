@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título -->
+  <title>Mi perfil</title> 
+   <!-- JavaScript -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- CSS -->
+  <link rel="stylesheet" href="{% static '/usuarios/css/miPerfil.css' %}" />
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="myHeader">
+        <section>
+            <h1>Nombre Aplicacion</h1>
+            <div class="conte">
+                <br>
+                <a href="/paginaPrincipal">Inicio</a>
+                <a href="/usuarios/miPerfil">Mi perfil</a>
+            </div>
+        </section>
+    </header>
+
+    <!-- Contenido de la página -->
+    <div class="container">
+        <div class="profile">
+
+            <h1><strong>Perfil de Usuario</strong></h1>
+            <p><strong>Nombre de usuario:</strong> {{ usuario.userName }}</p>
+            <p><strong>Correo electrónico:</strong> {{ usuario.email }}</p>
+
+            <button class="btn-edit">Edit Profile</button>
+            <a href="/usuarios/logout"><button class="btn-logout">Cerrar sesión</button></a>
+        </div>
+    </div>
+</body>
+</html>

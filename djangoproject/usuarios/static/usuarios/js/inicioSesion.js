@@ -1,15 +1,13 @@
 $(document).ready(function() {
-    $("#iniciarSesion").on("click", function() {
-        // Obtener los valores del formulario
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-    //     // Validar el formato del correo electrónico
-    //     if (email.indexOf('@loquesea') === -1) {
-    //         $('#message').html('El correo electrónico debe contener "@loquesea"');
-    //         return; // Salir de la función si el correo electrónico no es válido
-
-    // });
+    $("#iniciarSesion").on("click", function(event) {
+        var form = $(this);
+        var campos = form.find("input[required]");
+        for (var i = 0; i < campos.length; i++) {
+            if (!campos[i].value) {
+                event.preventDefault();
+                alert("Por favor, rellene todos los campos obligatorios.");
+                return;
+            }
+        }
     });
-    
 });

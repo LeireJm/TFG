@@ -19,30 +19,34 @@
             <div class="card-body">
                 <h3 class="card-title">Registro</h3>
                 <div class="card-text">
-                    <!--
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">Incorrect username or password.</div> -->
-                    <form>
+
+                    <!-- botón atrás -->
+                    <button class="boton_atras"><a href="/usuarios">Atrás</a></button>
+
+                    <form method="post" action="/usuarios/registro/validarRegistro/">
+                        {% csrf_token %}
                         <!-- Correo electrónico -->
-                        <div class="email">
+                        <div class="campo_email">
                             <label for="email">Correo electrónico</label><br>
-                            <input type="email" id="email" placeholder="Ingrese su correo">
+                            <input type="email" id="email" name="email" placeholder="Ingrese su correo" >
                         </div>
                         <!-- Nombre usuario -->
-                        <div class="userName">
+                        <div class="campo_userName">
                             <label for="userName">Nombre de usuario</label><br>
-                            <input type="userName" id="userName" placeholder="Ingrese su nombre de usuario">
+                            <input type="userName" id="userName" name="userName" placeholder="Ingrese su nombre de usuario" >
                         </div>
                         <!-- contraseña -->
-                        <div class="password">
+                        <div class="campo_password">
                             <label for="password">Contraseña</label>
-                            <input type="password" id="password" placeholder="Ingrese su contraseña">
+                            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" >
                             <label for="password">Repita la contraseña</label>
-                            <input type="password" id="password2" placeholder="Repita la contraseña">
+                            <input type="password" id="password2" name="password2" placeholder="Repita la contraseña" >
                             <button id="mostrar-ocultar" type="button">
                                 <i class="fa-solid fa-eye"></i>
-                            </button><br>
+                            </button>
                         </div>
-                        
+                        </br>
+                               
                         <!-- Esto es para mostrar o no la contraseña -->
                         <script>
                             const botonMostrarOcultar = document.getElementById('mostrar-ocultar');
@@ -63,8 +67,15 @@
 
                         </script>
 
+                        <!-- si no se ha podido registrar, se muestra un mensaje -->
+                        {% if error_message %}
+                        <div class="alert alert-danger">{{ error_message }}</div></br>
+                        {% endif %}
+
+                        <!-- botón siguiente  -->
                         <button type="submit" class="boton_siguiente">Siguiente</button>
                     </form>
+                    
                 </div>
             </div>
         </div>
