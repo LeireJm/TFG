@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Título -->
   <title>Mi perfil</title> 
+  <!-- Para los iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
    <!-- JavaScript -->
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <!-- CSS -->
@@ -20,23 +22,69 @@
             <h1>Nombre Aplicacion</h1>
             <div class="conte">
                 <br>
-                <a href="/paginaPrincipal">Inicio</a>
-                <a href="/usuarios/miPerfil">Mi perfil</a>
+
+                <a href="/paginaPrincipal"><i class="fas fa-home"></i></a>
+
+                {% if user.is_authenticated %} <!-- si el usuario está auntenticado, le muestra su perfil-->
+                    <a href="/usuarios/miPerfil"><i class="fas fa-user"></i>{{ user.userName }}</a>
+                {% else %} <!-- si el usuario no está auntenticado, inicia sesión -->
+                    <a href="/usuarios">Iniciar sesión</a>
+                {% endif %}
+
             </div>
         </section>
     </header>
 
     <!-- Contenido de la página -->
-    <div class="container">
-        <div class="profile">
 
-            <h1><strong>Perfil de Usuario</strong></h1>
-            <p><strong>Nombre de usuario:</strong> {{ usuario.userName }}</p>
-            <p><strong>Correo electrónico:</strong> {{ usuario.email }}</p>
+    <div class="content">
+        <!-- barra lateral -->
+        <div class="sidebar" id="sidebar">
+            <div class="scrollable-list">
+                <!-- Nombre web -->
+                <h1>Nombre de la web</h1>
 
-            <button class="btn-edit">Edit Profile</button>
-            <a href="/usuarios/logout"><button class="btn-logout">Cerrar sesión</button></a>
+                <!-- Barra separadora -->
+                <hr class="separator"> 
+    
+                <!-- Biblioteca -->
+                <h1 class ='biblioteca'>Biblioteca</h1>
+
+                <span class="favorites">
+                    <i class="far fa-heart"></i>
+                    Mis favoritos
+                </span>
+
+                <!-- Barra separadora -->
+                <hr class="separator"> 
+
+                <span h1 class ='playlists-titulo'>Playlists</h1>
+                <i class="fas fa-trash-alt"></i></span>
+                <br>
+
+                <div class="playlists">
+                    <!-- Mostrar las playlists del usuario -->
+                    <a>Poner las playlists</a>
+                </div>
+
+            </div>
+            <!-- redimensionar la sidebar -->
+            <!-- <div class="resize-handle" id="resizeHandle"></div>  -->
+        </div>
+
+        
+        <div class="container">
+            <div class="profile">
+    
+                <h1><strong>Perfil de Usuario</strong></h1>
+                <p><strong>Nombre de usuario:</strong> {{ usuario.userName }}</p>
+                <p><strong>Correo electrónico:</strong> {{ usuario.email }}</p>
+    
+                <button class="btn-edit">Edit Profile</button>
+                <a href="/usuarios/logout"><button class="btn-logout">Cerrar sesión</button></a>
+            </div>
         </div>
     </div>
+    
 </body>
 </html>

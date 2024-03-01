@@ -7,31 +7,131 @@ body, html {
 #myHeader {
     background-color: #333; /* Color de fondo del encabezado */
     color: #fff; /* Color del texto en el encabezado */
-    padding: 20px 0; /* Espaciado interno del encabezado */
+    padding: 5px; /* Espaciado interno del encabezado */
     text-align: center; /* Alineación del texto en el centro */
+    display: flex;
+    flex-direction: column;
 }
 
 #myHeader h1 {
-    margin: 0; /* Elimina el margen superior e inferior del título */
+    margin: 10px; /* Elimina el margen superior e inferior del título */
+    margin-right: 40vh;
 }
 
 .conte {
-    margin-top: 20px; /* Espacio superior entre los enlaces y el título */
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alinea los elementos verticalmente */
+    width: 100%;
+    justify-content: flex-start; /* Alinea todos los elementos hacia la derecha */
+    text-decoration: none;
+}
+
+.conte a i.fas.fa-home {
+    margin-left: 10px;
+    font-size: 24px; /* Aquí puedes ajustar el tamaño según tus necesidades */
 }
 
 .conte a {
+    display: inline-flex;
     color: #fff; /* Color del texto de los enlaces */
-    text-decoration: none; /* Elimina la subrayado de los enlaces */
-    margin-right: 20px; /* Espacio a la derecha entre los enlaces */
+    margin-left: 10px; /* Ajusta la separación entre los elementos */
+    margin-right: 1150px; /* Ajusta la separación entre los elementos */
+    text-decoration: none;
+    align-items: center;
+}
+
+.conte a i {
+    margin-right: 5px;
 }
 
 .conte a:hover {
     text-decoration: underline; /* Subrayado de los enlaces al pasar el mouse */
+} 
+
+/* Barra lateral */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #000000;
+    color: #fff;
+    overflow-y: auto; 
+}
+
+.scrollable-list {
+    padding: 20px;
+}
+
+.scrollable-list button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.scrollable-list button:hover {
+    background-color: #777;
+}
+
+.content {
+    margin-left: 100; /* Ancho de la barra lateral + espacio */
+    padding: 10px;
+    display: flex;
+    background-color: #333;
+    flex-direction: column;
+    align-items: left;
+}
+
+.separator {
+    border: none;
+    border-top: 1px solid #666; /* Línea horizontal */
+    margin: 20px 0; /* Espaciado */
+    height: 0; /* Oculta el espacio vertical generado por el hr */
+}
+
+.biblioteca {
+    font-size: 21px; 
+    margin-bottom: 30px; /*espacio entre biblioteca y Mis favoritos*/
+    font-weight: bold;
+}
+
+.favorites {
+    font-size: 16px; 
+    margin-left: 20px; 
+    font-style: italic;
+}
+
+.fa-heart {
+    color: rgb(96, 91, 91); 
+}
+
+.playlists-titulo {
+    font-size: 21px; 
+    margin-bottom: 30px; /*espacio entre biblioteca y Mis favoritos*/
+    font-weight: bold;
+}
+
+.fa-trash-alt {
+    float: right;
+}
+
+.playlists {
+    margin-top: 25px;
 }
 
 
 /* Resto de página */
 .container {
+    display: flex;
     max-width: 800px; /* Ajusta el ancho máximo del contenedor según sea necesario */
     margin: 0 auto; /* Centra el contenedor horizontalmente */
 }
@@ -66,7 +166,6 @@ body, html {
 .btn-edit:hover {
     background-color: #0056b3; /* Color de fondo del botón al pasar el mouse */
 }
-
 
 .btn-logout { /* botón de cerrar sesión */
     background-color: #007bff; /* Color de fondo del botón */

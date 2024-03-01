@@ -1,6 +1,7 @@
 body, html {
     height: 100%;
     margin: 0;
+    overflow: hidden;
 }
 
 /* HEADER */
@@ -15,6 +16,7 @@ body, html {
 
 #myHeader h1 {
     margin: 10px; /* Elimina el margen superior e inferior del título */
+    margin-right: 40vh;
 }
 
 .conte {
@@ -23,13 +25,25 @@ body, html {
     align-items: center; /* Alinea los elementos verticalmente */
     width: 100%;
     justify-content: flex-start; /* Alinea todos los elementos hacia la derecha */
+    text-decoration: none;
+}
+
+.conte a i.fas.fa-home {
+    margin-left: 10px;
+    font-size: 24px; /* Aquí puedes ajustar el tamaño según tus necesidades */
 }
 
 .conte a {
+    display: inline-flex;
     color: #fff; /* Color del texto de los enlaces */
-    text-decoration: none; /* Elimina la subrayado de los enlaces */
     margin-left: 10px; /* Ajusta la separación entre los elementos */
-    margin-right: 1500px; /* Ajusta la separación entre los elementos */
+    margin-right: 1150px; /* Ajusta la separación entre los elementos */
+    text-decoration: none;
+    align-items: center;
+}
+
+.conte a i {
+    margin-right: 5px;
 }
 
 .conte a:hover {
@@ -37,40 +51,13 @@ body, html {
 } 
 
 
-
-
-
-/* CONTENIDO GENENAL */
-.content button {
-    margin: 95px auto;
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.content button[disabled] {
-    background-color: #ccc; 
-    color: #666;
-}
-
-/* Contenido principal (izquierda) */
-
 /* Barra lateral */
 .sidebar {
     position: fixed;
     top: 0;
     right: 0;
     height: 100%;
-    width: 275px;
+    width: 250px;
     background-color: #000000;
     color: #fff;
     overflow-y: auto; 
@@ -99,7 +86,7 @@ body, html {
 
 .content {
     margin-left: 100; /* Ancho de la barra lateral + espacio */
-    padding: 20px;
+    padding: 10px;
     display: flex;
     background-color: #333;
     flex-direction: column;
@@ -143,37 +130,70 @@ body, html {
     margin-top: 25px;
 }
 
+/* Parte de la izquierda */
 .main-content {
-    padding: 20px;
+    display: flex;
     flex-grow: 1;
     flex-direction: column;
     align-items: center;
     display: flex;
+    min-height: 100vh;
 }
 
 .main-content .section {
     display: flex;
     flex-direction: column;
-    align-items: left; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
     text-align: center; /* Centra el texto horizontalmente */
-    margin-right: 300px
+    margin-right: 300px;
+    margin-bottom: 20px; /* Margen entre las secciones */
+    padding: 20px;
+    background-color: #6c6161;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
   
 .main-content .section button {
-    margin: 85px auto;
+    margin: 45px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #45a049;
 }
 
-.section {
-    margin-bottom: 50px;
+.content button {
+    margin: 95px auto;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
 }
-  
+
+.main-content .section button[disabled] {
+    background-color: #ccc; 
+    color: #666;
+}
+
+
 .section h2 {
     margin-bottom: 10px;
     color: #ffffff;
 }
   
 .section p {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* .resize-handle {

@@ -79,7 +79,7 @@
                 {% if user.is_authenticated %}
                     <!-- Si el usuario está autenticado, el botón estará habilitado -->
                     <a href="/paginaPrincipal/lista_canciones"><button>Descubrir</button></a>
-                    <img src="ruta_de_la_imagen.jpg" alt="Imagen rectangular">
+                    <!-- <img src="ruta_de_la_imagen.jpg" alt="Imagen rectangular"> -->
                 {% else %}
                 <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
                     <p>Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
@@ -89,7 +89,7 @@
             <!-- Crear nueva playlist -->
             <div class="section">
                 <h2>Crear playlist</h2>
-                <p>¡Crea tu playlist perfecta y fusiona las canciones que prefieras!</p>
+                <p>¡Crea una playlist perfecta y fusiona las canciones que prefieras para escucharlas sin parar!</p>
                 {% if user.is_authenticated %}
                     <!-- Si el usuario está autenticado, el botón estará habilitado -->
                     <a href="/paginaPrincipal/lista_canciones"><button>Crear</button></a>
