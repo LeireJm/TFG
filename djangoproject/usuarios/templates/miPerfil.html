@@ -36,7 +36,6 @@
     </header>
 
     <!-- Contenido de la página -->
-
     <div class="content">
         <!-- barra lateral -->
         <div class="sidebar" id="sidebar">
@@ -53,6 +52,11 @@
                 <span class="favorites">
                     <i class="far fa-heart"></i>
                     Mis favoritos
+                </span><br><br>
+
+                <span class="myplaylists">
+                    <i class="fas fa-music"></i>
+                    Mis playlists
                 </span>
 
                 <!-- Barra separadora -->
@@ -63,15 +67,19 @@
                 <br>
 
                 <div class="playlists">
-                    <!-- Mostrar las playlists del usuario -->
-                    <a>Poner las playlists</a>
+                    <!-- Mostrar las playlists del usuario -->                   
+                    {% for playlist in playlists %}
+                        <div class="playlist-box">
+                            <i class="fas fa-music"></i>
+                            <a>{{ playlist }}</a>
+                        </div>
+                    {% endfor %}
                 </div>
 
             </div>
             <!-- redimensionar la sidebar -->
             <!-- <div class="resize-handle" id="resizeHandle"></div>  -->
         </div>
-
         
         <div class="container">
             <div class="profile">

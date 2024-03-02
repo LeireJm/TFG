@@ -109,6 +109,8 @@ def recomendar_canciones(request):
 
         return JsonResponse({"recomendaciones": canciones_similares_JSON})
 
+def crear_playlist(request):
+    return render(request, 'crearPlaylist.html')
 
 def cargar_csv(request):
     archivo_csv = os.path.join(os.path.dirname(__file__), 'songs_dataset.csv')

@@ -102,7 +102,16 @@
                 <p>¡Crea una playlist perfecta y fusiona las canciones que prefieras para escucharlas sin parar!</p>
                 {% if user.is_authenticated %}
                     <!-- Si el usuario está autenticado, el botón estará habilitado -->
-                    <a href="/paginaPrincipal/lista_canciones"><button>Crear</button></a>
+                    <!-- <a href="/paginaPrincipal/crear_playlist" id="crear_playlist"><button>Crear</button></a> -->
+                    <button id="crear_playlist">Crear</button></a>
+
+                    <script>
+                        document.getElementById('crear_playlist').addEventListener('click', function() {
+                            // Abrir el pop-up
+                            var popupWindow = window.open('/paginaPrincipal/crear_playlist/', 'popupWindow', 'width=600,height=400');
+                            popupWindow.focus();
+                        });
+                    </script>
                 {% else %}
                 <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
                     <p>Debes iniciar sesión para acceder a las funcionalidades de la web.</p>

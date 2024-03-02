@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Usuario 
+from .models import Usuario, Playlist
 
 #muestra la pantalla de inicio de sesión (cuando /usuarios)
 def index(request):
@@ -101,5 +101,16 @@ def logoutUser(request):
 
 # perfil del usuario
 def perfil(request):
-    usuario = request.user  # Obtén el usuario autenticado
-    return render(request, 'miPerfil.html', {'usuario': usuario})
+    user = request.user  # Obtén el usuario autenticado
+
+    usuario = Usuario.objects.get(userId=user.userId)
+
+    playlists_usuario = usuario.playlists
+
+    nombres_playlists = []
+
+    for playlist in playlists_usuario:
+        p = Playlist.objects.get(playlistId=playlist)
+        nombres_playlists.append(p.playlistName)
+
+    return render(request, 'miPerfil.html', {'usuario': usuario, 'playlists': nombres_playlists})
