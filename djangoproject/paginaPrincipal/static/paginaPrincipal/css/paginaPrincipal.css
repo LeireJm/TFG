@@ -109,6 +109,14 @@ body, html {
 .favorites {
     font-size: 16px; 
     margin-left: 20px; 
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.myplaylists {
+    font-size: 16px; 
+    margin-top: 10px;
+    margin-left: 20px; 
     font-style: italic;
 }
 
@@ -118,7 +126,7 @@ body, html {
 
 .playlists-titulo {
     font-size: 21px; 
-    margin-bottom: 30px; /*espacio entre biblioteca y Mis favoritos*/
+    margin-bottom: 30px; 
     font-weight: bold;
 }
 
@@ -129,6 +137,31 @@ body, html {
 .playlists {
     margin-top: 25px;
 }
+
+.playlist-box {
+    background-color: #6c6161;
+    color: #000000;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: inline-block;
+    width: 170px; /* Anchura fija */
+    height: 20px; /* Altura fija */
+}
+
+.playlist-box a {
+    float: left;
+}
+
+.playlists .fa-music {
+    float: left; /* Flotar el icono a la izquierda */
+    width: 20px; /* Ancho fijo para el icono */
+    height: 30px; /* Altura fija para el icono */
+    margin-right: 20px; /* Espacio entre el icono y el texto */
+}
+
 
 /* Parte de la izquierda */
 .main-content {

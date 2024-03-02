@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Usuario 
 
-#muestra la pantalla de inicio de sesión
+#muestra la pantalla de inicio de sesión (cuando /usuarios)
 def index(request):
     usuarios = Usuario.objects.all()  # Consulta la base de datos
 
@@ -50,7 +50,7 @@ def validarRegistro(request):
 
                     nuevo_id = ultimo_usuario.userId + 1 if ultimo_usuario else 1
 
-                    new_user = Usuario(userId=nuevo_id, userName=userName, email=email, password=password, favoritos=[])
+                    new_user = Usuario(userId=nuevo_id, userName=userName, email=email, password=password, favoritos=[], playlists=[])
                     new_user.save()  # Guardar el nuevo usuario en la base de datos
 
                     #autenticar usuario

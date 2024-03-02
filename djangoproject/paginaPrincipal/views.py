@@ -3,10 +3,11 @@ from .models import Cancion
 from .models import Rating 
 from random import sample
 from django.http import HttpResponse
-#from .recomendador import recommender_no_surprise
 from .recomendador_v2 import recommender
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
+from usuarios.models import Playlist, Usuario
 
 import csv
 import os
@@ -21,7 +22,39 @@ def index(request):
 
 #página principal
 def pagina_principal(request):
-    return render(request, 'paginaPrincipal.html')
+    user = request.user
+
+    usuario = Usuario.objects.get(userId=user.userId)
+
+    
+
+    # Crear una nueva instancia de Playlist
+    # nueva_playlist = Playlist(
+    #     playlistId= 2,  # Asigna el ID de la nueva playlist (puedes ajustarlo según sea necesario)
+    #     playlistName="playlist de prueba 2",  # Asigna el nombre de la nueva playlist
+    #     listaCanciones=[1, 2, 3]  # Lista de IDs de canciones (ajusta según sea necesario)
+    # )
+
+    # # # Guardar la nueva instancia en la base de datos
+    # nueva_playlist.save()
+
+    # playlist_existente = Playlist.objects.get(playlistId=1)
+
+    # # Agregar canciones a la lista de canciones existente
+    # canciones_a_agregar = [4, 5, 6]  # IDs de las nuevas canciones
+    # playlist_existente.listaCanciones.extend(canciones_a_agregar)
+    # playlist_existente.save()
+
+    playlists_usuario = usuario.playlists
+
+    nombres_playlists = []
+
+    for playlist in playlists_usuario:
+        p = Playlist.objects.get(playlistId=playlist)
+        nombres_playlists.append(p.playlistName)
+
+
+    return render(request, 'paginaPrincipal.html', {'playlists': nombres_playlists})
 
 #lista de canciones (recomendador)
 def lista_canciones(request):
