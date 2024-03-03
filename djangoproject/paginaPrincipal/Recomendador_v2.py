@@ -513,3 +513,65 @@ def recommender(song_id, options):
 #    popularity_i = row_i['popularity'].values[0]
 #    year_i = row_i['year'].values[0]
 #    print(f"{song_titles[i]} de {artist_i} ({genre_i}, {year_i}). Popularidad: {popularity_i}")
+
+
+# ### Recomendador para varias canciones (PARTE IMPORTANTE)
+
+# La función ***intersection*** sirve para realizar la intersección entre varias listas dadas. Una canción es común cuando aparece en al menos dos listas, aunque no aparezca en el resto.
+
+# In[95]:
+
+
+from collections import Counter
+from functools import reduce
+from operator import add
+
+def intersection(lists):
+    # Reduce las listas y cuenta las veces que aparece cada elemento
+    counter = Counter(reduce(add, lists))
+    
+    # Devuelve los elementos que aparecen en más de una lista
+    return [item for item, count in counter.items() if count > 1]
+
+
+# La función ***merge_lists*** evita repetidos de manera eficiente
+
+# In[96]:
+
+
+def merge_lists(l1, l2):
+    # Convertir l1 a un conjunto para búsquedas eficientes
+    s1 = set(l1)
+
+    # Crear una nueva lista para los elementos de l2 que no están en l1
+    l2 = [item for item in l2 if item not in s1]
+
+    # Añadir los elementos de l2 a l1
+    l1.extend(l2)
+
+    return l1
+
+
+# La función ***recommender_songs*** devuelve las canciones similares de una lista de canciones. Consiste en devolver las canciones comunes de las similares de cada canción y así sucesivamente hasta conseguir al menos 10.
+
+# In[97]:
+
+
+def recommender_songs(songs_id, options):
+    ret = []
+    
+    similar_songs = []
+    
+    ids = songs_id.copy() # Copiamos los ids pasados
+    # Recorremos todas para obtener la lista de canciones similares de cada canción de seleccionada
+    # Luego se hace intersección
+    # De la intersección si no se ha llegado a 10 canciones en común, con esa intersección se vuelve a buscar las similares y comunes pero a estas y se añaden en la lista final las que no estén ya.
+    while len(ret) < 10:
+        for song_id in ids: 
+            similar_songs.append(recommender(song_id,options))
+        
+        ids = intersection(similar_songs)
+        merge_lists(ret,ids)
+    
+    return ret
+    
