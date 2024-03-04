@@ -38,7 +38,7 @@ import os
 
 
 ###REALMENTE NO HACE FALTA QUE COGER LOS DATOS DEL CSV PORQUE YA LOS HEMOS CARGADO
-songs = pd.read_csv('spotify_data_mod3.csv')
+songs = pd.read_csv('spotify_data_mod_llaves.csv')
 ratings = pd.read_csv('rating2.csv')
 
 
@@ -73,8 +73,14 @@ ratings = pd.read_csv('rating2.csv')
 
 # Hay que llamar esta función al iniciar la aplicación
 def cosine_genre():
-    songs['genres'] = songs['genres'].apply(lambda x: x.split("|"))
+    # Eliminar los caracteres "{" y "}"
+    songs['genres'] = songs['genres'].str.replace('{', '').str.replace('}', '')
+    #print(songs['genres'])
 
+    # Dividir la columna 'genres' por comas
+    songs['genres'] = songs['genres'].apply(lambda x: x.split(","))
+    #songs['genres'] = songs['genres'].apply(lambda x: x.split("|"))
+    
     col_del = ["songId",	"artist_name",	"track_name",	"track_id", "popularity", "year", "genre",	"danceability",	"energy",	"key",	"loudness",	"mode",	"speechiness",	"acousticness",	"instrumentalness",	"liveness",	"valence",	"tempo",	"duration_ms",	"time_signature", "genres"]
 
     songsAux = songs.copy()
@@ -539,12 +545,13 @@ def intersection(lists):
 # In[96]:
 
 
-def merge_lists(l1, l2):
+def merge_lists(l1, l2, l3):
     # Convertir l1 a un conjunto para búsquedas eficientes
     s1 = set(l1)
+    s3 = set(l3)
 
     # Crear una nueva lista para los elementos de l2 que no están en l1
-    l2 = [item for item in l2 if item not in s1]
+    l2 = [item for item in l2 if (item not in s1 and item not in s3)]
 
     # Añadir los elementos de l2 a l1
     l1.extend(l2)
@@ -571,7 +578,7 @@ def recommender_songs(songs_id, options):
             similar_songs.append(recommender(song_id,options))
         
         ids = intersection(similar_songs)
-        merge_lists(ret,ids)
+        merge_lists(ret,ids,songs_id)
     
     return ret
     
