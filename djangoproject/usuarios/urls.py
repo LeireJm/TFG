@@ -17,6 +17,8 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('registro/validarRegistro/', views.validarRegistro, name='validar_registro'),
 
+    path('mostrar_favoritos/', views.mostrarFavoritos, name='mostrar_favoritos'),
+    path('mostrar_playlists/', views.mostrarPlaylists, name='mostrar_playlists'),
 
     #si el inicio es correcto, lleva a la página principal de la aplicación
     path('paginaPrincipal/', viewsPaginaPrincipal.pagina_principal, name='paginaPrincipal')

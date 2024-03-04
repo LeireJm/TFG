@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título -->
+  <title>Mis favoritos</title> 
+    <!-- Para los iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
+   <!-- JavaScript -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- CSS -->
+  <link rel="stylesheet" href="{% static '/usuarios/css/mostrarFavoritos.css' %}" />
+</head>
+
+<body>
+    <div class="titulo">
+        <h1>Mis favoritos</h1>
+    </div>
+    <div id="cancionesContainer">
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'usuarios/js/mostrarFavoritos.js' %}"></script>
+</body>
+
+</html>

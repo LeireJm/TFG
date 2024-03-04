@@ -113,7 +113,7 @@ def crear_playlist(request):
     return render(request, 'crearPlaylist.html')
 
 def cargar_csv(request):
-    archivo_csv = os.path.join(os.path.dirname(__file__), 'songs_dataset.csv')
+    archivo_csv = os.path.join(os.path.dirname(__file__), 'spotify_data_mod_llaves.csv')
     
     with open(archivo_csv, 'r', newline='', encoding='utf-8') as csvfile:
         csv_data = csv.reader(csvfile)
@@ -123,20 +123,26 @@ def cargar_csv(request):
         for row in csv_data:
 
             cancion = Cancion(
-                title=row[1],
-                artist=row[2],
-                top_genre = row[3],
-                year = row[4],
-                bpm = row[5],
-                nrgy = row[6],
-                dnce = row[7],
-                dB = row[8],
-                live = row[9],
-                val = row[10],
-                dur = row[11],
-                acous = row[12],
-                spch = row[13],
-                pop = row[14],
+                artist_name=row[1],
+                track_name = row[2],
+                track_id = row[3],
+                popularity = row[4],
+                year = row[5],
+                genre = row[6],
+                danceability = row[7],
+                energy = row[8],
+                key = row[9],
+                loudness = row[10],
+                mode = row[11],
+                speechiness = row[12],
+                acousticness = row[13],
+                instrumentalness = row[14],
+                liveness = row[15],
+                valence = row[16],
+                tempo = row[17],
+                duration_ms = row[18],
+                time_signature = row[19],
+                genres = row[20],
             )
             cancion.save()
 

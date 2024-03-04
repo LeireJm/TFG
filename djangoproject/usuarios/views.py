@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Usuario, Playlist
+import json
 
 #muestra la pantalla de inicio de sesión (cuando /usuarios)
 def index(request):
@@ -114,3 +115,28 @@ def perfil(request):
         nombres_playlists.append(p.playlistName)
 
     return render(request, 'miPerfil.html', {'usuario': usuario, 'playlists': nombres_playlists})
+
+#mostrar favoritos
+def mostrarFavoritos(request):
+    #aquí contar la cantidad de canciones favoritas que tiene el usuario y pasarle nombre y duración de cada una
+
+    return render(request, 'mostrarFavoritos.html')
+
+#mostrar playlists
+def mostrarPlaylists(request):
+    #aquí contar la cantidad de playlists que tiene el usuario y pasarle nombre 
+    user = request.user  # Obtén el usuario autenticado
+
+    usuario = Usuario.objects.get(userId=user.userId)
+
+    playlists_usuario = usuario.playlists
+
+    nombres_playlists = []
+
+    for playlist in playlists_usuario:
+        p = Playlist.objects.get(playlistId=playlist)
+        nombres_playlists.append(p.playlistName)
+
+    nombres_playlists_json = json.dumps(nombres_playlists)
+
+    return render(request, 'mostrarPlaylists.html', {'id_playlists': playlists_usuario,'nombres_playlists': nombres_playlists_json})

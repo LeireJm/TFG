@@ -1,0 +1,47 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #333;
+}
+
+
+#cancionesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px; /* Asegura que las canciones no se superpongan al título fijo */
+    overflow-y: auto; /* Agrega un desplazamiento vertical si es necesario */
+}
+
+.titulo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 1; /* Asegura que el título esté por encima del resto del contenido */
+}
+
+.titulo h1 {
+    margin: 0; /* Elimina el margen predeterminado del h1 */
+    color: #ffffff;
+}
+
+.cancion {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    background-color: #6c6161;
+    height: 80px;
+    width: 900px;
+}
+
+.icono-musica {
+    margin-right: 10px;
+}
+
+.corazon {
+    margin-left: auto;
+}

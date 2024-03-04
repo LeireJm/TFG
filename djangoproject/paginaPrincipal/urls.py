@@ -15,5 +15,8 @@ urlpatterns = [
     path('recomendar_canciones/', views.recomendar_canciones, name='recomendar_canciones'),
     path('crear_playlist/', views.crear_playlist, name='crear_playlist'),
 
+
     path('miPerfil/', viewsUsuarios.perfil, name='miPerfil'),
+    path('mostrar_favoritos/', viewsUsuarios.mostrarFavoritos, name='mostrar_favoritos'),
+    path('mostrar_playlists/', viewsUsuarios.mostrarPlaylists, name='mostrar_playlists'),
 ]

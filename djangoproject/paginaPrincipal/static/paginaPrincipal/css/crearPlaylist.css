@@ -1,0 +1,66 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* Caja de la canción */
+.song_box {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #6c6161;
+    border: 1px solid #000000;
+    padding: 20px;
+    width: 400px; /* ajusta el ancho según tus necesidades */
+    height: 525px; /* ajusta la altura según tus necesidades */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.icon-container {
+    width: 350px; /* ajusta el ancho del contenedor del icono */
+    height: 400px; /* ajusta la altura del contenedor del icono */
+    border-radius: 10px;
+    background-color: #8e86864f;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px; /* ajusta el tamaño del icono */
+}
+
+.text {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Iconos */
+.icons {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 50px; /* Espacio entre los iconos */
+}
+
+.icon {
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.icon .fa-heart{
+    color: #fc3636;
+}
+
+.icon .fa-check{
+    color: #3ff880;
+}
+
+.icon .fa-redo-alt{
+    color: #363dfc;
+}
