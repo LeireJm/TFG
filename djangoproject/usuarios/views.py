@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Usuario, Playlist
+from .models import Usuario, Playlist, Cancion
 import json
 
 #muestra la pantalla de inicio de sesión (cuando /usuarios)
@@ -119,8 +119,29 @@ def perfil(request):
 #mostrar favoritos
 def mostrarFavoritos(request):
     #aquí contar la cantidad de canciones favoritas que tiene el usuario y pasarle nombre y duración de cada una
+    user = request.user  # Obtén el usuario autenticado
 
-    return render(request, 'mostrarFavoritos.html')
+    usuario = Usuario.objects.get(userId=user.userId)
+
+    favoritos_usuario = usuario.favoritos
+
+    nombreCanciones = []
+    artistaCanciones = []
+    duracionCanciones = []
+
+    print("favoritos_usuario", favoritos_usuario)
+
+    for cancion in favoritos_usuario:
+        p = Cancion.objects.get(id=cancion)
+        nombreCanciones.append(p.track_name)
+        artistaCanciones.append(p.artist_name)
+        duracionCanciones.append(p.duration_ms)
+
+    nombres_favoritos_json = json.dumps(nombreCanciones)
+    artistas_favoritos_json = json.dumps(artistaCanciones)
+    duracion_favoritos_json = json.dumps(duracionCanciones)
+
+    return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones})
 
 #mostrar playlists
 def mostrarPlaylists(request):

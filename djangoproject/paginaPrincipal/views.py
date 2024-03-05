@@ -24,9 +24,17 @@ def index(request):
 def pagina_principal(request):
     user = request.user
 
-    usuario = Usuario.objects.get(userId=user.userId)
+    if user.is_authenticated:
+        usuario = Usuario.objects.get(userId=user.userId)
+        playlists_usuario = usuario.playlists
 
-    
+        nombres_playlists = []
+
+        for playlist in playlists_usuario:
+            p = Playlist.objects.get(playlistId=playlist)
+            nombres_playlists.append(p.playlistName)
+    else:
+        return render(request, 'paginaPrincipal.html')
 
     # Crear una nueva instancia de Playlist
     # nueva_playlist = Playlist(
@@ -44,15 +52,6 @@ def pagina_principal(request):
     # canciones_a_agregar = [4, 5, 6]  # IDs de las nuevas canciones
     # playlist_existente.listaCanciones.extend(canciones_a_agregar)
     # playlist_existente.save()
-
-    playlists_usuario = usuario.playlists
-
-    nombres_playlists = []
-
-    for playlist in playlists_usuario:
-        p = Playlist.objects.get(playlistId=playlist)
-        nombres_playlists.append(p.playlistName)
-
 
     return render(request, 'paginaPrincipal.html', {'playlists': nombres_playlists})
 

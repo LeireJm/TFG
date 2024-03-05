@@ -66,16 +66,21 @@
                 <i class="fas fa-trash-alt"></i></span>
                 <br>
 
+                
                 <div class="playlists">
-                    <!-- Mostrar las playlists del usuario -->                   
-                    {% for playlist in playlists %}
-                        <div class="playlist-box">
-                            <i class="fas fa-music"></i>
-                            <a>{{ playlist }}</a>
-                        </div>
-                    {% endfor %}
+                    {% if user.is_authenticated %}
+                        <!-- Si el usuario está autenticado, mostrar las playlists del usuario -->                   
+                        {% for playlist in playlists %}
+                            <div class="playlist-box">
+                                <i class="fas fa-music"></i>
+                                <a>{{ playlist }}</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Debes iniciar sesión para acceder a tus playlists.</p>
+                    {% endif %}
                 </div>
-
+                
             </div>
             <!-- redimensionar la sidebar -->
             <!-- <div class="resize-handle" id="resizeHandle"></div>  -->

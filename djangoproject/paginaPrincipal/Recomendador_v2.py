@@ -566,7 +566,10 @@ def merge_lists(l1, l2, l3):
 
     return l1
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 # La función ***recommender_songs*** devuelve las canciones similares de una lista de canciones. Consiste en devolver las canciones comunes de las similares de cada canción y así sucesivamente hasta conseguir al menos 10.
 
 # In[97]:
@@ -590,5 +593,9 @@ def recommender_songs(songs_id, options):
         ids = intersection(similar_songs)
         merge_lists(ret,ids,songs_id)
     
+<<<<<<< Updated upstream
     return ret
     
+=======
+    return ret
+>>>>>>> Stashed changes
