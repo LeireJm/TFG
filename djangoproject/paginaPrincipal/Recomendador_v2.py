@@ -481,13 +481,21 @@ def recommender(song_id, options):
     list_final = []
 
     if len(list_songs_content) > 10: # Es necesario hacer la intersección -> segunda fase
-        list_final = intercalate_lists(list_songs_content, list_songs_collaborative)
+        aux = intercalate_lists(list_songs_content, list_songs_collaborative)
+        
+        if song_id in aux: aux.remove(song_id)
+        list_final = aux.copy()[:10]
+        
     elif len(list_songs_content) == 0:
-        list_final = list_songs_collaborative
+        aux = list_songs_collaborative
+        
+        if song_id in aux: aux.remove(song_id)
+        list_final = aux.copy()[:10]
     else:
-        list_final = list_songs_content
-
-    
+        aux = list_songs_content
+        
+        if song_id in aux: aux.remove(song_id)
+        list_final = aux.copy()[:10]    
 
     #La lista final devuelve los ids de las canciones que se recomiendan.
     #Cambiamos los ids para devolver el nombre de la canción y el artista
@@ -568,6 +576,8 @@ def recommender_songs(songs_id, options):
     ret = []
     
     similar_songs = []
+    
+    if len(songs_id) == 1: return recommender(songs_id[0],options)
     
     ids = songs_id.copy() # Copiamos los ids pasados
     # Recorremos todas para obtener la lista de canciones similares de cada canción de seleccionada
