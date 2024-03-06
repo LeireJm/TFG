@@ -139,9 +139,16 @@ def mostrarFavoritos(request):
 
     nombres_favoritos_json = json.dumps(nombreCanciones)
     artistas_favoritos_json = json.dumps(artistaCanciones)
-    duracion_favoritos_json = json.dumps(duracionCanciones)
 
-    return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones})
+    print("nombres canciones", nombres_favoritos_json)
+    print("artistas: ", artistas_favoritos_json)
+    print("duracion:", duracionCanciones)
+
+    datos = {'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
+
+    print("datos: ", datos)
+
+    return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
 
 #mostrar playlists
 def mostrarPlaylists(request):

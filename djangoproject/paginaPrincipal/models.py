@@ -21,7 +21,7 @@ class Cancion(models.Model):
     liveness = models.DecimalField(null=True, max_digits=50, decimal_places=6)
     valence = models.DecimalField(null=True, max_digits=50, decimal_places=6)
     tempo = models.DecimalField(null=True, max_digits=50, decimal_places=6)
-    duration_ms = models.DecimalField(null=True, max_digits=50, decimal_places=6)
+    duration_ms = models.IntegerField(null=True)
     time_signature = models.DecimalField(null=True, max_digits=50, decimal_places=6)
     genres = ArrayField(models.CharField(), null=True)
 

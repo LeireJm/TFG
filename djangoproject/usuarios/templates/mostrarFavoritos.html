@@ -22,6 +22,36 @@
     <div id="cancionesContainer">
     </div>
 
+    <script>
+      var nombresCanciones = JSON.parse('{{ nombre_canciones|escapejs }}');
+      var artistasCanciones = JSON.parse('{{ artistas_canciones|safe }}');
+      var duracionCanciones = JSON.parse('{{ duracion_canciones|escapejs }}');
+
+      var canciones = [];
+
+      var longitud = nombresCanciones.length;
+
+      //Unifico las tres listas anteriores en una
+      for (var i = 0; i < longitud; i++) {
+        var duracionMilisegundos = duracionCanciones[i];
+        //paso la duración a minutos y segundos
+        var minutos = Math.floor(duracionMilisegundos / 60000);
+        var segundos = ((duracionMilisegundos % 60000) / 1000).toFixed(0);
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+
+        var cancion = {
+            nombre: nombresCanciones[i],
+            artista: artistasCanciones[i],
+            duracion: minutos + ':' + segundos
+        };
+
+        canciones.push(cancion);
+      }
+
+      console.log(canciones);
+
+    </script>
+
     <!-- JavaScript -->
     <script src="{% static 'usuarios/js/mostrarFavoritos.js' %}"></script>
 </body>
