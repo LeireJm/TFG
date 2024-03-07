@@ -26,12 +26,24 @@ $(document).ready(function() {
         cancionElement.appendChild(nombreArtista);
 
         // Corazón (para marcar como favorita)
+        // Crear corazón
         var corazon = document.createElement("i");
-        corazon.classList.add("far", "fa-music", "corazon");
+        corazon.classList.add("fas", "fa-heart", "corazon");
+        corazon.setAttribute("estado", "vacio"); // Agregar un atributo personalizado para rastrear el estado
         corazon.addEventListener("click", function() {
-            corazon.classList.toggle("favorita");
+            // Alternar entre los estados lleno/vacío
+            if (corazon.getAttribute("estado") === "vacio") {
+                corazon.classList.remove("fa-heart-o");
+                corazon.classList.add("fa-heart");
+                corazon.setAttribute("estado", "lleno");
+            } else {
+                corazon.classList.remove("fa-heart");
+                corazon.classList.add("fa-heart-o");
+                corazon.setAttribute("estado", "vacio");
+            }
         });
         cancionElement.appendChild(corazon);
+
 
         // Duración de la canción
         var duracionCancion = document.createElement("span");
