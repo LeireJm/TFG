@@ -144,7 +144,7 @@ def mostrarFavoritos(request):
     print("artistas: ", artistas_favoritos_json)
     print("duracion:", duracionCanciones)
 
-    datos = {'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
+    datos = {'id_canciones': favoritos_usuario, 'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
 
     print("datos: ", datos)
 
@@ -168,3 +168,12 @@ def mostrarPlaylists(request):
     nombres_playlists_json = json.dumps(nombres_playlists)
 
     return render(request, 'mostrarPlaylists.html', {'id_playlists': playlists_usuario,'nombres_playlists': nombres_playlists_json})
+
+#eliminar cancion favorita del usuario
+def eliminarCancionFav(request):
+    if request.method == 'POST' and request.is_ajax():
+        cancion_id = request.POST.get('cancion_id')
+        # Aquí puedes eliminar la canción de la base de datos
+        # Eliminar la canción de la base de datos y luego responder con un mensaje de éxito
+        return JsonResponse({'mensaje': 'Canción eliminada correctamente'})
+    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})

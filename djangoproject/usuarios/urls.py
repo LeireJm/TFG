@@ -20,6 +20,8 @@ urlpatterns = [
     path('mostrar_favoritos/', views.mostrarFavoritos, name='mostrar_favoritos'),
     path('mostrar_playlists/', views.mostrarPlaylists, name='mostrar_playlists'),
 
+    path('mostrar_favoritos/eliminar_cancion_fav/', views.eliminarCancionFav, name='eliminar_cancion_favorita'),
+
     #si el inicio es correcto, lleva a la página principal de la aplicación
     path('paginaPrincipal/', viewsPaginaPrincipal.pagina_principal, name='paginaPrincipal')
     
