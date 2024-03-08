@@ -21,14 +21,21 @@
       <div class="icon-container">
         <div class="icon">🎵</div>
       </div>
-      <div class="text">Texto de la primera línea</div>
-      <div class="text">Texto de la segunda línea</div>
+      <div class="text"><a>{{ nombre }}</a></div>
+      <div class="text">{{artista}}</div>
     </div>
     <div class="icons">
       <div class="icon"><i class="fas fa-heart"></i></div>
       <div class="icon"><i class="fas fa-check"></i></div>
       <div class="icon"><i class="fas fa-redo-alt"></i></div>
+
+
+      <button type="button" id="btn-enviar" aria-label="Enviar selecciones">Enviar selecciones</button>
+        <div id="resultados-seleccion"></div>
     </div>
+    
+    <!-- JavaScript -->
+    <script src="{% static 'paginaPrincipal/js/canciones.js' %}"></script>
     
 </body>
 </html>

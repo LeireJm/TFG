@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from usuarios.models import Playlist, Usuario
 
+import random
 import csv
 import os
 import json
@@ -76,6 +77,21 @@ def lista_canciones(request):
 
     return render(request, 'canciones.html', {'canciones': random_songs, 'cantidad_canciones': cantidad_canciones})
 
+def crear_playlist(request):
+    user = request.user
+
+    usuario = Usuario.objects.get(userId=user.userId)
+
+    favoritos_usuario = usuario.favoritos
+    
+    #una canción aleatoria de entre las favoritas del usuario
+    cancionAMostrar = random.choice(favoritos_usuario)
+
+    cancion = Cancion.objects.get(id=cancionAMostrar)
+    nombre = cancion.track_name
+    artista = cancion.artist_name
+
+    return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista })
 
 @csrf_exempt
 def recomendar_canciones(request):
@@ -108,8 +124,6 @@ def recomendar_canciones(request):
 
         return JsonResponse({"recomendaciones": canciones_similares_JSON})
 
-def crear_playlist(request):
-    return render(request, 'crearPlaylist.html')
 
 def cargar_csv(request):
     archivo_csv = os.path.join(os.path.dirname(__file__), 'spotify_data_mod_llaves.csv')
