@@ -16,7 +16,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
-
+from sklearn.cluster import KMeans
+from sklearn.metrics.pairwise import euclidean_distances
 
 # Comenzamos cargando los datasets de las canciones junto a los ratings. El archivo original del dataset de las canciones incluía 1.2 millones de canciones por lo que se ha reducido el dataset a 50000 porque al no usar librerías específicas como Surprise no es eficiente y sobrepasa el uso de la memoria si utilizamos el dataset no reducido.
 
@@ -433,6 +434,44 @@ def second_stage(song_id): # collaborative_recommender
     
     return similar_songs
 
+# Tercera fase (***third_stage***) representa basado en conocimiento, que solo se usará en el caso de que el usuario no haya introducido ninguna opción y recomendará por popularidad de la canción, que es algo que el sistema sabe (conocimiento)
+
+def third_stage(song_id):
+    # Supongamos que 'df' es tu DataFrame que contiene las características de las canciones
+    # Primero, normalizamos los datos
+    df = songs.copy();
+    
+    col_del = ['songId', 'artist_name', 'track_name', 'track_id','genre', 'genres']
+    
+    df = df.drop(columns=col_del)
+    
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Aplicamos K-means
+    kmeans = KMeans(n_clusters=1)
+    kmeans.fit(df_scaled)
+
+    # Ahora, cada canción ha sido asignada a un cluster
+    df['cluster'] = kmeans.labels_
+
+    # Obtiene el cluster de la canción
+    song_cluster = df.loc[song_id, 'cluster']
+
+    # Filtra el DataFrame para incluir solo las canciones en el mismo cluster
+    same_cluster_df = df[df['cluster'] == song_cluster]
+
+    # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.loc[song_id].drop('cluster').values.reshape(1, -1))
+
+    # Obtiene los índices de las canciones ordenadas por distancia (de menor a mayor)
+    closest_song_ids = np.argsort(distances.squeeze())
+
+    # Obtiene los índices de las canciones más cercanas
+    closest_songs = same_cluster_df.iloc[closest_song_ids[:20]]
+
+    return closest_songs
+
 
 # La función ***intercale_lists*** sirve para mezclar los resultados del recomendador basado en contenido y el colaborativo.
 
@@ -487,7 +526,10 @@ def recommender(song_id, options):
         list_final = aux.copy()[:10]
         
     elif len(list_songs_content) == 0:
-        aux = list_songs_collaborative
+        if len(list_songs_collaborative) == 0:
+            aux = third_stage(song_id)
+        else: 
+            aux = list_songs_collaborative
         
         if song_id in aux: aux.remove(song_id)
         list_final = aux.copy()[:10]
