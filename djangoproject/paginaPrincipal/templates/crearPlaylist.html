@@ -17,25 +17,48 @@
 
 <body>
     <!-- Contenido de tu página actual -->
-    <div class="song_box">
-      <div class="icon-container">
-        <div class="icon">🎵</div>
+    {% if opcion %}
+    <button id="botonEnviar" hidden>Enviar</button>
+      <div class="song_box">
+        <div class="icon-container">
+          <div class="icon">🎵</div>
+        </div>
+        <div class="text"><a id="nombre" data-nombre="{{ nombre }}">{{ nombre }}</a></div>
+        <div class="text" id="artista" data-artista="{{ artista }}">{{ artista }}</div>
+        <div class="text" id="id" data-id="{{ id }}"></div>
       </div>
-      <div class="text"><a>{{ nombre }}</a></div>
-      <div class="text">{{artista}}</div>
-    </div>
-    <div class="icons">
-      <div class="icon"><i class="fas fa-heart"></i></div>
-      <div class="icon"><i class="fas fa-check"></i></div>
-      <div class="icon"><i class="fas fa-redo-alt"></i></div>
+      <div class="icons">
 
+        <div class="icon">
+          <i id="btn-like" class="fas fa-heart"></i>
+        </div>
+        <div class="icon">
+          <i id="btn-check" class="fas fa-check"></i>
+        </div>
+        <div class="icon">
+          <i id="btn-rep" class="fas fa-redo-alt"></i>
+        </div>
+        <div class="icon">
+          <i id="btn-enviar" class="fas fa-arrow-right"></i>
+        </div>
+      
 
-      <button type="button" id="btn-enviar" aria-label="Enviar selecciones">Enviar selecciones</button>
-        <div id="resultados-seleccion"></div>
-    </div>
+        <!-- <button type="button" id="btn-enviar" aria-label="Enviar selecciones">
+          Enviar selecciones
+          <i class="fas fa-arrow-right"></i>
+          <div id="resultados-seleccion"></div>
+      </button> -->
+    {% else %}  
+      <form method="post" action="/paginaPrincipal/crear_playlist/">
+        {% csrf_token %}
+        <h2>Introduce el nombre de tu playlist:</h2>
+        <input type="text" id="nombreInput" name="nombre" placeholder="Ingresa aquí el nombre" required>
+        <button id="botonEnviar">Enviar</button>
+
+    {% endif %}
     
     <!-- JavaScript -->
-    <script src="{% static 'paginaPrincipal/js/canciones.js' %}"></script>
+    <script src="{% static 'paginaPrincipal/js/crearPlaylist.js' %}"></script>
     
 </body>
 </html>

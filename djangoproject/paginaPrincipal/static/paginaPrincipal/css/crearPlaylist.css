@@ -37,6 +37,11 @@ body, html {
     margin-bottom: 10px;
 }
 
+.text a{
+    font-size: 25px;
+    font-weight: bold;
+}
+
 /* Iconos */
 .icons {
     position: absolute;

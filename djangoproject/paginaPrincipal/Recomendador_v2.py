@@ -498,7 +498,7 @@ def idANombre(songs_id):
 
     for song_id in songs_id:
         #aquí puedo escoger los campos que quiero devolver
-        nombre_cancion = songs.loc[songs.index == song_id, ['track_name', 'artist_name']]
+        nombre_cancion = songs.loc[songs.index == song_id, [ 'track_name', 'artist_name']]
         nombres_canciones.append(nombre_cancion)
 
     #pasar a df
@@ -539,12 +539,13 @@ def recommender(song_id, options):
         if song_id in aux: aux.remove(song_id)
         list_final = aux.copy()[:10]    
 
+    print("list_final:", list_final)
+
     #La lista final devuelve los ids de las canciones que se recomiendan.
     #Cambiamos los ids para devolver el nombre de la canción y el artista
     songs = idANombre(list_final)
 
-    print("SONGS")
-    print(songs)
+    songs['id'] = list_final
     
     return songs
 

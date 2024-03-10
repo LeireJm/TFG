@@ -13,8 +13,11 @@ urlpatterns = [
     path('', views.pagina_principal, name='paginaPrincipal'),
     path('lista_canciones/', views.lista_canciones, name='lista_canciones'),
     path('recomendar_canciones/', views.recomendar_canciones, name='recomendar_canciones'),
+
+    path('crear_playlist_inicio/', views.crear_playlist_inicio, name='crear_playlist_inicio'),
     path('crear_playlist/', views.crear_playlist, name='crear_playlist'),
 
+    # path('meterCancionPlaylist/', views.meterCancionPlaylist, name='meterCancionPlaylist'),
 
     path('miPerfil/', viewsUsuarios.perfil, name='miPerfil'),
     path('mostrar_favoritos/', viewsUsuarios.mostrarFavoritos, name='mostrar_favoritos'),

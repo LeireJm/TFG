@@ -37,22 +37,7 @@ def pagina_principal(request):
     else:
         return render(request, 'paginaPrincipal.html')
 
-    # Crear una nueva instancia de Playlist
-    # nueva_playlist = Playlist(
-    #     playlistId= 2,  # Asigna el ID de la nueva playlist (puedes ajustarlo según sea necesario)
-    #     playlistName="playlist de prueba 2",  # Asigna el nombre de la nueva playlist
-    #     listaCanciones=[1, 2, 3]  # Lista de IDs de canciones (ajusta según sea necesario)
-    # )
-
-    # # # Guardar la nueva instancia en la base de datos
-    # nueva_playlist.save()
-
-    # playlist_existente = Playlist.objects.get(playlistId=1)
-
-    # # Agregar canciones a la lista de canciones existente
-    # canciones_a_agregar = [4, 5, 6]  # IDs de las nuevas canciones
-    # playlist_existente.listaCanciones.extend(canciones_a_agregar)
-    # playlist_existente.save()
+   
 
     return render(request, 'paginaPrincipal.html', {'playlists': nombres_playlists})
 
@@ -77,7 +62,34 @@ def lista_canciones(request):
 
     return render(request, 'canciones.html', {'canciones': random_songs, 'cantidad_canciones': cantidad_canciones})
 
+def crear_playlist_inicio(request):
+    return render(request, 'crearPlaylist.html', {"opcion": 0})
+
 def crear_playlist(request):
+    error_message = ''
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+
+        # Crear una nueva playlist en la base de datos
+        ultima_playlist = Playlist.objects.order_by('-playlistId').first()
+
+        print("ultima playlist id:" , ultima_playlist.playlistId)
+
+
+        nueva_id = ultima_playlist.playlistId + 1 if ultima_playlist else 1
+
+        nueva_playlist = Playlist( playlistId= nueva_id, playlistName=nombre, listaCanciones=[])
+
+        # # Guardar la nueva instancia en la base de datos
+        #nueva_playlist.save()
+
+        # playlist_existente = Playlist.objects.get(playlistId=1)
+
+        # Agregar canciones a la lista de canciones existente
+        # canciones_a_agregar = [4, 5, 6]  # IDs de las nuevas canciones
+        # playlist_existente.listaCanciones.extend(canciones_a_agregar)
+        # playlist_existente.save()
+    
     user = request.user
 
     usuario = Usuario.objects.get(userId=user.userId)
@@ -88,10 +100,11 @@ def crear_playlist(request):
     cancionAMostrar = random.choice(favoritos_usuario)
 
     cancion = Cancion.objects.get(id=cancionAMostrar)
+    idCancion = cancion.id
     nombre = cancion.track_name
     artista = cancion.artist_name
 
-    return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista })
+    return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'error_message': error_message})
 
 @csrf_exempt
 def recomendar_canciones(request):

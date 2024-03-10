@@ -9,7 +9,7 @@ $(document).ready(function() {
     
     var crearPlaylist = document.getElementById("crear_playlist");
     crearPlaylist.addEventListener("click", function() {
-        abrirPopup('/paginaPrincipal/crear_playlist/', 600, 1000);
+        abrirPopup('/paginaPrincipal/crear_playlist_inicio/', 600, 1000);
     });
     
     var openPopupButton = document.getElementById("abrirFavoritos");
