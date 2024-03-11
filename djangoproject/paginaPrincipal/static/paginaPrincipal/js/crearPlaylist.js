@@ -1,17 +1,5 @@
 $(document).ready(function() {
-    // primera parte
-    // var botonEnviar = document.getElementById('botonEnviar');
-
-    // botonEnviar.addEventListener('click', function() {
-    //     // Obtener el valor del cuadro de texto
-    //     var nombre = document.getElementById('nombreInput').value;
-
-    //     if (nombre.trim() === "") {
-    //         alert("Por favor, ingresa un nombre.");
-    //         window.location.href = '/paginaPrincipal/crear_playlist_inicio'
-    //     }
-    // });
-
+    var indiceActual = 0;
 
     // segunda parte
     var btnLike = document.getElementById('btn-like');
@@ -26,9 +14,12 @@ $(document).ready(function() {
     var artista = document.getElementById('artista').dataset.artista;
     var elementoId = document.getElementById('id').dataset.id;
 
+    var playlistId = document.getElementById('playlistId').dataset.playlistid;
+
     console.log("Nombre:", nombre);
     console.log("Artista:", artista);
     console.log("Id:", elementoId);
+    console.log("PlaylistId:", playlistId);
 
     selecciones.push(elementoId)
 
@@ -44,10 +35,12 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "/meterCancionPlaylist/",
-            data: JSON.stringify(datos),
-            contentType: "application/json",
-            dataType: "json",
+            url: "/paginaPrincipal/meterCancionPlaylist/",
+            data: {
+                cancion: elementoId,
+                playlistId: playlistId,
+                // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            },
             success: function(response) {
                 console.log("Los datos se enviaron correctamente a views.py");
                 console.log(response); // Puedes manejar la respuesta si es necesario
@@ -56,8 +49,6 @@ $(document).ready(function() {
                 console.error("Error al enviar datos a views.py:", error);
             }
         });          
-
-        
     });
 
     //si hemos marcado alguna casilla, la muestra
@@ -87,12 +78,20 @@ $(document).ready(function() {
 
             btnRep.addEventListener('click', function() {
 
-                var indiceAleatorio = Math.floor(Math.random() * 10);
-                console.log("longitud")
-                console.log(indiceAleatorio)
+                // var indiceAleatorio = Math.floor(Math.random() * 10);
         
-                // Obtener la canción en el índice aleatorio
-                var song = jsonArray[indiceAleatorio];
+                // // Obtener la canción en el índice aleatorio
+                // var song = jsonArray[indiceAleatorio];
+
+                // Obtener la canción en el índice actual
+                var song = jsonArray[indiceActual];
+                
+                // Incrementar el índice actual para la próxima canción
+                indiceActual++;
+        
+
+                console.log("jsonArray longitud")
+                console.log(jsonArray.length)
         
                 console.log("Rep")
                 console.log(song)
@@ -101,6 +100,10 @@ $(document).ready(function() {
                 $("#nombre").text(song.track_name);
                 $("#artista").text(song.artist_name);
                 $("#id").text(song.id).hide();
+
+                nombre = song.track_name
+                artista = song.artist_name
+                elementoId = song.id
         
             });
             
@@ -119,13 +122,27 @@ $(document).ready(function() {
         var confirmacion = confirm("¿Deseas crear la playlist con las canciones seleccionadas?");
 
             if (confirmacion) {
-                window.location.href = "/crear_playlist/";
+                window.close()
+                var left = (window.innerWidth - 1000) / 2;
+                var top = (window.innerHeight - 1000) / 2;
+                var opciones = 'width=1000,height=1000, left=' + left + ',top=' + top; 
+    
+                // Abre una nueva ventana con la URL especificada y las opciones definidas
+                var nuevaVentana = window.open('/usuarios/mostrar_playlists/', '_blank', opciones);
+                nuevaVentana.focus();
             } else {
                 // // Si el usuario cancela, no se realiza ninguna acción adicional
                 // console.log("El usuario canceló la redirección.");
             }
 
     });
+
+    function abrirPopup(url, width, height) {
+        var left = (window.innerWidth - width) / 2;
+        var top = (window.innerHeight - height) / 2;
+        var popupWindow = window.open(url, "popupWindow", 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
+        popupWindow.focus();
+    }
         
 
     function mostrarResultadosRecomendacion(resultados) {

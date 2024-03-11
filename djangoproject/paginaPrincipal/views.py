@@ -66,33 +66,29 @@ def crear_playlist_inicio(request):
     return render(request, 'crearPlaylist.html', {"opcion": 0})
 
 def crear_playlist(request):
-    error_message = ''
+
+    user = request.user
+
+    usuario = Usuario.objects.get(userId=user.userId)
+
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
 
         # Crear una nueva playlist en la base de datos
         ultima_playlist = Playlist.objects.order_by('-playlistId').first()
 
-        print("ultima playlist id:" , ultima_playlist.playlistId)
-
-
         nueva_id = ultima_playlist.playlistId + 1 if ultima_playlist else 1
+
+        print("nueva ID: ",  nueva_id)
 
         nueva_playlist = Playlist( playlistId= nueva_id, playlistName=nombre, listaCanciones=[])
 
-        # # Guardar la nueva instancia en la base de datos
-        #nueva_playlist.save()
+        nueva_playlist.save()
 
-        # playlist_existente = Playlist.objects.get(playlistId=1)
-
-        # Agregar canciones a la lista de canciones existente
-        # canciones_a_agregar = [4, 5, 6]  # IDs de las nuevas canciones
-        # playlist_existente.listaCanciones.extend(canciones_a_agregar)
-        # playlist_existente.save()
-    
-    user = request.user
-
-    usuario = Usuario.objects.get(userId=user.userId)
+        #meto la playlist nueva en las playlists del usuario
+        usuario.playlists.append(nueva_id)
+        # usuario.save()
+   
 
     favoritos_usuario = usuario.favoritos
     
@@ -104,7 +100,29 @@ def crear_playlist(request):
     nombre = cancion.track_name
     artista = cancion.artist_name
 
-    return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'error_message': error_message})
+    return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
+
+@csrf_exempt
+def meterCancionPlaylist(request):
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        idCancionNueva = request.POST.get("cancion")
+        playlistId = request.POST.get("playlistId")
+
+        print("cancion nueva:", idCancionNueva)
+        print("playlist id:", playlistId)
+        
+        playlist_actual = Playlist.objects.get(playlistId=playlistId)
+
+        #Agregar canciones a la lista de canciones existente
+        playlist_actual.listaCanciones.append(idCancionNueva)
+        # playlist_actual.save()
+
+        return JsonResponse({'mensaje': 'Solicitud AJAX exitosa'})
+    else:
+        return JsonResponse({'error': 'Solicitud no válida'})
+
+
+
 
 @csrf_exempt
 def recomendar_canciones(request):
