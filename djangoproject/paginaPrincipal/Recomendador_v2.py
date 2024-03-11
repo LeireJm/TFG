@@ -18,6 +18,9 @@ from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import euclidean_distances
+from itertools import chain
+from sklearn.decomposition import TruncatedSVD
+
 
 # Comenzamos cargando los datasets de las canciones junto a los ratings. El archivo original del dataset de las canciones incluía 1.2 millones de canciones por lo que se ha reducido el dataset a 50000 porque al no usar librerías específicas como Surprise no es eficiente y sobrepasa el uso de la memoria si utilizamos el dataset no reducido.
 
@@ -355,6 +358,17 @@ def content_based_features(title):
 
 # Las **funciones** anteriormente declaradas que van a ser utilzadas para el recomendador.
 
+# La función ***intercale_lists*** sirve para mezclar los resultados del recomendador basado en contenido y el colaborativo.
+
+def intercalate_lists(*l):
+    # Utiliza zip_longest para manejar listas de diferentes longitudes
+    zipped = zip(*l)
+    
+    # Usa chain.from_iterable para aplanar la lista intercalada
+    list_final = list(chain.from_iterable(zipped))
+    
+    return list_final
+
 # Ahora vamos a hacer una función que se aquella que se llame cuando se le de al botón de recomendadar (***recommender*** es la función).
 
 # La siguiente función ***sim_cosine_total*** calcula la matriz de similitud del coseno total, es decir, tiene en cuenta los atributos pasados y los atributos específicos que usamos con un menor porcentaje para una recomendación algo más exacta. Hacemos una media aritmética y damos la misma importancia a todos los atributos que el usuario elige sin preferencias.
@@ -405,23 +419,108 @@ def sim_cosine_total(options):
 
 # Primera fase (***first_stage***) representa el recomendador basado en contenido, el contenido a tener en cuenta son los atributos que ha seleccionado el usuario, si ha seleccionado.
 
+def genre_clustering(song_id):
+    # Eliminar los caracteres "{" y "}"
+    #songs['genres'] = songs['genres'].str.replace('{', '').str.replace('}', '')
+    #print(songs['genres'])
+
+    # Dividir la columna 'genres' por comas
+    #songs['genres'] = songs['genres'].apply(lambda x: x.split(","))
+    #songs['genres'] = songs['genres'].apply(lambda x: x.split("|"))
+    
+    col_del = ["songId",	"artist_name",	"track_name",	"track_id", "popularity", "year", "genre",	"danceability",	"energy",	"key",	"loudness",	"mode",	"speechiness",	"acousticness",	"instrumentalness",	"liveness",	"valence",	"tempo",	"duration_ms",	"time_signature", "genres"]
+
+    songsAux = songs.copy()
+
+    genre = set(g for G in songsAux['genres'] for g in G)
+
+    for g in genre:
+        songsAux[g] = songsAux.genre.transform(lambda x: int(g in x))
+        
+    song_genre = songsAux.drop(columns=col_del)
+    
+    # Aplicamos K-means
+    kmeans = KMeans(n_clusters=1)
+    kmeans.fit(song_genre)
+
+    # Ahora, cada canción ha sido asignada a un cluster
+    song_genre['cluster'] = kmeans.labels_
+
+    # Obtiene el cluster de la canción
+    song_cluster = song_genre.loc[song_id, 'cluster']
+
+    # Filtra el DataFrame para incluir solo las canciones en el mismo cluster
+    same_cluster_df = song_genre[song_genre['cluster'] == song_cluster]
+
+    # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.loc[song_id].drop('cluster').values.reshape(1, -1))
+
+    # Obtiene los índices de las canciones ordenadas por distancia (de menor a mayor)
+    closest_song_ids = np.argsort(distances.squeeze())
+
+    # Obtiene los índices de las canciones más cercanas
+    closest_songs = closest_song_ids[:20]
+    #closest_songs = same_cluster_df.iloc[closest_song_ids[:20]]
+
+    return closest_songs 
+
+def features_clustering(options, song_id):
+    df = songs[options].copy();
+        
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Aplicamos K-means
+    kmeans = KMeans(n_clusters=1)
+    kmeans.fit(df_scaled)
+
+    # Ahora, cada canción ha sido asignada a un cluster
+    df['cluster'] = kmeans.labels_
+
+    # Obtiene el cluster de la canción
+    song_cluster = df.loc[song_id, 'cluster']
+
+    # Filtra el DataFrame para incluir solo las canciones en el mismo cluster
+    same_cluster_df = df[df['cluster'] == song_cluster]
+
+    # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.loc[song_id].drop('cluster').values.reshape(1, -1))
+
+    # Obtiene los índices de las canciones ordenadas por distancia (de menor a mayor)
+    closest_song_ids = np.argsort(distances.squeeze())
+
+    # Obtiene los índices de las canciones más cercanas
+    closest_songs = closest_song_ids[:20]
+    #closest_songs = same_cluster_df.iloc[closest_song_ids[:20]]
+
+    return closest_songs
 
 def first_stage(song_id, options):
     # 1. Hay que comprobar si hay atributos a tener en cuenta (options)
-    cosine_sim = sim_cosine_total(options)
+    #cosine_sim = sim_cosine_total(options)
 
-    print("cosine_sim: ", cosine_sim)
+    #print("cosine_sim: ", cosine_sim)
 
-    song_idx = dict(zip(songs['songId'], list(songs.index)))
-    n_recommendations = 20
+    #song_idx = dict(zip(songs['songId'], list(songs.index)))
+    #n_recommendations = 20
 
     #pongo song_id[0] porque solo hay una cancion en la lista song_id
-    idx = song_idx.get(song_id[0])
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:(n_recommendations+1)] # (id, puntuacion)
+    #idx = song_idx.get(song_id[0])
+    #sim_scores = list(enumerate(cosine_sim[idx]))
+    #sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    #sim_scores = sim_scores[1:(n_recommendations+1)] # (id, puntuacion)
 
-    similar_songs = [i[0] for i in sim_scores]
+    #similar_songs = [i[0] for i in sim_scores]
+    
+    # Clustering
+    
+    if 'genres' not in options:
+        similar_songs = features_clustering(options, song_id)
+    else:
+        similar_songs_genres = genre_clustering(song_id)
+        similar_songs_features = features_clustering(options,song_id)
+        
+        similar_songs = intercalate_lists(similar_songs_genres, similar_songs_features)[:20]
 
     return similar_songs
 
@@ -429,7 +528,15 @@ def first_stage(song_id, options):
 # Segunda fase (***second_stage***) representa el recomendador filtrado colaborativo, se recomienda acorde con las canciones que le han gustando a otros usuarios y tienen, por lo tanto, gustos parecidos entre sí.
 
 def second_stage(song_id): # collaborative_recommender
-    similar_songs = find_similar_songs(song_id, X_norm, song_mapper, song_inv_mapper, metric='euclidean', k=20)
+    # Matriz de factorización
+    svd = TruncatedSVD(n_components=20, n_iter=10)
+    Z = svd.fit_transform(X.T)
+    
+    similar_songs = find_similar_songs(song_id, Z.T, song_mapper, song_inv_mapper, metric='cosine', k=20)
+    
+    # No optimizado
+    #similar_songs = find_similar_songs(song_id, X_norm, song_mapper, #song_inv_mapper, metric='euclidean', k=20)
+    
     #similar_songs = find_similar_songs(song_id, X_norm, song_mapper, song_inv_mapper, metric='cosine', k=10) # Hemos visto antes que euclides es algo más rápido
     
     return similar_songs
@@ -468,29 +575,10 @@ def third_stage(song_id):
     closest_song_ids = np.argsort(distances.squeeze())
 
     # Obtiene los índices de las canciones más cercanas
-    closest_songs = same_cluster_df.iloc[closest_song_ids[:20]]
+    closest_songs = closest_song_ids[:20]
+    #closest_songs = same_cluster_df.iloc[closest_song_ids[:20]]
 
     return closest_songs
-
-
-# La función ***intercale_lists*** sirve para mezclar los resultados del recomendador basado en contenido y el colaborativo.
-
-def intercalate_lists(l1, l2):
-    # Calcula la mitad de la longitud de las listas
-    l = len(l1) // 2
-
-    # Utiliza conjuntos para evitar repeticiones
-    intercalate_set = set()
-
-    # Intercale los elementos de la primera mitad de cada lista sin repeticiones
-    for elem1, elem2 in zip(l1, l2):
-        intercalate_set.add(elem1)
-        intercalate_set.add(elem2)
-
-    # Convierte el conjunto a una lista para mantener el orden original
-    list_final = list(intercalate_set)
-
-    return list_final[:l]
 
 ##Función que devuelve la información de una canción a partir del índice
 def idANombre(songs_id):
@@ -550,46 +638,7 @@ def recommender(song_id, options):
     return songs
 
 
-# Hacemos unas pruebas y parece ser que funciona bien
-
-# song_titles = dict(zip(songs['songId'], songs['track_name']))
-
-# similar_songs = recommender(1, ['popularity'])
-
-# song_title = song_titles[1]
-# song_row = songs.loc[songs['songId'] == 1]
-# song_artist = song_row['artist_name'].values[0]
-# song_genre = song_row['genres'].values
-# song_year = song_row['year'].values[0]
-
-# print(f"porque has escuchado ... {song_title} de {song_artist} ({song_genre}, {song_year}) te recomendamos:")
-# for i in similar_songs:
-#    row_i = songs.loc[songs['songId'] == i]
-#    artist_i = row_i['artist_name'].values[0]
-#    genre_i = row_i['genres'].values
-#    popularity_i = row_i['popularity'].values[0]
-#    year_i = row_i['year'].values[0]
-#    print(f"{song_titles[i]} de {artist_i} ({genre_i}, {year_i}). Popularidad: {popularity_i}")
-
-
 # ### Recomendador para varias canciones (PARTE IMPORTANTE)
-
-# La función ***intersection*** sirve para realizar la intersección entre varias listas dadas. Una canción es común cuando aparece en al menos dos listas, aunque no aparezca en el resto.
-
-# In[95]:
-
-
-from collections import Counter
-from functools import reduce
-from operator import add
-
-def intersection(lists):
-    # Reduce las listas y cuenta las veces que aparece cada elemento
-    counter = Counter(reduce(add, lists))
-    
-    # Devuelve los elementos que aparecen en más de una lista
-    return [item for item, count in counter.items() if count > 1]
-
 
 # La función ***merge_lists*** evita repetidos de manera eficiente
 
@@ -625,11 +674,10 @@ def recommender_songs(songs_id, options):
     # Recorremos todas para obtener la lista de canciones similares de cada canción de seleccionada
     # Luego se hace intersección
     # De la intersección si no se ha llegado a 10 canciones en común, con esa intersección se vuelve a buscar las similares y comunes pero a estas y se añaden en la lista final las que no estén ya.
-    while len(ret) < 10:
-        for song_id in ids: 
-            similar_songs.append(recommender(song_id,options))
-        
-        ids = intersection(similar_songs)
-        merge_lists(ret,ids,songs_id)
+    for song_id in ids: 
+        similar_songs.append(recommender(song_id,options))
     
-    return ret
+    aux = intercalate_lists(*similar_songs)
+    merge_lists(ret,aux,songs_id)
+        
+    return ret[:10]
