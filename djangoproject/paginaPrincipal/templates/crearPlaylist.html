@@ -53,9 +53,11 @@
     {% else %}  
       <form method="post" action="/paginaPrincipal/crear_playlist/">
         {% csrf_token %}
-        <h2>Introduce el nombre de tu playlist:</h2>
-        <input type="text" id="nombreInput" name="nombre" placeholder="Ingresa aquí el nombre" required>
-        <button id="botonEnviar">Enviar</button>
+        <div id="contenedor">
+          <h2>Introduce el nombre de tu playlist:</h2>
+          <input type="text" id="nombreInput" name="nombre" placeholder="Ingresa aquí el nombre" required>
+          <button id="botonEnviar">Enviar</button>
+        </div>
     {% endif %}
     
     <!-- JavaScript -->

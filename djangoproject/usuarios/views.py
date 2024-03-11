@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from .models import Usuario, Playlist, Cancion
 import json
 
@@ -168,6 +169,42 @@ def mostrarPlaylists(request):
     nombres_playlists_json = json.dumps(nombres_playlists)
 
     return render(request, 'mostrarPlaylists.html', {'id_playlists': playlists_usuario,'nombres_playlists': nombres_playlists_json})
+
+#mostrar las canciones que contiene una playlist
+@csrf_exempt
+def mostrarCancionesPlaylist(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        playlist_id = request.POST.get('playlistId')
+
+        playlist = Playlist.objects.get(playlistId=playlist_id)
+
+        canciones_playlist = playlist.listaCanciones
+
+        nombreCanciones = []
+        artistaCanciones = []
+        duracionCanciones = []
+
+
+        for cancion in canciones_playlist:
+            p = Cancion.objects.get(id=cancion)
+            nombreCanciones.append(p.track_name)
+            artistaCanciones.append(p.artist_name)
+            duracionCanciones.append(p.duration_ms)
+
+        nombres_favoritos_json = json.dumps(nombreCanciones)
+        artistas_favoritos_json = json.dumps(artistaCanciones)
+
+        print("nombres canciones", nombres_favoritos_json)
+        print("artistas: ", artistas_favoritos_json)
+        print("duracion:", duracionCanciones)
+
+        datos = {'id_canciones': canciones_playlist, 'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
+
+        print("datos: ", datos)
+
+        return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
+
+    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 #eliminar cancion favorita del usuario
 def eliminarCancionFav(request):

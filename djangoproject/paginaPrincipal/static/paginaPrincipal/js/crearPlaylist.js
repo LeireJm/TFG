@@ -42,8 +42,7 @@ $(document).ready(function() {
                 // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
             },
             success: function(response) {
-                console.log("Los datos se enviaron correctamente a views.py");
-                console.log(response); // Puedes manejar la respuesta si es necesario
+                console.log("Los datos se enviaron correctamente a views.py");      
             },
             error: function(xhr, status, error) {
                 console.error("Error al enviar datos a views.py:", error);
@@ -74,7 +73,28 @@ $(document).ready(function() {
 
             // mostrarResultadosRecomendacion(respuesta);
 
-            
+            btnCheck.addEventListener('click', function() { 
+                var song = jsonArray[indiceActual];
+                
+                // Incrementar el índice actual para la próxima canción
+                indiceActual++;
+        
+
+                console.log("jsonArray longitud")
+                console.log(jsonArray.length)
+        
+                console.log("Rep")
+                console.log(song)
+    
+                // Ponemos la nueva canción
+                $("#nombre").text(song.track_name);
+                $("#artista").text(song.artist_name);
+                $("#id").text(song.id).hide();
+
+                nombre = song.track_name
+                artista = song.artist_name
+                elementoId = song.id
+            });
 
             btnRep.addEventListener('click', function() {
 
@@ -104,9 +124,7 @@ $(document).ready(function() {
                 nombre = song.track_name
                 artista = song.artist_name
                 elementoId = song.id
-        
-            });
-            
+            });    
         },
         error: function(xhr, status, error) {
             console.error("Error en la solicitud AJAX:", error);

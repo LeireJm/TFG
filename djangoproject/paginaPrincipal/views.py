@@ -3,7 +3,7 @@ from .models import Cancion
 from .models import Rating 
 from random import sample
 from django.http import HttpResponse
-from .Recomendador_v2 import recommender
+from .Recomendador_v2_antiguo import recommender
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 

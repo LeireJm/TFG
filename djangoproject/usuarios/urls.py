@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('mostrar_favoritos/', views.mostrarFavoritos, name='mostrar_favoritos'),
     path('mostrar_playlists/', views.mostrarPlaylists, name='mostrar_playlists'),
+    path('mostrar_playlists/mostrarCancionesPlaylist/', views.mostrarCancionesPlaylist, name='mostrar_canciones_playlist'),
 
     path('mostrar_favoritos/eliminar_cancion_fav/', views.eliminarCancionFav, name='eliminar_cancion_favorita'),
 
