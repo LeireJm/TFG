@@ -22,7 +22,7 @@ body, html {
     margin: 45px auto;
     padding: 10px 20px;
     background-color: #ffffff;
-    color: white;
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;

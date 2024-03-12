@@ -202,9 +202,9 @@ def mostrarCancionesPlaylist(request):
 
         print("datos: ", datos)
 
-        return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
-
-    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
+        # return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
+    return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
+    # return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 #eliminar cancion favorita del usuario
 def eliminarCancionFav(request):

@@ -32,7 +32,6 @@ $(document).ready(function() {
 
     // Meter la cancion en la playlist y mostrar otra
     btnCheck.addEventListener('click', function() {    
-
         $.ajax({
             type: "POST",
             url: "/paginaPrincipal/meterCancionPlaylist/",
@@ -78,7 +77,6 @@ $(document).ready(function() {
                 
                 // Incrementar el índice actual para la próxima canción
                 indiceActual++;
-        
 
                 console.log("jsonArray longitud")
                 console.log(jsonArray.length)
@@ -97,6 +95,7 @@ $(document).ready(function() {
             });
 
             btnRep.addEventListener('click', function() {
+                contarCancionesEnPlaylist(playlistId);
 
                 // var indiceAleatorio = Math.floor(Math.random() * 10);
         
@@ -161,9 +160,31 @@ $(document).ready(function() {
         var popupWindow = window.open(url, "popupWindow", 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
         popupWindow.focus();
     }
+
+    function contarCancionesEnPlaylist(playlistId) {
+        $.ajax({
+            type: "POST",
+            url: "/paginaPrincipal/crear_playlist/contarCancionesPlaylist/",
+            data: {
+                playlistId: playlistId,
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            },
+            success: function(response) {
+                // Accede al número de canciones desde la respuesta recibida
+                var numCanciones = response.num_canciones;
+                
+                // Haz lo que necesites con el número de canciones
+                console.log("Número de canciones en la playlist:", numCanciones);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error al contar canciones:", error);
+            }
+        });
+    }    
         
 
     function mostrarResultadosRecomendacion(resultados) {
+
         console.log("resultados")
         console.log(resultados);
         var cancionesRecomendadas = resultados.recomendaciones;

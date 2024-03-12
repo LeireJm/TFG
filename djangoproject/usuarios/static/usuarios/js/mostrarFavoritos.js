@@ -66,7 +66,6 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     console.log(response);
-                    console
                     // Eliminar la canción de la página después de eliminarla de la base de datos
                     // $('#cancion_' + idCancion).remove();
                 },

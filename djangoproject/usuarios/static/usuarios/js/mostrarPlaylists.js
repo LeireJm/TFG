@@ -42,13 +42,13 @@ $(document).ready(function() {
                     // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                 },
                 success: function(response) {
-                    console.log("Los datos se enviaron correctamente");
+                    console.log(response)
+                    
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al enviar datos a views.py:", error);
                 }
             });    
-            // window.location.href = "/canciones/?playlist=" + encodeURIComponent(cancion);
         });
         cancionElement.appendChild(corazon);
 

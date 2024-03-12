@@ -87,7 +87,7 @@ def crear_playlist(request):
 
         #meto la playlist nueva en las playlists del usuario
         usuario.playlists.append(nueva_id)
-        # usuario.save()
+        usuario.save()
    
 
     favoritos_usuario = usuario.favoritos
@@ -103,6 +103,23 @@ def crear_playlist(request):
     return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
 
 @csrf_exempt
+def contarCancionesPlaylist(request):
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        playlist_id = request.POST.get('playlistId')
+
+        print("playlist id newww: ", playlist_id)
+
+        #hasta aqui bien
+        
+        playlist = Playlist.objects.get(playlistId=playlist_id)
+
+        num_canciones = len(playlist.listaCanciones)
+
+        return JsonResponse({'num_canciones': num_canciones})
+
+    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
+
+@csrf_exempt
 def meterCancionPlaylist(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         idCancionNueva = request.POST.get("cancion")
@@ -115,7 +132,9 @@ def meterCancionPlaylist(request):
 
         #Agregar canciones a la lista de canciones existente
         playlist_actual.listaCanciones.append(idCancionNueva)
-        # playlist_actual.save()
+
+        #luego comentar
+        playlist_actual.save()
 
         return JsonResponse({'mensaje': 'Solicitud AJAX exitosa'})
     else:
