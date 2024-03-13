@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título -->
+  <title>Crear Playlist</title> 
+    <!-- Para los iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
+   <!-- JavaScript -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- CSS -->
+  <link rel="stylesheet" href="{% static '/paginaPrincipal/css/descubreCanciones.css' %}" />
+</head>
+
+<body>
+    <!-- Contenido de tu página actual -->
+    {% if opcion %}
+    {% csrf_token %}
+    {% else %}  <!-- primera parte donde elegimos las opciones -->
+    <div class="container">
+        <form action="/lista_canciones" method="post">
+            <td>Selecciona los atributos que prefieras:</td><br/>           
+            <input name="options" id="genre" type="checkbox" value="genre" /> Género<br/>
+            <input name="options" id="year" type="checkbox" value="year" /> Año<br/>
+            <input name="options" id="duration_ms" type="checkbox" value="duration_ms" /> Duración<br/>
+            <input name="options" id="popularity" type="checkbox" value="popularity" /> Popularidad<br/>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    {% endif %}
+    
+    <!-- JavaScript -->
+    <script src="{% static 'paginaPrincipal/js/crearPlaylist.js' %}"></script>
+    
+</body>
+</html>

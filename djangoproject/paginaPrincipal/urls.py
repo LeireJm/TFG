@@ -19,6 +19,8 @@ urlpatterns = [
     path('crear_playlist/contarCancionesPlaylist/', views.contarCancionesPlaylist, name='contar_canciones'),
     path('crear_playlist/contarCancionesPlaylist/porPopularidad', views.porPopularidad, name='por_popularidad'),
 
+    path('descubrir_opciones/', views.descubrir_opciones, name='descubrir_opciones'),
+
     path('meterCancionPlaylist/', views.meterCancionPlaylist, name='meterCancionPlaylist'),
 
     path('miPerfil/', viewsUsuarios.perfil, name='miPerfil'),

@@ -41,6 +41,11 @@ def pagina_principal(request):
 
     return render(request, 'paginaPrincipal.html', {'playlists': nombres_playlists})
 
+#página en la que te muestra las opciones que puedes elegir antes de descubrir nuevas canciones
+def descubrir_opciones(request):
+    return render(request, 'descubreCanciones.html', {"opcion": 0})
+
+
 #lista de canciones (recomendador)
 def lista_canciones(request):
     global opciones_globales
@@ -160,9 +165,6 @@ def meterCancionPlaylist(request):
         return JsonResponse({'mensaje': 'Solicitud AJAX exitosa'})
     else:
         return JsonResponse({'error': 'Solicitud no válida'})
-
-
-
 
 @csrf_exempt
 def recomendar_canciones(request):

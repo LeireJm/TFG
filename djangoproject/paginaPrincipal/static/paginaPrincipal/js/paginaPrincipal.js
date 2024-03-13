@@ -6,6 +6,11 @@ $(document).ready(function() {
         var popupWindow = window.open(url, "popupWindow", 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
         popupWindow.focus();
     }
+
+    var descubrir = document.getElementById("descubrir");
+    descubrir.addEventListener("click", function() {
+        abrirPopup('/paginaPrincipal/descubrir_opciones/', 1000, 1000);
+    });
     
     var crearPlaylist = document.getElementById("crear_playlist");
     crearPlaylist.addEventListener("click", function() {

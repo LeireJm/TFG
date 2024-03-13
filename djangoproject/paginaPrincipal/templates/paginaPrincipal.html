@@ -93,7 +93,8 @@
                 <p>¡Explora nuevas canciones y encuentra nueva música a partir de las canciones que te gustan!</p>
                 {% if user.is_authenticated %}
                     <!-- Si el usuario está autenticado, el botón estará habilitado -->
-                    <a href="/paginaPrincipal/lista_canciones"><button>Descubrir</button></a>
+                    <!-- <a href="/paginaPrincipal/lista_canciones"><button>Descubrir</button></a> -->
+                    <button id="descubrir">Descubrir</button></a>
                     <!-- <img src="ruta_de_la_imagen.jpg" alt="Imagen rectangular"> -->
                 {% else %}
                 <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
