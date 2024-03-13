@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var indiceActual = 0;
+    var indicePop = 0;
 
     // segunda parte
     var btnLike = document.getElementById('btn-like');
@@ -97,32 +98,25 @@ $(document).ready(function() {
             btnRep.addEventListener('click', function() {
                 contarCancionesEnPlaylist(playlistId);
 
-                // var indiceAleatorio = Math.floor(Math.random() * 10);
-        
-                // // Obtener la canción en el índice aleatorio
-                // var song = jsonArray[indiceAleatorio];
 
-                // Obtener la canción en el índice actual
-                var song = jsonArray[indiceActual];
+                // // Obtener la canción en el índice actual
+                // var song = jsonArray[indiceActual];
                 
-                // Incrementar el índice actual para la próxima canción
-                indiceActual++;
-        
-
-                console.log("jsonArray longitud")
-                console.log(jsonArray.length)
-        
-                console.log("Rep")
-                console.log(song)
+                // // Incrementar el índice actual para la próxima canción
+                // indiceActual++;
     
-                // Ponemos la nueva canción
-                $("#nombre").text(song.track_name);
-                $("#artista").text(song.artist_name);
-                $("#id").text(song.id).hide();
+        
+                // console.log("Rep")
+                // console.log(song)
+    
+                // // Ponemos la nueva canción
+                // $("#nombre").text(song.track_name);
+                // $("#artista").text(song.artist_name);
+                // $("#id").text(song.id).hide();
 
-                nombre = song.track_name
-                artista = song.artist_name
-                elementoId = song.id
+                // nombre = song.track_name
+                // artista = song.artist_name
+                // elementoId = song.id
             });    
         },
         error: function(xhr, status, error) {
@@ -170,11 +164,62 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
             },
             success: function(response) {
-                // Accede al número de canciones desde la respuesta recibida
                 var numCanciones = response.num_canciones;
                 
-                // Haz lo que necesites con el número de canciones
-                console.log("Número de canciones en la playlist:", numCanciones);
+                if (numCanciones === 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/paginaPrincipal/crear_playlist/contarCancionesPlaylist/porPopularidad",
+                        data: {
+                            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                        },
+                        success: function(response) {
+                            var canciones = response.canciones;
+                            
+                            // Obtener la canción en el índice actual
+                            var song = canciones[indicePop];
+                            
+                            // Incrementar el índice actual para la próxima canción
+                            indicePop++;
+                
+                            // Ponemos la nueva canción
+                            $("#nombre").text(song.track_name);
+                            $("#artista").text(song.artist_name);
+                            $("#id").text(song.id).hide();
+
+                            nombre = song.track_name
+                            artista = song.artist_name
+                            elementoId = song.id
+
+                            console.log("canciones aleatorias")
+                            console.log(canciones)
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error al mostrar canciones aleatorias:", error);
+                        }
+                    });
+
+                } else {
+                    console.log("La playlist tiene canciones.");
+                    // Obtener la canción en el índice actual
+                    var song = jsonArray[indiceActual];
+                    
+                    // Incrementar el índice actual para la próxima canción
+                    indiceActual++;
+        
+            
+                    console.log("Rep")
+                    console.log(song)
+        
+                    // Ponemos la nueva canción
+                    $("#nombre").text(song.track_name);
+                    $("#artista").text(song.artist_name);
+                    $("#id").text(song.id).hide();
+
+                    nombre = song.track_name
+                    artista = song.artist_name
+                    elementoId = song.id
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error al contar canciones:", error);

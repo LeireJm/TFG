@@ -120,6 +120,27 @@ def contarCancionesPlaylist(request):
     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 @csrf_exempt
+def porPopularidad(request):
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+        #cojo las 50 más populares y saco 20 de ellas de manera aleatoria
+        canciones_populares = Cancion.objects.order_by('-popularity')[:50]
+
+        canciones_aleatorias = random.sample(list(canciones_populares), 20)
+
+        datos = []
+        for cancion in canciones_aleatorias:
+            datos.append({
+                'track_name': cancion.track_name,
+                'artist_name': cancion.artist_name,
+                'id': cancion.id,
+            })
+
+        return JsonResponse({'canciones': datos})
+
+    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
+
+@csrf_exempt
 def meterCancionPlaylist(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         idCancionNueva = request.POST.get("cancion")
