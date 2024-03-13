@@ -599,18 +599,28 @@ def idANombre(songs_id):
 def recommender(song_id, options):
     # Primera fase: consiste en la obtención de la lista de canciones parecidas que cumplan con los atributos que el usuario ha elegido.
     list_songs_content = [] # Lista de canciones recomendadas basadas
+
+    
     
     if len(options) != 0:  #si hemos marcado opciones
         list_songs_content = first_stage(song_id, options)
 
+    
+
     # Segunda fase: filtrado colaborativo (si la lista es demasiado grande)
     list_songs_collaborative = second_stage(song_id)
+
     list_final = []
+
+    print("len list_songs_content: ", len(list_songs_content))
 
     if len(list_songs_content) > 10: # Es necesario hacer la intersección -> segunda fase
         aux = intercalate_lists(list_songs_content, list_songs_collaborative)
         
-        if song_id in aux: aux.remove(song_id)
+
+        song_id_set = set(song_id)
+        aux = [x for x in aux if x not in song_id_set]
+
         list_final = aux.copy()[:10]
         
     elif len(list_songs_content) == 0:
@@ -618,13 +628,21 @@ def recommender(song_id, options):
             aux = third_stage(song_id)
         else: 
             aux = list_songs_collaborative
+
+        song_id_set = set(song_id)
+        aux = [x for x in aux if x not in song_id_set]
         
-        if song_id in aux: aux.remove(song_id)
+        # if song_id in aux: 
+        #     aux.remove(song_id)
+
         list_final = aux.copy()[:10]
     else:
         aux = list_songs_content
+        print("aux: ", aux)
         
-        if song_id in aux: aux.remove(song_id)
+        song_id_set = set(song_id)
+        aux = [x for x in aux if x not in song_id_set]
+
         list_final = aux.copy()[:10]    
 
     print("list_final:", list_final)

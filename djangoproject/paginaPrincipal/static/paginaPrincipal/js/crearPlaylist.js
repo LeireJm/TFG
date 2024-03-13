@@ -22,8 +22,6 @@ $(document).ready(function() {
     console.log("Id:", elementoId);
     console.log("PlaylistId:", playlistId);
 
-    selecciones.push(elementoId)
-
     // $(".cancion-checkbox:checked").each(function() {
     //     selecciones.push($(this).val());
     // });
@@ -31,7 +29,7 @@ $(document).ready(function() {
     var resultadosDiv = $("#resultados-seleccion");
     resultadosDiv.empty(); // Limpiar contenido anterior
 
-    // Meter la cancion en la playlist y mostrar otra
+    // Si le damos el check, metemos la cancion en la playlist y mostramos otra en función de las canciones que tengamos en la playlist hasta ahora
     btnCheck.addEventListener('click', function() {    
         $.ajax({
             type: "POST",
@@ -42,93 +40,71 @@ $(document).ready(function() {
                 // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
             },
             success: function(response) {
-                console.log("Los datos se enviaron correctamente a views.py");      
+                //metemos el elemento en la lista de las canciones que tenemos en la playlist
+                selecciones.push(elementoId)
+                $.ajax({
+                    type: "POST",
+                    url: "/paginaPrincipal/recomendar_canciones/",  
+                    data: {
+                        canciones: selecciones,
+                        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    },
+                    success: function(respuesta) {
+                        console.log("La solicitud AJAX se ha completado con éxito");
+                        console.log(respuesta);
+            
+                        var cancionesRecomendadas = respuesta.recomendaciones;
+                        console.log("La solicitud AJAX se ha completado con éxito");
+                        console.log(cancionesRecomendadas);
+            
+                        var jsonArray = JSON.parse(cancionesRecomendadas);
+                        console.log("JSON")
+                        console.log(jsonArray);
+            
+                        // mostrarResultadosRecomendacion(respuesta);
+
+                        var song = jsonArray[indiceActual];
+                        
+                        // Incrementar el índice actual para la próxima canción
+                        indiceActual++;
+        
+                        console.log("jsonArray longitud")
+                        console.log(jsonArray.length)
+                
+                        console.log("Check")
+                        console.log(song)
+            
+                        // Ponemos la nueva canción
+                        $("#nombre").text(song.track_name);
+                        $("#artista").text(song.artist_name);
+                        $("#id").text(song.id).hide();
+        
+                        nombre = song.track_name
+                        artista = song.artist_name
+                        elementoId = song.id 
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", error);
+                    }
+                });
+                console.log("La canción se ha añadido a la playlist");      
             },
             error: function(xhr, status, error) {
-                console.error("Error al enviar datos a views.py:", error);
+                console.error("La canción no se ha añadido a la playlist", error);
             }
         });          
     });
 
-    //si hemos marcado alguna casilla, la muestra
-    // if (selecciones.length > 0) {
-    $.ajax({
-        type: "POST",
-        url: "/paginaPrincipal/recomendar_canciones/",  
-        data: {
-            canciones: selecciones,
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-        },
-        success: function(respuesta) {
-            console.log("La solicitud AJAX se ha completado con éxito");
-            console.log(respuesta);
+    console.log("selecciones")
+    console.log(selecciones)
 
-            var cancionesRecomendadas = respuesta.recomendaciones;
-            console.log("La solicitud AJAX se ha completado con éxito");
-            console.log(cancionesRecomendadas);
+    //Si le doy al botón de repetir, me saca otra canción
+    btnRep.addEventListener('click', function() {
+        contarCancionesEnPlaylist(playlistId);
+    });   
 
-            var jsonArray = JSON.parse(cancionesRecomendadas);
-            console.log("JSON")
-            console.log(jsonArray);
-
-            // mostrarResultadosRecomendacion(respuesta);
-
-            btnCheck.addEventListener('click', function() { 
-                var song = jsonArray[indiceActual];
-                
-                // Incrementar el índice actual para la próxima canción
-                indiceActual++;
-
-                console.log("jsonArray longitud")
-                console.log(jsonArray.length)
-        
-                console.log("Rep")
-                console.log(song)
-    
-                // Ponemos la nueva canción
-                $("#nombre").text(song.track_name);
-                $("#artista").text(song.artist_name);
-                $("#id").text(song.id).hide();
-
-                nombre = song.track_name
-                artista = song.artist_name
-                elementoId = song.id
-            });
-
-            btnRep.addEventListener('click', function() {
-                contarCancionesEnPlaylist(playlistId);
-
-
-                // // Obtener la canción en el índice actual
-                // var song = jsonArray[indiceActual];
-                
-                // // Incrementar el índice actual para la próxima canción
-                // indiceActual++;
-    
-        
-                // console.log("Rep")
-                // console.log(song)
-    
-                // // Ponemos la nueva canción
-                // $("#nombre").text(song.track_name);
-                // $("#artista").text(song.artist_name);
-                // $("#id").text(song.id).hide();
-
-                // nombre = song.track_name
-                // artista = song.artist_name
-                // elementoId = song.id
-            });    
-        },
-        error: function(xhr, status, error) {
-            console.error("Error en la solicitud AJAX:", error);
-            console.log("Estado de la respuesta:", xhr.status);
-            console.log("Respuesta del servidor:", xhr.responseText);
-        }
-    });
-
-    
-
-    // Crear la playlist
+    // Si le doy al botón de enviar, creo la playlist
     btnEnviar.addEventListener('click', function() {
         var confirmacion = confirm("¿Deseas crear la playlist con las canciones seleccionadas?");
 
@@ -148,66 +124,25 @@ $(document).ready(function() {
 
     });
 
-    function abrirPopup(url, width, height) {
-        var left = (window.innerWidth - width) / 2;
-        var top = (window.innerHeight - height) / 2;
-        var popupWindow = window.open(url, "popupWindow", 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
-        popupWindow.focus();
-    }
-
     function contarCancionesEnPlaylist(playlistId) {
-        $.ajax({
-            type: "POST",
-            url: "/paginaPrincipal/crear_playlist/contarCancionesPlaylist/",
-            data: {
-                playlistId: playlistId,
-                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            },
-            success: function(response) {
-                var numCanciones = response.num_canciones;
-                
-                if (numCanciones === 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/paginaPrincipal/crear_playlist/contarCancionesPlaylist/porPopularidad",
-                        data: {
-                            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                        },
-                        success: function(response) {
-                            var canciones = response.canciones;
-                            
-                            // Obtener la canción en el índice actual
-                            var song = canciones[indicePop];
-                            
-                            // Incrementar el índice actual para la próxima canción
-                            indicePop++;
-                
-                            // Ponemos la nueva canción
-                            $("#nombre").text(song.track_name);
-                            $("#artista").text(song.artist_name);
-                            $("#id").text(song.id).hide();
-
-                            nombre = song.track_name
-                            artista = song.artist_name
-                            elementoId = song.id
-
-                            console.log("canciones aleatorias")
-                            console.log(canciones)
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error al mostrar canciones aleatorias:", error);
-                        }
-                    });
-
-                } else {
-                    console.log("La playlist tiene canciones.");
+        //Si no hay canciones en la playlist, mostrar por popularidad
+        if (selecciones.length === 0) {
+            $.ajax({
+                type: "POST",
+                url: "/paginaPrincipal/crear_playlist/contarCancionesPlaylist/porPopularidad",
+                data: {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                success: function(response) {
+                    console.log("no hay canciones en la playlist")
+                    var canciones = response.canciones;
+                    
                     // Obtener la canción en el índice actual
-                    var song = jsonArray[indiceActual];
+                    var song = canciones[indicePop];
                     
                     // Incrementar el índice actual para la próxima canción
-                    indiceActual++;
-        
-            
+                    indicePop++;
+
                     console.log("Rep")
                     console.log(song)
         
@@ -219,12 +154,64 @@ $(document).ready(function() {
                     nombre = song.track_name
                     artista = song.artist_name
                     elementoId = song.id
+
+                    console.log("canciones aleatorias")
+                    console.log(canciones)
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al mostrar canciones aleatorias:", error);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error("Error al contar canciones:", error);
-            }
-        });
+            });
+        } else { //si hay canciones en la playlist, mostrar canciones basadas en las que ya hay en la playlist
+            console.log("La playlist tiene canciones.");
+
+            $.ajax({
+                type: "POST",
+                url: "/paginaPrincipal/recomendar_canciones/",  
+                data: {
+                    canciones: selecciones,
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                success: function(respuesta) {
+                    console.log("La solicitud AJAX se ha completado con éxito");
+                    console.log(respuesta);
+        
+                    var cancionesRecomendadas = respuesta.recomendaciones;
+                    console.log("La solicitud AJAX se ha completado con éxito");
+                    console.log(cancionesRecomendadas);
+        
+                    var jsonArray = JSON.parse(cancionesRecomendadas);
+                    console.log("JSON")
+                    console.log(jsonArray);
+        
+                    // mostrarResultadosRecomendacion(respuesta);
+
+                    var song = jsonArray[indiceActual];
+                    
+                    // Incrementar el índice actual para la próxima canción
+                    indiceActual++;
+    
+                    console.log("jsonArray longitud")
+                    console.log(jsonArray.length)
+            
+                    console.log("Rep")
+                    console.log(song)
+        
+                    // Ponemos la nueva canción
+                    $("#nombre").text(song.track_name);
+                    $("#artista").text(song.artist_name);
+                    $("#id").text(song.id).hide();
+    
+                    nombre = song.track_name
+                    artista = song.artist_name
+                    elementoId = song.id 
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        }
     }    
         
 
