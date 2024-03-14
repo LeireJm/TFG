@@ -45,6 +45,65 @@ def pagina_principal(request):
 def descubrir_opciones(request):
     return render(request, 'descubreCanciones.html', {"opcion": 0})
 
+#te muestra una lista aleatoria con 10 canciones favoritas para elegir
+@csrf_exempt
+def descubrir_listaCanciones(request):
+
+    #mirar si se escogen opciones
+    if request.method == 'POST':
+        opciones = request.POST.getlist("options")
+    
+    #sacar una lista de 10 canciones favoritas
+    user = request.user  # Obtén el usuario autenticado
+
+    usuario = Usuario.objects.get(userId=user.userId)
+
+    favoritos_usuario = usuario.favoritos
+
+    if len(favoritos_usuario) > 20:
+        canciones_aleatorias = random.sample(list(favoritos_usuario), 20)
+    else:
+        canciones_aleatorias = favoritos_usuario
+
+    print("canciones aleatorias: ", canciones_aleatorias)
+
+    nombreCanciones = []
+    artistaCanciones = []
+    duracionCanciones = []
+
+    for cancion in canciones_aleatorias:
+        p = Cancion.objects.get(id=cancion)
+        nombreCanciones.append(p.track_name)
+        artistaCanciones.append(p.artist_name)
+        duracionCanciones.append(p.duration_ms)
+    
+    datos = []
+
+    for i in range(len(canciones_aleatorias)):
+        cancion_info = {
+            'id': canciones_aleatorias[i],
+            'nombre': nombreCanciones[i],
+            'artista': artistaCanciones[i],
+            'duracion': duracionCanciones[i]
+        }
+        datos.append(cancion_info)
+    
+    datos_json = json.dumps(datos)
+
+    # nombres_favoritos_json = json.dumps(nombreCanciones)
+    # artistas_favoritos_json = json.dumps(artistaCanciones)
+
+    # # print("artist_name: ", artistas_favoritos_json)
+    # # print("track_name: ", nombres_favoritos_json)
+
+
+    # datos = {'id_canciones': canciones_aleatorias, 'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
+    
+    print("datos: ", datos_json)
+
+
+    return render(request, 'descubreCanciones.html', {"opcion": 1, "canciones_id": canciones_aleatorias, "datos": datos})
+
 
 #lista de canciones (recomendador)
 def lista_canciones(request):
@@ -107,22 +166,22 @@ def crear_playlist(request):
 
     return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
 
-@csrf_exempt
-def contarCancionesPlaylist(request):
-    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        playlist_id = request.POST.get('playlistId')
+# @csrf_exempt
+# def contarCancionesPlaylist(request):
+#     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+#         playlist_id = request.POST.get('playlistId')
 
-        print("playlist id newww: ", playlist_id)
+#         print("playlist id newww: ", playlist_id)
 
-        #hasta aqui bien
+#         #hasta aqui bien
         
-        playlist = Playlist.objects.get(playlistId=playlist_id)
+#         playlist = Playlist.objects.get(playlistId=playlist_id)
 
-        num_canciones = len(playlist.listaCanciones)
+#         num_canciones = len(playlist.listaCanciones)
 
-        return JsonResponse({'num_canciones': num_canciones})
+#         return JsonResponse({'num_canciones': num_canciones})
 
-    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
+#     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 @csrf_exempt
 def porPopularidad(request):

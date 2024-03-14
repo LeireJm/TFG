@@ -18,11 +18,22 @@
 <body>
     <!-- Contenido de tu página actual -->
     {% if opcion %}
-    {% csrf_token %}
+      <div class="canciones-container">
+        <h2>Lista de Canciones</h2>
+          {% for cancion in datos %}
+              <div class="cancion" onclick="seleccionarCancion('{{ cancion.id }}')">
+                  <h3>{{ cancion.nombre }}</h3>
+                  <p>Autor: {{ cancion.artista }}</p>
+                  <p>Duración: {{ cancion.duracion }}</p>
+              </div>
+          {% endfor %}
+      </div>
     {% else %}  <!-- primera parte donde elegimos las opciones -->
     <div class="container">
-        <form action="/lista_canciones" method="post">
-            <td>Selecciona los atributos que prefieras:</td><br/>           
+      <!-- sería /lista_canciones -->
+        {% csrf_token %}
+        <form action="/paginaPrincipal/descubrir_listaCanciones/" method="post">
+            <h2>Selecciona los atributos que prefieras:</h2>    
             <input name="options" id="genre" type="checkbox" value="genre" /> Género<br/>
             <input name="options" id="year" type="checkbox" value="year" /> Año<br/>
             <input name="options" id="duration_ms" type="checkbox" value="duration_ms" /> Duración<br/>

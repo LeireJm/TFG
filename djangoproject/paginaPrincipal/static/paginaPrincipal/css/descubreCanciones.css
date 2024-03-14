@@ -3,12 +3,17 @@ body, html {
     margin: 0;
     overflow: hidden;
     background-color: #333;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100vh;
 }
 
 /* Pantalla donde eliges las opciones */
 .container {
+    display: flex;
+    flex-direction: column; 
     max-width: 400px;
-    background-color: #fff;
+    background-color: #6c6161;
     border-radius: 5px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -24,22 +29,18 @@ body, html {
     text-align: center;
 }
 
-.options {
-    margin-bottom: 20px;
+input[name="options"] {
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
+    font-size: 20px; /* Cambia el tamaño de la fuente a 16px */
 }
 
-.options label {
-    display: block;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.options input[type="checkbox"] {
-    margin-right: 5px;
-    vertical-align: middle;
+.container button {
+    align-self: flex-end;
 }
 
 button[type="submit"] {
+    margin-top: 15px;
     width: auto;
     background-color: #4CAF50;
     color: #fff;
@@ -48,9 +49,26 @@ button[type="submit"] {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3;
+/* Mostrar la lista de canciones para elegir*/
+.canciones-container{
+    max-height: 100%;
+    overflow-y: auto;
 }
+
+.canciones-container h2 {
+    color:#f0f0f0;
+    margin-left: 1%;
+}
+
+.cancion {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+.cancion:hover {
+    background-color: #f0f0f0;
+}
+

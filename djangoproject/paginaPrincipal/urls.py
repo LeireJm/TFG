@@ -16,10 +16,11 @@ urlpatterns = [
 
     path('crear_playlist_inicio/', views.crear_playlist_inicio, name='crear_playlist_inicio'),
     path('crear_playlist/', views.crear_playlist, name='crear_playlist'),
-    path('crear_playlist/contarCancionesPlaylist/', views.contarCancionesPlaylist, name='contar_canciones'),
+    # path('crear_playlist/contarCancionesPlaylist/', views.contarCancionesPlaylist, name='contar_canciones'),
     path('crear_playlist/contarCancionesPlaylist/porPopularidad', views.porPopularidad, name='por_popularidad'),
 
     path('descubrir_opciones/', views.descubrir_opciones, name='descubrir_opciones'),
+    path('descubrir_listaCanciones/', views.descubrir_listaCanciones, name='descubrir_listaCanciones'),
 
     path('meterCancionPlaylist/', views.meterCancionPlaylist, name='meterCancionPlaylist'),
 
