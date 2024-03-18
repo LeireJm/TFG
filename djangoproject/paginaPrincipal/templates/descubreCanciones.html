@@ -16,15 +16,22 @@
 </head>
 
 <body>
-    <!-- Contenido de tu página actual -->
     {% if opcion %}
+    <script>
+      var opciones_seleccionadas = "{{ opciones }}";
+    </script>
       <div class="canciones-container">
         <h2>Lista de Canciones</h2>
+        <!-- botón para enviar las canciones seleccionadas -->
+        <button id="botonEnviar">Enviar</button>
           {% for cancion in datos %}
-              <div class="cancion" onclick="seleccionarCancion('{{ cancion.id }}')">
+              <div class="cancion" data-id="{{ cancion.id }}" onclick="seleccionarCancion(this)">
                   <h3>{{ cancion.nombre }}</h3>
                   <p>Autor: {{ cancion.artista }}</p>
-                  <p>Duración: {{ cancion.duracion }}</p>
+                  <script>
+
+                  </script>
+                  <p>Duración: <span class="duracion">{{ cancion.duracion }}</span></p>
               </div>
           {% endfor %}
       </div>
@@ -34,7 +41,7 @@
         {% csrf_token %}
         <form action="/paginaPrincipal/descubrir_listaCanciones/" method="post">
             <h2>Selecciona los atributos que prefieras:</h2>    
-            <input name="options" id="genre" type="checkbox" value="genre" /> Género<br/>
+            <input name="options" id="genres" type="checkbox" value="genres" /> Género<br/>
             <input name="options" id="year" type="checkbox" value="year" /> Año<br/>
             <input name="options" id="duration_ms" type="checkbox" value="duration_ms" /> Duración<br/>
             <input name="options" id="popularity" type="checkbox" value="popularity" /> Popularidad<br/>
@@ -45,7 +52,7 @@
     {% endif %}
     
     <!-- JavaScript -->
-    <script src="{% static 'paginaPrincipal/js/crearPlaylist.js' %}"></script>
+    <script src="{% static 'paginaPrincipal/js/descubreCanciones.js' %}"></script>
     
 </body>
 </html>

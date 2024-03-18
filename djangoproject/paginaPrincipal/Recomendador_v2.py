@@ -465,7 +465,14 @@ def genre_clustering(song_id):
     return closest_songs 
 
 def features_clustering(options, song_id):
-    df = songs[options].copy();
+
+    # print("string song id: ", song_id)
+    
+    # song_id = int(song_id)
+
+    # print("ints song id: ", song_id)
+
+    df = songs[options].copy()
         
     scaler = StandardScaler()
     df_scaled = scaler.fit_transform(df)
@@ -521,6 +528,8 @@ def first_stage(song_id, options):
         similar_songs_features = features_clustering(options,song_id)
         
         similar_songs = intercalate_lists(similar_songs_genres, similar_songs_features)[:20]
+
+    print("similar songs: ", similar_songs)
 
     return similar_songs
 
@@ -605,7 +614,7 @@ def recommender(song_id, options):
     if len(options) != 0:  #si hemos marcado opciones
         list_songs_content = first_stage(song_id, options)
 
-    
+    print("Primera fase superada: ", list_songs_content)
 
     # Segunda fase: filtrado colaborativo (si la lista es demasiado grande)
     list_songs_collaborative = second_stage(song_id)

@@ -53,16 +53,17 @@ def descubrir_listaCanciones(request):
     if request.method == 'POST':
         opciones = request.POST.getlist("options")
     
-    #sacar una lista de 10 canciones favoritas
+    #sacar una lista de 20 canciones favoritas
     user = request.user  # Obtén el usuario autenticado
 
     usuario = Usuario.objects.get(userId=user.userId)
 
     favoritos_usuario = usuario.favoritos
 
-    if len(favoritos_usuario) > 20:
+    # Si el usuario tiene más de 20 favoritas
+    if len(favoritos_usuario) > 20: 
         canciones_aleatorias = random.sample(list(favoritos_usuario), 20)
-    else:
+    else: #si no tiene más de 20 favoritas
         canciones_aleatorias = favoritos_usuario
 
     print("canciones aleatorias: ", canciones_aleatorias)
@@ -102,7 +103,7 @@ def descubrir_listaCanciones(request):
     print("datos: ", datos_json)
 
 
-    return render(request, 'descubreCanciones.html', {"opcion": 1, "canciones_id": canciones_aleatorias, "datos": datos})
+    return render(request, 'descubreCanciones.html', {"opcion": 1, "canciones_id": canciones_aleatorias, "datos": datos, "opciones": opciones})
 
 
 #lista de canciones (recomendador)
@@ -227,14 +228,18 @@ def meterCancionPlaylist(request):
 
 @csrf_exempt
 def recomendar_canciones(request):
-    global opciones_globales
 
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         canciones_seleccionadas = request.POST.getlist("canciones[]", [])
+        opciones_seleccionadas = request.POST.getlist("opciones")
 
-        opciones = opciones_globales
+        opciones = opciones_seleccionadas
         print("OPCIONES")
         print(opciones)
+
+        opciones = eval(opciones[0])
+
+        print("options list: ", opciones) 
         
         print("CANCIONES SELECCIONADAS AHORA")
         print(canciones_seleccionadas)
