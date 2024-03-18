@@ -18,7 +18,7 @@ from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import euclidean_distances
-from itertools import chain
+from itertools import zip_longest, chain
 from sklearn.decomposition import TruncatedSVD
 
 
@@ -361,13 +361,14 @@ def content_based_features(title):
 # La función ***intercale_lists*** sirve para mezclar los resultados del recomendador basado en contenido y el colaborativo.
 
 def intercalate_lists(*l):
-    # Utiliza zip_longest para manejar listas de diferentes longitudes
-    zipped = zip(*l)
+    zipped = zip_longest(*l)
     
-    # Usa chain.from_iterable para aplanar la lista intercalada
     list_final = list(chain.from_iterable(zipped))
     
-    return list_final
+    # Elimina duplicados usando un conjunto (set)
+    list_final_no_dup = list(set(list_final))
+    
+    return list_final_no_dup
 
 # Ahora vamos a hacer una función que se aquella que se llame cuando se le de al botón de recomendadar (***recommender*** es la función).
 
@@ -524,10 +525,15 @@ def first_stage(song_id, options):
     if 'genres' not in options:
         similar_songs = features_clustering(options, song_id)
     else:
+        print(song_id)
         similar_songs_genres = genre_clustering(song_id)
-        similar_songs_features = features_clustering(options,song_id)
-        
-        similar_songs = intercalate_lists(similar_songs_genres, similar_songs_features)[:20]
+        if len(options) > 1:
+            options_aux = options.copy()
+            options_aux.remove('genres') 
+            similar_songs_features = features_clustering(options_aux,song_id)
+            similar_songs = intercalate_lists(similar_songs_genres, similar_songs_features)[:20]
+        else:
+            similar_songs = similar_songs_genres[:20]
 
     print("similar songs: ", similar_songs)
 
@@ -694,9 +700,7 @@ def recommender_songs(songs_id, options):
     ret = []
     
     similar_songs = []
-    
-    if len(songs_id) == 1: return recommender(songs_id[0],options)
-    
+   
     ids = songs_id.copy() # Copiamos los ids pasados
     # Recorremos todas para obtener la lista de canciones similares de cada canción de seleccionada
     # Luego se hace intersección
