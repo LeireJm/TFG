@@ -428,6 +428,8 @@ def genre_clustering(song_id):
     # Dividir la columna 'genres' por comas
     #songs['genres'] = songs['genres'].apply(lambda x: x.split(","))
     #songs['genres'] = songs['genres'].apply(lambda x: x.split("|"))
+
+    song_id = int(song_id)
     
     col_del = ["songId",	"artist_name",	"track_name",	"track_id", "popularity", "year", "genre",	"danceability",	"energy",	"key",	"loudness",	"mode",	"speechiness",	"acousticness",	"instrumentalness",	"liveness",	"valence",	"tempo",	"duration_ms",	"time_signature", "genres"]
 
@@ -467,11 +469,7 @@ def genre_clustering(song_id):
 
 def features_clustering(options, song_id):
 
-    # print("string song id: ", song_id)
-    
-    # song_id = int(song_id)
-
-    # print("ints song id: ", song_id)
+    song_id = int(song_id)
 
     df = songs[options].copy()
         
@@ -561,7 +559,9 @@ def second_stage(song_id): # collaborative_recommender
 def third_stage(song_id):
     # Supongamos que 'df' es tu DataFrame que contiene las características de las canciones
     # Primero, normalizamos los datos
-    df = songs.copy();
+    song_id = int(song_id)
+
+    df = songs.copy()
     
     col_del = ['songId', 'artist_name', 'track_name', 'track_id','genre', 'genres']
     
@@ -627,7 +627,6 @@ def recommender(song_id, options):
 
     list_final = []
 
-    print("len list_songs_content: ", len(list_songs_content))
 
     if len(list_songs_content) > 10: # Es necesario hacer la intersección -> segunda fase
         aux = intercalate_lists(list_songs_content, list_songs_collaborative)
@@ -662,13 +661,17 @@ def recommender(song_id, options):
 
     print("list_final:", list_final)
 
+
     #La lista final devuelve los ids de las canciones que se recomiendan.
     #Cambiamos los ids para devolver el nombre de la canción y el artista
-    songs = idANombre(list_final)
+    # songs = idANombre(list_final)
 
-    songs['id'] = list_final
+    # songs['id'] = list_final
+
+    # print("SONGS: ", songs)
+
     
-    return songs
+    return list_final
 
 
 # ### Recomendador para varias canciones (PARTE IMPORTANTE)
@@ -697,6 +700,7 @@ def merge_lists(l1, l2, l3):
 
 
 def recommender_songs(songs_id, options):
+
     ret = []
     
     similar_songs = []
@@ -707,8 +711,21 @@ def recommender_songs(songs_id, options):
     # De la intersección si no se ha llegado a 10 canciones en común, con esa intersección se vuelve a buscar las similares y comunes pero a estas y se añaden en la lista final las que no estén ya.
     for song_id in ids: 
         similar_songs.append(recommender(song_id,options))
+
+    print("SIMILAR SONGS: ", *similar_songs)
     
     aux = intercalate_lists(*similar_songs)
+
+    print("AUX: ", aux)
+
     merge_lists(ret,aux,songs_id)
+
+    print("RET ", ret)
+
+    songs = idANombre(ret)
+
+    songs['id'] = ret
+
+    print("SONGS FINAL: ", songs)
         
     return ret[:10]

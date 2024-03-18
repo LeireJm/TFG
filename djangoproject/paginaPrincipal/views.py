@@ -3,7 +3,7 @@ from .models import Cancion
 from .models import Rating 
 from random import sample
 from django.http import HttpResponse
-from .Recomendador_v2 import recommender
+from .Recomendador_v2 import recommender_songs
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -244,7 +244,7 @@ def recomendar_canciones(request):
         print("CANCIONES SELECCIONADAS AHORA")
         print(canciones_seleccionadas)
 
-        canciones_similares = recommender(canciones_seleccionadas, opciones) #pasamos la cancion seleccionada y las opciones
+        canciones_similares = recommender_songs(canciones_seleccionadas, opciones) #pasamos la cancion seleccionada y las opciones
 
         
         canciones_similares_JSON = canciones_similares.to_json(orient='records')
