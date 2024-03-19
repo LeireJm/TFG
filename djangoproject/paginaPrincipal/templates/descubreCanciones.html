@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Título -->
-  <title>Crear Playlist</title> 
+  <title>Descubre canciones</title> 
     <!-- Para los iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-" crossorigin="anonymous" />
    <!-- JavaScript -->
@@ -28,13 +28,11 @@
               <div class="cancion" data-id="{{ cancion.id }}" onclick="seleccionarCancion(this)">
                   <h3>{{ cancion.nombre }}</h3>
                   <p>Autor: {{ cancion.artista }}</p>
-                  <script>
-
-                  </script>
                   <p>Duración: <span class="duracion">{{ cancion.duracion }}</span></p>
               </div>
           {% endfor %}
       </div>
+      <div id="cancionesRecomendadas"></div>
     {% else %}  <!-- primera parte donde elegimos las opciones -->
     <div class="container">
       <!-- sería /lista_canciones -->
@@ -50,6 +48,7 @@
         </form>
     </div>
     {% endif %}
+    
     
     <!-- JavaScript -->
     <script src="{% static 'paginaPrincipal/js/descubreCanciones.js' %}"></script>

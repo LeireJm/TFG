@@ -43,7 +43,9 @@ $(document).ready(function() {
     
                 var jsonArray = JSON.parse(cancionesRecomendadas);
                 console.log("JSON")
-                console.log(jsonArray);    
+                console.log(jsonArray); 
+                
+                //hacer otra consulta de ajax para mandar los resultados a views y tratarlos
             },
             error: function(xhr, status, error) {
                 console.error("No se han podido recomendar canciones a partir de las seleccionadas", error);
