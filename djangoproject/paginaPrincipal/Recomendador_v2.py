@@ -664,11 +664,6 @@ def recommender(song_id, options):
 
     #La lista final devuelve los ids de las canciones que se recomiendan.
     #Cambiamos los ids para devolver el nombre de la canción y el artista
-    # songs = idANombre(list_final)
-
-    # songs['id'] = list_final
-
-    # print("SONGS: ", songs)
 
     
     return list_final
@@ -728,4 +723,4 @@ def recommender_songs(songs_id, options):
 
     print("SONGS FINAL: ", songs)
         
-    return ret[:10]
+    return songs[:10]
