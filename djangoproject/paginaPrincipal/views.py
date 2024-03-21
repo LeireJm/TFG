@@ -105,6 +105,25 @@ def descubrir_listaCanciones(request):
 
     return render(request, 'descubreCanciones.html', {"opcion": 1, "canciones_id": canciones_aleatorias, "datos": datos, "opciones": opciones})
 
+#tratamos la respuesta (descubrir canciones)
+@csrf_exempt
+def descubrir_tratarResultado(request):
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        lista_canciones = data.get('listaCanciones', [])
+        print("listaCanciones: ", lista_canciones)
+    
+
+    return JsonResponse(lista_canciones, safe=False)
+
+#te muestra la lista de las canciones recomendadas (descubrir canciones)
+def descubrir_mostrarPlaylist(request):
+
+    
+
+    return render(request, 'descubreCanciones.html', {"opcion": 2})
+
 
 #lista de canciones (recomendador)
 def lista_canciones(request):

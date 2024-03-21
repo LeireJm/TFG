@@ -44,8 +44,15 @@ $(document).ready(function() {
                 var jsonArray = JSON.parse(cancionesRecomendadas);
                 console.log("JSON")
                 console.log(jsonArray); 
+
+                $('.canciones-container').empty();
+
+                // $('#resultados-seleccion').empty().append(mostrarResultadosRecomendacion(jsonArray));
+                $('#resultados-seleccion').empty();
+                mostrarResultadosRecomendacion(jsonArray);
+
                 
-                //hacer otra consulta de ajax para mandar los resultados a views y tratarlos
+   
             },
             error: function(xhr, status, error) {
                 console.error("No se han podido recomendar canciones a partir de las seleccionadas", error);
@@ -54,6 +61,39 @@ $(document).ready(function() {
     });
     
 });
+
+function minutosSegundos(duracionMs) {
+    var segundosTotales = Math.floor(duracionMs / 1000);
+    var minutos = Math.floor(segundosTotales / 60);
+    var segundos = segundosTotales % 60;
+    return minutos + ":" + (segundos < 10 ? "0" : "") + segundos; // Agrega un cero delante si los segundos son menores que 10
+}
+
+function mostrarResultadosRecomendacion(resultados) {
+
+    // Limpiar el contenido anterior en #resultados-seleccion
+    var resultadosDiv = $("#resultados-seleccion");
+    resultadosDiv.empty();
+
+    if (resultados.length > 0) {
+        var resultadosHTML = "<h2>Playlist recomendada: </h2><ul>";;
+
+        for (var i = 0; i < resultados.length; i++) {
+            var song = resultados[i];
+            resultadosHTML += "<div class='cancion-container'>";
+            resultadosHTML += "<h3>" + song.track_name + "</h3>";
+            resultadosHTML += "<p>Autor: " + song.artist_name + "</p>";
+            resultadosHTML += "</div>";
+        }
+        resultadosHTML += "</ul>";
+
+        // Agregar la lista al contenedor #resultados-seleccion
+        resultadosDiv.append(resultadosHTML);
+    } else {
+        // Mostrar un mensaje si no hay canciones recomendadas
+        resultadosDiv.html("<p>No hay canciones recomendadas.</p>");
+    }
+}
 
 function seleccionarCancion(elemento) {
     var cancionId = elemento.getAttribute('data-id');

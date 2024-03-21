@@ -6,6 +6,8 @@ body, html {
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
     height: 100vh;
+    overflow-y: auto; 
+    max-height: 100%;
 }
 
 /* Pantalla donde eliges las opciones */
@@ -55,7 +57,6 @@ button{
 /* Mostrar la lista de canciones para elegir*/
 .canciones-container{
     height: 100vh;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -83,4 +84,30 @@ button{
     border: 2px solid #ff0000; 
 }
 
+/* contenedores de las canciones recomendadas */
+.cancion-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #6c6161;
+    width: 90%;
+}
 
+h2{
+    margin-left: 10px;
+    color:#f0f0f0;
+}
+
+.cancion-container h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.cancion-container p {
+    margin: 0;
+}
+
+.cancion-container .duracion {
+    font-weight: bold;
+}
