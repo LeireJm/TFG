@@ -22,8 +22,8 @@ urlpatterns = [
     path('descubrir_opciones/', views.descubrir_opciones, name='descubrir_opciones'),
     path('descubrir_listaCanciones/', views.descubrir_listaCanciones, name='descubrir_listaCanciones'),
     path('descubrir_listaCanciones/tratarResultado', views.descubrir_tratarResultado, name='descubrir_tratarResultado'),
-    path('descubrir_listaCanciones/mostrarPlaylist', views.descubrir_mostrarPlaylist, name='descubrir_mostrarPlaylist'),
-
+    path('descubrir_listaCanciones/ponerNombre', views.descubrir_ponerNombre, name='descubrir_ponerNombre'),
+    path('descubrir_listaCanciones/pasarCanciones', views.descubrir_pasarCanciones, name='descubrir_pasarCanciones'),
 
     path('meterCancionPlaylist/', views.meterCancionPlaylist, name='meterCancionPlaylist'),
 

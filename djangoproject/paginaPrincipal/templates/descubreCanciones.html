@@ -35,11 +35,14 @@
           <!-- muestra los resultados de la recomendacion -->
           
       </div>
-      
-    
-    {% elif opcion == 2 %} <!-- parte en la que se muestran las canciones recomendadas (final) -->
-    
-    
+    {% elif opcion == 2 %}
+    <form method="post" action="/paginaPrincipal/crear_playlist/">
+      {% csrf_token %}
+      <div id="contenedor">
+        <h2>Introduce el nombre de tu playlist:</h2>
+        <input type="text" id="nombreInput" name="nombreDescubreCanciones" placeholder="Ingresa aquí el nombre" required>
+        <button id="botonEnviar">Enviar</button>
+    </div>
     {% else %}  <!-- primera parte donde elegimos las opciones -->
     <div class="container">
       <!-- sería /lista_canciones -->

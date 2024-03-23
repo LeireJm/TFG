@@ -111,3 +111,45 @@ h2{
 .cancion-container .duracion {
     font-weight: bold;
 }
+
+.botones-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 70px;
+}
+
+.botones-container button {
+    margin-left: 10px;
+}
+
+/* Pantalla donde pones el nombre de la playlist */
+#contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ajusta la altura según sea necesario */
+}
+
+#contenedor h2{
+    color: #ffffff;
+}
+
+#nombreInput {
+    margin: 45px auto;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 200px; /* Ajusta el ancho según sea necesario */
+}
+
+#nombreInput:focus {
+    outline: none; /* Elimina el contorno predeterminado */
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Agrega un efecto de sombra al enfocarse */
+}
+
+

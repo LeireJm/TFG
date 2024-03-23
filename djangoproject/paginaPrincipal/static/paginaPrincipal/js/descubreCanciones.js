@@ -1,4 +1,5 @@
 var cancionesSeleccionadas = [];
+var jsonArray;
 
 $(document).ready(function() {
     var duraciones = document.querySelectorAll('.duracion');
@@ -41,7 +42,7 @@ $(document).ready(function() {
                 console.log("La solicitud AJAX se ha completado con éxito");
                 console.log(cancionesRecomendadas);
     
-                var jsonArray = JSON.parse(cancionesRecomendadas);
+                jsonArray = JSON.parse(cancionesRecomendadas);
                 console.log("JSON")
                 console.log(jsonArray); 
 
@@ -52,7 +53,6 @@ $(document).ready(function() {
                 mostrarResultadosRecomendacion(jsonArray);
 
                 
-   
             },
             error: function(xhr, status, error) {
                 console.error("No se han podido recomendar canciones a partir de las seleccionadas", error);
@@ -88,12 +88,59 @@ function mostrarResultadosRecomendacion(resultados) {
         resultadosHTML += "</ul>";
 
         // Agregar la lista al contenedor #resultados-seleccion
+        resultadosHTML += "<div class='botones-container'>";
+        resultadosHTML += "<button id='irInicio'>Ir al inicio</button>";
+        resultadosHTML += "<button id='anadirABiblioteca'>Añadir a la biblioteca</button>";
+        resultadosHTML += "</div>";
         resultadosDiv.append(resultadosHTML);
     } else {
         // Mostrar un mensaje si no hay canciones recomendadas
         resultadosDiv.html("<p>No hay canciones recomendadas.</p>");
     }
 }
+
+//una vez realizada la recomendación, si el usuario no quiere guardar la playlist, vuelve al inicio
+$(document).on('click', '#irInicio', function() {
+    window.close();
+});
+
+//si el usuario quiere guardar la playlist recomendada
+$(document).on('click', '#anadirABiblioteca', function() {
+    console.log("añadir a la biblioteca")
+
+    //mandar las canciones recomendadas a views para meterlas en la base de datos.
+    
+    console.log("JSON que pasamos")
+    console.log(jsonArray)
+
+    var listaIds = jsonArray.map(function(objeto) {
+        return objeto.id;
+    });
+
+    console.log("lista ids")
+    console.log(listaIds);
+
+    $.ajax({
+        type: "POST",
+        url: "/paginaPrincipal/descubrir_listaCanciones/pasarCanciones",
+        data: {
+            listaIds: listaIds
+            // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+        },
+        success: function(response) {     
+
+        },
+        error: function(xhr, status, error) {
+            console.error("No se han podido pasar las canciones recomendadas a la base de datos", error);
+        }
+    }); 
+
+    var left = (window.innerWidth - 100) / 2;
+    var top = (window.innerHeight - 100) / 2;
+    // var popupWindow2 = window.open('/paginaPrincipal/descubrir_listaCanciones/ponerNombre', "popupWindow", 'width=' + 100 + ', height=' + 100 + ', top=' + top + ', left=' + left);
+
+    // popupWindow2.focus();
+});
 
 function seleccionarCancion(elemento) {
     var cancionId = elemento.getAttribute('data-id');
@@ -113,3 +160,4 @@ function seleccionarCancion(elemento) {
         elemento.classList.remove('cancion-seleccionada');
     }
 }
+

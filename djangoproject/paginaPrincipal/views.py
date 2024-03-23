@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
 from .models import Cancion 
 from .models import Rating 
 from random import sample
@@ -15,7 +15,7 @@ import os
 import json
 import pandas as pd
 
-opciones_globales = []
+cancionesParaMeterPlaylist = []
 
 
 def index(request):
@@ -112,17 +112,28 @@ def descubrir_tratarResultado(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         lista_canciones = data.get('listaCanciones', [])
+
         print("listaCanciones: ", lista_canciones)
     
 
     return JsonResponse(lista_canciones, safe=False)
 
-#te muestra la lista de las canciones recomendadas (descubrir canciones)
-def descubrir_mostrarPlaylist(request):
-
-    
+#poner nombre a la playlist recomendada
+def descubrir_ponerNombre(request):
 
     return render(request, 'descubreCanciones.html', {"opcion": 2})
+
+#recibir las canciones recomendadas en descubrir canciones para meter en la base de datos
+@csrf_exempt
+def descubrir_pasarCanciones(request):
+
+    if request.method == 'POST':
+        idsCanciones = request.POST.getlist('listaIds[]')
+
+        print("canciones recomendadas en descubrir canciones")
+        print(idsCanciones)
+
+    return JsonResponse({'message': 'Datos enviados correctamente'})
 
 
 #lista de canciones (recomendador)
@@ -156,7 +167,11 @@ def crear_playlist(request):
     usuario = Usuario.objects.get(userId=user.userId)
 
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
+        nombreCP = request.POST.get('nombreCrearPlaylist')
+        nombreDC = request.POST.get('nombreDescubreCanciones')
+
+        print("crear playlist: ", nombreCP)
+        print("descubre canciones: ", nombreDC)
 
         # Crear una nueva playlist en la base de datos
         ultima_playlist = Playlist.objects.order_by('-playlistId').first()
@@ -165,7 +180,10 @@ def crear_playlist(request):
 
         print("nueva ID: ",  nueva_id)
 
-        nueva_playlist = Playlist( playlistId= nueva_id, playlistName=nombre, listaCanciones=[])
+        if nombreDC == None:
+            nueva_playlist = Playlist( playlistId= nueva_id, playlistName=nombreCP, listaCanciones=[])
+        else:
+            nueva_playlist = Playlist( playlistId= nueva_id, playlistName=nombreDC, listaCanciones=[])
 
         nueva_playlist.save()
 
@@ -173,18 +191,22 @@ def crear_playlist(request):
         usuario.playlists.append(nueva_id)
         usuario.save()
    
+        if nombreDC == None: #si estamos en crearPlaylist
+            favoritos_usuario = usuario.favoritos
+            
+            #una canción aleatoria de entre las favoritas del usuario
+            cancionAMostrar = random.choice(favoritos_usuario)
 
-    favoritos_usuario = usuario.favoritos
-    
-    #una canción aleatoria de entre las favoritas del usuario
-    cancionAMostrar = random.choice(favoritos_usuario)
+            cancion = Cancion.objects.get(id=cancionAMostrar)
+            idCancion = cancion.id
+            nombre = cancion.track_name
+            artista = cancion.artist_name
 
-    cancion = Cancion.objects.get(id=cancionAMostrar)
-    idCancion = cancion.id
-    nombre = cancion.track_name
-    artista = cancion.artist_name
-
-    return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
+            return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
+        else: #si estamos en descubre canciones
+            #meter todas las canciones en la playlist
+            
+            return redirect('/usuarios/mostrar_playlists/')
 
 # @csrf_exempt
 # def contarCancionesPlaylist(request):
@@ -256,9 +278,9 @@ def recomendar_canciones(request):
         print("OPCIONES")
         print(opciones)
 
-        opciones = eval(opciones[0])
-
-        print("options list: ", opciones) 
+        if len(opciones) > 0:
+            opciones = eval(opciones[0])
+            print("options list: ", opciones) 
         
         print("CANCIONES SELECCIONADAS AHORA")
         print(canciones_seleccionadas)
