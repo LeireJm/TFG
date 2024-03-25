@@ -137,9 +137,9 @@ $(document).on('click', '#anadirABiblioteca', function() {
 
     var left = (window.innerWidth - 100) / 2;
     var top = (window.innerHeight - 100) / 2;
-    // var popupWindow2 = window.open('/paginaPrincipal/descubrir_listaCanciones/ponerNombre', "popupWindow", 'width=' + 100 + ', height=' + 100 + ', top=' + top + ', left=' + left);
+    var popupWindow2 = window.open('/paginaPrincipal/descubrir_listaCanciones/ponerNombre', "popupWindow", 'width=' + 100 + ', height=' + 100 + ', top=' + top + ', left=' + left);
 
-    // popupWindow2.focus();
+    popupWindow2.focus();
 });
 
 function seleccionarCancion(elemento) {

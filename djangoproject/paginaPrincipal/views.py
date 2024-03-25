@@ -38,7 +38,6 @@ def pagina_principal(request):
         return render(request, 'paginaPrincipal.html')
 
    
-
     return render(request, 'paginaPrincipal.html', {'playlists': nombres_playlists})
 
 #página en la que te muestra las opciones que puedes elegir antes de descubrir nuevas canciones
@@ -115,7 +114,6 @@ def descubrir_tratarResultado(request):
 
         print("listaCanciones: ", lista_canciones)
     
-
     return JsonResponse(lista_canciones, safe=False)
 
 #poner nombre a la playlist recomendada
@@ -132,6 +130,14 @@ def descubrir_pasarCanciones(request):
 
         print("canciones recomendadas en descubrir canciones")
         print(idsCanciones)
+
+        # cancionesParaMeterPlaylist = []
+
+        #meter idsCanciones en la variableGlobal
+        global cancionesParaMeterPlaylist 
+        cancionesParaMeterPlaylist = idsCanciones
+
+        print("CANCIONES PARA METER EN PLAYLIST", cancionesParaMeterPlaylist)
 
     return JsonResponse({'message': 'Datos enviados correctamente'})
 
@@ -204,8 +210,19 @@ def crear_playlist(request):
 
             return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
         else: #si estamos en descubre canciones
+            print("Canciones para meter en la playlist al crearla")
+            print(cancionesParaMeterPlaylist)
+
             #meter todas las canciones en la playlist
-            
+            playlist_actual = Playlist.objects.get(playlistId=nueva_id)
+
+            #Agregar canciones de cancionesParaMeterPlaylist
+            for cancionIdMeter in cancionesParaMeterPlaylist:
+                playlist_actual.listaCanciones.append(cancionIdMeter)
+
+            playlist_actual.save()
+
+
             return redirect('/usuarios/mostrar_playlists/')
 
 # @csrf_exempt
