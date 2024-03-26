@@ -172,38 +172,37 @@ def mostrarPlaylists(request):
 
 #mostrar las canciones que contiene una playlist
 @csrf_exempt
-def mostrarCancionesPlaylist(request):
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        playlist_id = request.POST.get('playlistId')
+def mostrarCancionesPlaylist(request, id):
 
-        playlist = Playlist.objects.get(playlistId=playlist_id)
+    playlist = Playlist.objects.get(playlistId=id)
 
-        canciones_playlist = playlist.listaCanciones
+    canciones_playlist = playlist.listaCanciones
 
-        nombreCanciones = []
-        artistaCanciones = []
-        duracionCanciones = []
+    nombre_playlist = playlist.playlistName
+
+    nombreCanciones = []
+    artistaCanciones = []
+    duracionCanciones = []
 
 
-        for cancion in canciones_playlist:
-            p = Cancion.objects.get(id=cancion)
-            nombreCanciones.append(p.track_name)
-            artistaCanciones.append(p.artist_name)
-            duracionCanciones.append(p.duration_ms)
+    for cancion in canciones_playlist:
+        p = Cancion.objects.get(id=cancion)
+        nombreCanciones.append(p.track_name)
+        artistaCanciones.append(p.artist_name)
+        duracionCanciones.append(p.duration_ms)
 
-        nombres_favoritos_json = json.dumps(nombreCanciones)
-        artistas_favoritos_json = json.dumps(artistaCanciones)
+    nombres_favoritos_json = json.dumps(nombreCanciones)
+    artistas_favoritos_json = json.dumps(artistaCanciones)
 
-        print("nombres canciones", nombres_favoritos_json)
-        print("artistas: ", artistas_favoritos_json)
-        print("duracion:", duracionCanciones)
+    print("nombres canciones", nombres_favoritos_json)
+    print("artistas: ", artistas_favoritos_json)
+    print("duracion:", duracionCanciones)
 
-        datos = {'id_canciones': canciones_playlist, 'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
+    datos = {'id_canciones': canciones_playlist, 'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
 
-        print("datos: ", datos)
+    print("datos: ", datos)
 
-        # return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
-    return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
+    return render(request, 'mostrarCancionesPlaylist.html', {'nombre_playlist': nombre_playlist, 'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
     # return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 #eliminar cancion favorita del usuario

@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
     function abrirPopup(url, width, height) {
-        var left = (window.innerWidth - width) / 2;
-        var top = (window.innerHeight - height) / 2;
+        var left = (screen.width - width) / 2;
+        var top = (screen.height - height) / 2;
         var popupWindow = window.open(url, "popupWindow", 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
         popupWindow.focus();
     }

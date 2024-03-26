@@ -24,7 +24,10 @@ $(document).ready(function() {
         var corazon = document.createElement("i");
         corazon.classList.add("fas", "fa-arrow-right", "corazon");
 
-        corazon.setAttribute("data-index", index);
+        corazon.setAttribute("data-index", idsPlaylists[index]);
+
+        console.log("index")
+        console.log(idsPlaylists[index])
         
 
         corazon.addEventListener("click", function() {
@@ -32,23 +35,31 @@ $(document).ready(function() {
             console.log("Playlist seleccionada")
             console.log(playlistIndex)
 
-            idsPlaylists[playlistIndex]
+            var url = '/usuarios/mostrar_playlists/mostrarCancionesPlaylist/' + playlistIndex + '/';
 
-            $.ajax({
-                type: "POST",
-                url: "/usuarios/mostrar_playlists/mostrarCancionesPlaylist/",
-                data: {
-                    playlistId: idsPlaylists[playlistIndex],
-                    // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                },
-                success: function(response) {
-                    console.log(response)
+            var width = 1000;
+            var height = 1000;
+            var left = (screen.width - width) / 2;
+            var top = (screen.height - height) / 2;
+
+            var popup = window.open(url, '_blank', 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
+            popup.focus()
+
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/usuarios/mostrar_playlists/mostrarCancionesPlaylist/",
+            //     data: {
+            //         playlistId: idsPlaylists[playlistIndex],
+            //         // csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            //     },
+            //     success: function(response) {
+            //         console.log(response)
                     
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error al enviar datos a views.py:", error);
-                }
-            });    
+            //     },
+            //     error: function(xhr, status, error) {
+            //         console.error("Error al enviar datos a views.py:", error);
+            //     }
+            // });    
         });
         cancionElement.appendChild(corazon);
 
