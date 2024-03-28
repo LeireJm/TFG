@@ -171,7 +171,7 @@ body, html {
 }
 
 
-/* Parte de la izquierda */
+/* Resto de la página */
 .main-content {
     display: flex;
     flex-grow: 1;
@@ -236,18 +236,6 @@ body, html {
 .section p {
     margin-bottom: 10px;
 }
-
-/* .resize-handle {
-    position: absolute;
-    top: 0;
-    right: -5px; 
-    height: 100%;
-    width: 10px; 
-    cursor: ew-resize; 
-    background-color: #000;
-    z-index: 1; 
-    opacity: 0; 
-} */
 
 
 /* Crear playlist (botón 2) */

@@ -19,7 +19,7 @@
     <!-- Header -->
     <header id="myHeader">
         <section>
-            <h1>Nombre Aplicacion</h1>
+            <h1>Music4U</h1>
             <div class="conte">
                 <br>
 
@@ -41,7 +41,7 @@
         <div class="sidebar" id="sidebar">
             <div class="scrollable-list">
                 <!-- Nombre web -->
-                <h1>Nombre de la web</h1>
+                <h1>Music4U</h1>
 
                 <!-- Barra separadora -->
                 <hr class="separator"> 
@@ -49,12 +49,12 @@
                 <!-- Biblioteca -->
                 <h1 class ='biblioteca'>Biblioteca</h1>
 
-                <span class="favorites">
+                <span class="favorites" id="abrirFavoritos">
                     <i class="far fa-heart"></i>
                     Mis favoritos
                 </span><br><br>
 
-                <span class="myplaylists">
+                <span class="myplaylists" id="abrirPlaylists">
                     <i class="fas fa-music"></i>
                     Mis playlists
                 </span>
@@ -66,16 +66,21 @@
                 <i class="fas fa-trash-alt"></i></span>
                 <br>
 
+                
                 <div class="playlists">
-                    <!-- Mostrar las playlists del usuario -->                   
-                    {% for playlist in playlists %}
-                        <div class="playlist-box">
-                            <i class="fas fa-music"></i>
-                            <a>{{ playlist }}</a>
-                        </div>
-                    {% endfor %}
+                    {% if user.is_authenticated %}
+                        <!-- Si el usuario está autenticado, mostrar las playlists del usuario -->                   
+                        {% for playlist in playlists %}
+                            <div class="playlist-box">
+                                <i class="fas fa-music"></i>
+                                <a>{{ playlist }}</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Debes iniciar sesión para acceder a tus playlists.</p>
+                    {% endif %}
                 </div>
-
+                
             </div>
             <!-- redimensionar la sidebar -->
             <!-- <div class="resize-handle" id="resizeHandle"></div>  -->
@@ -88,7 +93,7 @@
                 <p><strong>Nombre de usuario:</strong> {{ usuario.userName }}</p>
                 <p><strong>Correo electrónico:</strong> {{ usuario.email }}</p>
     
-                <button class="btn-edit">Edit Profile</button>
+                <!-- <button class="btn-edit">Edit Profile</button> -->
                 <a href="/usuarios/logout"><button class="btn-logout">Cerrar sesión</button></a>
             </div>
         </div>

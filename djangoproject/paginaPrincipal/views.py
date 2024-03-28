@@ -331,6 +331,7 @@ def cargar_csv(request):
         for row in csv_data:
 
             cancion = Cancion(
+                id=row[0],
                 artist_name=row[1],
                 track_name = row[2],
                 track_id = row[3],
