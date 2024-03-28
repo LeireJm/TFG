@@ -1,34 +1,29 @@
 html,body { 
 	height: 100%; 
+    background-color: #333;
 }
 
 .global-container{
 	height: 100%; 
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f5f5f5;
+	background-color: #333;
 }
 
 form{
-	font-size: 16px; /* tamaño de la letra */
-	border: 3px solid #000; /*borde de la caja */
+	font-size: 16px; 
+	border: 3px solid #000; 
     padding: 60px;
-    margin: 1px; /* Margen exterior de 20px */
-    background-color: #ffffff; /* Color de fondo gris claro */
+    margin: 1px;
+    background-color: #6c6161;
 }
 
 .card-title{ 
 	font-weight: bold;
 	text-align: center;
+    color:#ffffff;
 }
-
-.btn{
-	font-size: 14px;
-	margin-top:20px;
-}
-
 
 .login-form{ 
 	width:330px;
@@ -36,25 +31,25 @@ form{
 }
 
 .boton_siguiente {
-	border-radius: 10px; /*curvatura del botón*/
-    font-weight: bold; /*letra en negrita*/
+	margin-top: 10px;
     padding: 10px 20px;
-    background-color: #484242; /*color del fondo*/
-    color: #fff;
+    color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    transition: background-color 0.3s ease;
+    background-color: #45a049;
 }
 
 .boton_atras {
-	border-radius: 10px; /*curvatura del botón*/
-    font-weight: bold; /*letra en negrita*/
+	margin-top: 10px;
     padding: 10px 20px;
-    background-color: #484242; /*color del fondo*/
-    color: #fff;
+    color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    transition: background-color 0.3s ease;
+    background-color: #45a049;
 }
 
 .boton_atras a {

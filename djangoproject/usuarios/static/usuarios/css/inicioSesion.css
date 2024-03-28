@@ -1,14 +1,14 @@
 html,body { 
 	height: 100%; 
+	background-color: #333;
 }
 
 .global-container{
 	height: 100%; 
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f5f5f5;
+	background-color: #333;
 }
 
 form{
@@ -16,19 +16,25 @@ form{
 	border: 3px solid #000; /*borde de la caja */
     padding: 60px;
     margin: 1px; /* Margen exterior de 20px */
-    background-color: #ffffff; /* Color de fondo gris claro */
+	background-color: #6c6161;
 }
 
 .card-title{ 
 	font-weight: bold;
 	text-align: center;
+	color:#ffffff;
 }
 
 .btn{
-	font-size: 14px;
-	margin-top:20px;
+	margin-top: 10px;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #45a049;
 }
-
 
 .login-form{ 
 	width:330px;
