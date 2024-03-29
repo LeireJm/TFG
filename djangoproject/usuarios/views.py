@@ -149,7 +149,7 @@ def mostrarFavoritos(request):
 
     print("datos: ", datos)
 
-    return render(request, 'mostrarFavoritos.html', {'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
+    return render(request, 'mostrarFavoritos.html', {'id_canciones': favoritos_usuario, 'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
 
 #mostrar playlists
 def mostrarPlaylists(request):
@@ -206,10 +206,57 @@ def mostrarCancionesPlaylist(request, id):
     # return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 #eliminar cancion favorita del usuario
+@csrf_exempt
 def eliminarCancionFav(request):
-    if request.method == 'POST' and request.is_ajax():
-        cancion_id = request.POST.get('cancion_id')
-        # Aquí puedes eliminar la canción de la base de datos
-        # Eliminar la canción de la base de datos y luego responder con un mensaje de éxito
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        cancion_id = request.POST.get("idCancion")
+
+
+        cancion_id = int(cancion_id)
+
+        user = request.user
+        usuario = Usuario.objects.get(userId=user.userId)
+        
+        lista_favoritos = usuario.favoritos
+
+        if cancion_id in lista_favoritos:
+            lista_favoritos.remove(cancion_id)
+            usuario.save()
+            print("Canción eliminada de la lista de favoritos del usuario correctamente.")
+        else:
+            print("La canción no está en la lista de favoritos del usuario.")
+
+        return JsonResponse({'mensaje': 'Canción eliminada correctamente'})
+    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
+
+#añadir cancion favorita del usuario
+@csrf_exempt
+def anadirCancionFav(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        cancion_id = request.POST.get("idCancion")
+        cancion_id = int(cancion_id)
+
+        user = request.user
+        usuario = Usuario.objects.get(userId=user.userId)
+        lista_favoritos = usuario.favoritos
+
+        print("id de la cancion que vamos a añadir", cancion_id)
+
+        if cancion_id not in lista_favoritos:
+
+            print("lista favoritos antes:", lista_favoritos)
+            
+            lista_favoritos.append(cancion_id)
+            usuario.save()
+
+            print("lista favoritos despues:", lista_favoritos)
+
+            if cancion_id in lista_favoritos:
+                print("Canción añadida de la lista de favoritos del usuario correctamente.")
+            else:
+                print("Canción no añadida a la lista de favoritos del usuario.")
+        else:
+            print("La canción ya está en favoritos")
+
         return JsonResponse({'mensaje': 'Canción eliminada correctamente'})
     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
