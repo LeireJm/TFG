@@ -264,6 +264,18 @@ def porPopularidad(request):
     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 @csrf_exempt
+def estaEnFavoritos(request):
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+        idCancion = request.POST.get("idCancion")
+
+        print("cancion que miro a ver si está: ", idCancion)
+
+        return JsonResponse({'mensaje': 'Está'})
+
+    return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
+
+@csrf_exempt
 def meterCancionPlaylist(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         idCancionNueva = request.POST.get("cancion")
