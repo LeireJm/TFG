@@ -90,9 +90,9 @@ def cosine_genre():
 
     songsAux = songs.copy()
 
-    genre = set(g for G in songsAux['genres'] for g in G)
+    genres = set(g for G in songsAux['genres'] for g in G)
 
-    for g in genre:
+    for g in genres:
         songsAux[g] = songsAux.genres.transform(lambda x: int(g in x))
         
     song_genre = songsAux.drop(columns=col_del)
@@ -436,10 +436,10 @@ def genre_clustering(song_id):
 
     songsAux = songs.copy()
 
-    genre = set(g for G in songsAux['genres'] for g in G)
+    genres = set(g for G in songsAux['genres'] for g in G)
 
-    for g in genre:
-        songsAux[g] = songsAux.genre.transform(lambda x: int(g in x))
+    for g in genres:
+        songsAux[g] = songsAux.genres.transform(lambda x: int(g in x))
         
     song_genre = songsAux.drop(columns=col_del)
     
@@ -469,6 +469,13 @@ def genre_clustering(song_id):
     closest_songs = closest_song_ids[:20]
 
     return closest_songs
+
+def genre_cosine(song_id):
+    sim_scores = list(enumerate(cosine_sim_genre[song_id]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:(20+1)]
+    similar_songs = [i[0] for i in sim_scores]
+    return similar_songs
 
 def features_clustering(options, song_id):
     df = songs[options].copy();
@@ -563,7 +570,8 @@ def first_stage(song_id, options):
         
     else:
         print(song_id)
-        similar_songs_genres = genre_clustering(song_id)
+        #similar_songs_genres = genre_clustering(song_id)
+        similar_songs_genres = genre_cosine(song_id)
         explanation1 = explanation_content(similar_songs_genres, ["genres"], song_id)
         
         if len(options) > 1:
@@ -821,4 +829,4 @@ def recommender_songs(songs_id, options):
 
     print("SONGS FINAL: ", songs)
         
-    return songs[:10]
+    return songs[:10], aux_expl[:10]
