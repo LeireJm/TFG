@@ -33,13 +33,28 @@ $(document).ready(function() {
         },
         success: function(response) {
             console.log(response);
+            //la canción está en mis favoritos, muestro el corazón lleno
+            if (response.mensaje === '0') {
+                console.log("hemos determinado que la canción está")
+                btnLike.classList.remove("far");
+                btnLike.classList.add("fas");
+                btnLike.setAttribute("estado", "lleno");
+            }
+            else{
+                console.log("hemos determinado que la canción no está")
+                btnLike.classList.remove("fas");
+                btnLike.classList.add("far");
+                btnLike.setAttribute("estado", "vacio");
+            }
         },
         error: function(error) {
             console.error(error);
         }
     });
 
-    manejarClicCorazon(btnLike, "canciones[i].nombre", "canciones[i].id");
+    manejarClicCorazon(btnLike, nombre, playlistId);
+
+
 
     function manejarClicCorazon(corazon, nombreCancion, idCancion) {
         corazon.addEventListener("click", function() {
@@ -83,8 +98,6 @@ $(document).ready(function() {
                     }
                 });
             }
-
-            
         });  
     }
 

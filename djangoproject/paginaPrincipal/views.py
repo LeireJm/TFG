@@ -271,7 +271,8 @@ def estaEnFavoritos(request):
 
         print("cancion que miro a ver si está: ", idCancion)
 
-        return JsonResponse({'mensaje': 'Está'})
+    
+        return JsonResponse({'mensaje': '0'})
 
     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
