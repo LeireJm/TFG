@@ -50,7 +50,7 @@ button {
 /* Caja de la canción */
 .song_box {
     position: fixed;
-    top: 45%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #6c6161;
@@ -79,6 +79,10 @@ button {
     margin-bottom: 10px;
 }
 
+.text .explanation{
+    font-size: 10px;
+}
+
 .text a{
     font-size: 25px;
     font-weight: bold;
@@ -87,7 +91,7 @@ button {
 /* Iconos */
 .icons {
     position: absolute;
-    bottom: 50px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;

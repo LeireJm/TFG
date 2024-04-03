@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var indiceActual = 0;
     var indicePop = 0;
+    var indiceExplicacion = 0;
 
     // segunda parte
     var btnLike = document.getElementById('btn-like');
@@ -32,6 +33,7 @@ $(document).ready(function() {
 
     // Si le damos el check, metemos la cancion en la playlist y mostramos otra en función de las canciones que tengamos en la playlist hasta ahora
     btnCheck.addEventListener('click', function() {    
+        console.log("Metemos la cancion en la playlist:", nombre, elementoId)
         $.ajax({
             type: "POST",
             url: "/paginaPrincipal/meterCancionPlaylist/",
@@ -50,14 +52,13 @@ $(document).ready(function() {
                         canciones: selecciones,
                         csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                     },
-                    success: function(respuesta) {            
-                        var cancionesRecomendadas = respuesta.recomendaciones;
+                    success: function(response) {            
+                        var cancionesRecomendadas = response.recomendaciones;
+                        var explicacion = response.explicacion;
             
                         var jsonArray = JSON.parse(cancionesRecomendadas);
                         console.log("JSON")
                         console.log(jsonArray);
-            
-                        // mostrarResultadosRecomendacion(respuesta);
 
                         var song = jsonArray[indiceActual];
                         
@@ -69,15 +70,26 @@ $(document).ready(function() {
                 
                         console.log("Check")
                         console.log(song)
+
+                        indiceExplicacion = 0;
+
+                        var explanationText = explicacion[indiceExplicacion]; // Obtener la explicación correspondiente
+
+                        console.log(explanationText)
             
                         // Ponemos la nueva canción
                         $("#nombre").text(song.track_name);
                         $("#artista").text(song.artist_name);
                         $("#id").text(song.id).hide();
+                        $("#explanation").text(explicacion[indiceExplicacion]);
         
                         nombre = song.track_name
                         artista = song.artist_name
                         elementoId = song.id 
+
+                        indiceExplicacion++;
+
+                        console.log("Indice explicacion: ", indiceExplicacion)
 
                         console.log("Nombre:", nombre);
                         console.log("Artista:", artista);
@@ -135,7 +147,7 @@ $(document).ready(function() {
     function contarCancionesEnPlaylist(playlistId) {
         //Si no hay canciones en la playlist, mostrar por popularidad
         if (selecciones.length === 0) {
-            console.log("La playlist no tiene canciones")
+            console.log("La playlist no tiene canciones, mostramos por popularidad")
 
             $.ajax({
                 type: "POST",
@@ -156,6 +168,7 @@ $(document).ready(function() {
                     $("#nombre").text(song.track_name);
                     $("#artista").text(song.artist_name);
                     $("#id").text(song.id).hide();
+                    $("#explanation").text("Te la recomendamos porque esta canción es popular");
 
                     nombre = song.track_name
                     artista = song.artist_name
@@ -164,15 +177,14 @@ $(document).ready(function() {
                     console.log("canciones aleatorias")
                     console.log(canciones)
 
-                    estaEnFavoritos(elementoId)
-                    
+                    estaEnFavoritos(elementoId)  
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al mostrar canciones aleatorias:", error);
                 }
             });
         } else { //si hay canciones en la playlist, mostrar canciones basadas en las que ya hay en la playlist
-            console.log("La playlist tiene canciones.");
+            console.log("La playlist tiene canciones, mostramos la canción a partir de las canciones de la playlist");
 
             $.ajax({
                 type: "POST",
@@ -181,8 +193,9 @@ $(document).ready(function() {
                     canciones: selecciones,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                 },
-                success: function(respuesta) {
-                    var cancionesRecomendadas = respuesta.recomendaciones;
+                success: function(response) {
+                    var cancionesRecomendadas = response.recomendaciones;
+                    var explicacion = response.explicacion;
                     console.log("La solicitud AJAX se ha completado con éxito");
                     console.log(cancionesRecomendadas);
         
@@ -207,6 +220,10 @@ $(document).ready(function() {
                     $("#nombre").text(song.track_name);
                     $("#artista").text(song.artist_name);
                     $("#id").text(song.id).hide();
+
+            
+                    $("#explanation").text(explicacion[indiceExplicacion]);
+                    indiceExplicacion++;
     
                     nombre = song.track_name
                     artista = song.artist_name

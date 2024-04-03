@@ -16,9 +16,6 @@ $(document).ready(function() {
         console.log("Hemos dado a enviar");
         console.log("Canciones seleccionadas:", cancionesSeleccionadas);
 
-        console.log("opciones seleccionadas mal: ")
-        console.log(opciones_seleccionadas)
-
         opciones_seleccionadas = opciones_seleccionadas.replace(/&#x27;/g, "'");
 
         console.log("opciones seleccionadas bien: ")
@@ -39,10 +36,15 @@ $(document).ready(function() {
             },
             success: function(response) {     
                 var cancionesRecomendadas = response.recomendaciones;
-                console.log("La solicitud AJAX se ha completado con éxito");
+                var explicacion = response.explicacion;
+                console.log("Canciones recomendadas");
                 console.log(cancionesRecomendadas);
+
+                console.log("explicacion canciones")
+                console.log(explicacion)
     
                 jsonArray = JSON.parse(cancionesRecomendadas);
+
                 console.log("JSON")
                 console.log(jsonArray); 
 
@@ -50,7 +52,7 @@ $(document).ready(function() {
 
                 // $('#resultados-seleccion').empty().append(mostrarResultadosRecomendacion(jsonArray));
                 $('#resultados-seleccion').empty();
-                mostrarResultadosRecomendacion(jsonArray);
+                mostrarResultadosRecomendacion(jsonArray, explicacion);
 
                 
             },
@@ -69,7 +71,7 @@ function minutosSegundos(duracionMs) {
     return minutos + ":" + (segundos < 10 ? "0" : "") + segundos; // Agrega un cero delante si los segundos son menores que 10
 }
 
-function mostrarResultadosRecomendacion(resultados) {
+function mostrarResultadosRecomendacion(resultados, explicacion) {
 
     // Limpiar el contenido anterior en #resultados-seleccion
     var resultadosDiv = $("#resultados-seleccion");
@@ -80,9 +82,11 @@ function mostrarResultadosRecomendacion(resultados) {
 
         for (var i = 0; i < resultados.length; i++) {
             var song = resultados[i];
+            var explanationText = explicacion[i]; // Obtener la explicación correspondiente
             resultadosHTML += "<div class='cancion-container'>";
             resultadosHTML += "<h3>" + song.track_name + "</h3>";
             resultadosHTML += "<p>Autor: " + song.artist_name + "</p>";
+            resultadosHTML += "<p> " + explanationText + "</p>"; // Agregar la explicación
             resultadosHTML += "</div>";
         }
         resultadosHTML += "</ul>";

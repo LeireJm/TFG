@@ -615,7 +615,7 @@ def explanation_collaborative(similar_songs, song_id):
 
         song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
         
-        str = "Porque te ha gustado " + song_name + " y teniendo en cuenta los gustos similares a otros usuarios te recomendamos la canción " + song_name_sim 
+        str = "Te lo recomendamos porque te ha gustado " + song_name + " y teniendo en cuenta los gustos similares a otros usuarios te recomendamos la canción " + song_name_sim 
         
         explanation.append(str)
 
@@ -781,7 +781,6 @@ def recommender(song_id, options):
         explanation = aux_explanation.copy()[:10]   
 
     print("list_final:", list_final)
-
 
     #La lista final devuelve los ids de las canciones que se recomiendan.
     #Cambiamos los ids para devolver el nombre de la canción y el artista

@@ -324,12 +324,14 @@ def recomendar_canciones(request):
         print("CANCIONES SELECCIONADAS AHORA")
         print(canciones_seleccionadas)
 
-        canciones_similares = recommender_songs(canciones_seleccionadas, opciones) #pasamos la cancion seleccionada y las opciones
+        canciones_similares, explanation = recommender_songs(canciones_seleccionadas, opciones) #pasamos la cancion seleccionada y las opciones
 
         
         canciones_similares_JSON = canciones_similares.to_json(orient='records')
         print("\nCANCIONES SIMILARES\n")
         print(canciones_similares_JSON)
+
+        print("Explanation: ", explanation)
 
         # canciones_similares_list = [int(item) for item in canciones_similares]
         # print(canciones_similares_list)
@@ -339,7 +341,7 @@ def recomendar_canciones(request):
 
         ####EL PROBLEMA ES QUE SE PASA UN DATAFRAME A UN JSON
 
-        return JsonResponse({"recomendaciones": canciones_similares_JSON})
+        return JsonResponse({"recomendaciones": canciones_similares_JSON, 'explicacion': explanation})
 
 
 def cargar_csv(request):
