@@ -268,11 +268,20 @@ def estaEnFavoritos(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 
         idCancion = request.POST.get("idCancion")
+        idCancion = int(idCancion)
 
         print("cancion que miro a ver si está: ", idCancion)
 
-    
-        return JsonResponse({'mensaje': '0'})
+        user = request.user
+        usuario = Usuario.objects.get(userId=user.userId)
+        lista_favoritos = usuario.favoritos
+
+        print("esta es la lista de favoritos en la que miro: ", lista_favoritos)
+
+        if idCancion in lista_favoritos:
+            return JsonResponse({'mensaje': '0'})
+        else:
+            return JsonResponse({'mensaje': '1'})
 
     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 

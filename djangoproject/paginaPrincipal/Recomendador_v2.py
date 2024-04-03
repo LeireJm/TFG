@@ -362,6 +362,9 @@ def content_based_features(title):
 # La función ***intercale_lists*** sirve para mezclar los resultados del recomendador basado en contenido y el colaborativo.
 
 def intercalate_lists(*l):
+
+    print("aqui hay un error: ", l)
+
     zipped = zip_longest(*l)
     
     list_final = list(chain.from_iterable(zipped))
@@ -471,6 +474,8 @@ def genre_clustering(song_id):
     return closest_songs
 
 def genre_cosine(song_id):
+    song_id = int(song_id)
+
     sim_scores = list(enumerate(cosine_sim_genre[song_id]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:(20+1)]
@@ -478,7 +483,9 @@ def genre_cosine(song_id):
     return similar_songs
 
 def features_clustering(options, song_id):
-    df = songs[options].copy();
+    song_id = int(song_id)
+
+    df = songs[options].copy()
         
     scaler = StandardScaler()
     df_scaled = scaler.fit_transform(df)
@@ -512,6 +519,8 @@ def features_clustering(options, song_id):
 
 def explanation_content(similar_songs, options, song_id):
     explanation = []
+
+    song_id = int(song_id)
         
     for i in range(0, len(similar_songs)):
         song_name = songs[songs["songId"] == song_id]["track_name"].iloc[0]
@@ -562,6 +571,8 @@ def first_stage(song_id, options):
     #similar_songs = [i[0] for i in sim_scores]
     
     # Clustering
+
+    
     
     if 'genres' not in options:
         similar_songs = features_clustering(options, song_id)
@@ -595,14 +606,20 @@ def first_stage(song_id, options):
 
 def explanation_collaborative(similar_songs, song_id):
     explanation = []
+
+    song_id = int(song_id)
         
     for i in range(0, len(similar_songs)):
-        song_name = songs[songs["songId"] == song_id]["track_name"].iloc[0]
+
+        song_name = songs[songs['songId'] == song_id]["track_name"].iloc[0]
+
         song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
         
         str = "Porque te ha gustado " + song_name + " y teniendo en cuenta los gustos similares a otros usuarios te recomendamos la canción " + song_name_sim 
         
         explanation.append(str)
+
+    print("explanation: ", explanation)
         
     return explanation
 
@@ -627,7 +644,10 @@ def second_stage(song_id): # collaborative_recommender
 def third_stage(song_id):
     # Supongamos que 'df' es tu DataFrame que contiene las características de las canciones
     # Primero, normalizamos los datos
-    df = songs.copy();
+
+    song_id = int(song_id)
+
+    df = songs.copy()
     
     col_del = ['songId', 'artist_name', 'track_name', 'track_id','genre', 'genres']
     
@@ -806,8 +826,10 @@ def recommender_songs(songs_id, options):
     # Recorremos todas para obtener la lista de canciones similares de cada canción de seleccionada
     # Luego se hace intersección
     # De la intersección si no se ha llegado a 10 canciones en común, con esa intersección se vuelve a buscar las similares y comunes pero a estas y se añaden en la lista final las que no estén ya.
-    for song_id in ids: 
-        similar_songs.append(recommender(song_id,options))
+    for song_id in ids:
+        s, e = recommender(song_id,options) 
+        similar_songs.append(s)
+        explanation_songs.append(e)
 
  #   print("SIMILAR SONGS: ", *similar_songs)
     
@@ -828,5 +850,6 @@ def recommender_songs(songs_id, options):
     songs['id'] = aux_songs
 
     print("SONGS FINAL: ", songs)
+    print("explicacion final", aux_expl)
         
     return songs[:10], aux_expl[:10]
