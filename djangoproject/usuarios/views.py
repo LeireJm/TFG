@@ -258,5 +258,5 @@ def anadirCancionFav(request):
         else:
             print("La canción ya está en favoritos")
 
-        return JsonResponse({'mensaje': 'Canción eliminada correctamente'})
+        return JsonResponse({'mensaje': 'Canción añadida correctamente'})
     return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})

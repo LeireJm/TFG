@@ -79,8 +79,18 @@ button {
     margin-bottom: 10px;
 }
 
-.text .explanation{
-    font-size: 10px;
+.explanation-container {
+    border: 2px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #8e86864f;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#explanation {
+    color: red; 
+    font-size: 16px;
 }
 
 .text a{

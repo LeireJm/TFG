@@ -21,7 +21,10 @@
     <!-- Contenido de tu página actual -->
     {% if opcion %}
     <button id="botonEnviar" hidden>Enviar</button>
-    <div class="text" id="explanation" data-explanation="{{ explanation }}"> Te la recomendamos porque está en tu lista de favoritos</div>
+    <div class="explanation-container">
+      <div class="text" id="explanation" data-explanation="{{ explanation }}"> Te la recomendamos porque está en tu lista de favoritos</div>
+    </div>
+    
       <div class="song_box">
         
         <div class="icon-container">

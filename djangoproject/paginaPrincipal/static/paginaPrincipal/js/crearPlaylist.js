@@ -87,6 +87,9 @@ $(document).ready(function() {
                         artista = song.artist_name
                         elementoId = song.id 
 
+                        //miro a ver si el usuario tiene la canción en favoritos
+                        estaEnFavoritos(elementoId)
+
                         indiceExplicacion++;
 
                         console.log("Indice explicacion: ", indiceExplicacion)
@@ -140,7 +143,8 @@ $(document).ready(function() {
 
     });
 
-    btnLike.addEventListener('click', function() {    
+    btnLike.addEventListener('click', function() {  
+        console.log("le he dado al icono del corazón")  
         manejarClicCorazon(btnLike, nombre, elementoId);
     });
 
@@ -228,6 +232,9 @@ $(document).ready(function() {
                     nombre = song.track_name
                     artista = song.artist_name
                     elementoId = song.id 
+
+                    //miro a ver si el usuario tiene la canción en favoritos
+                    estaEnFavoritos(elementoId)
                     
                 },
                 error: function(xhr, status, error) {
@@ -268,51 +275,51 @@ $(document).ready(function() {
     }
 
     function manejarClicCorazon(corazon, nombreCancion, idCancion) {
-        corazon.addEventListener("click", function() {
-            // Alternar entre los estados lleno/vacío
-            if (corazon.getAttribute("estado") === "vacio") {
-                corazon.classList.remove("far");
-                corazon.classList.add("fas");
-                corazon.setAttribute("estado", "lleno");
-                console.log("Le gusta la canción:", nombreCancion);
-                console.log("id de la cancion que le gusta", idCancion)
-
-                $.ajax({
-                    url: '/usuarios/mostrar_favoritos/anadir_cancion_fav/',
-                    type: 'POST',
-                    data: {
-                        idCancion: idCancion
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        console.error(error);
-                    }
-                });
-            } else {
-                corazon.classList.remove("fas");
-                corazon.classList.add("far");
-                corazon.setAttribute("estado", "vacio");
-                console.log("No le gusta la canción:", idCancion);
-
-                $.ajax({
-                    url: '/usuarios/mostrar_favoritos/eliminar_cancion_fav/',
-                    type: 'POST',
-                    data: {
-                        idCancion: idCancion
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        console.error(error);
-                    }
-                });
-            }
-        });  
+        // Verificar el estado actual del corazón
+        var estadoActual = corazon.getAttribute("estado");
+    
+        // Alternar entre los estados lleno/vacío
+        if (estadoActual === "vacio") {
+            corazon.classList.remove("far");
+            corazon.classList.add("fas");
+            corazon.setAttribute("estado", "lleno");
+            console.log("Le gusta la canción:", nombreCancion);
+            console.log("id de la cancion que le gusta", idCancion);
+    
+            $.ajax({
+                url: '/usuarios/mostrar_favoritos/anadir_cancion_fav/',
+                type: 'POST',
+                data: {
+                    idCancion: idCancion
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        } else {
+            corazon.classList.remove("fas");
+            corazon.classList.add("far");
+            corazon.setAttribute("estado", "vacio");
+            console.log("No le gusta la canción:", idCancion);
+    
+            $.ajax({
+                url: '/usuarios/mostrar_favoritos/eliminar_cancion_fav/',
+                type: 'POST',
+                data: {
+                    idCancion: idCancion
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
     }
-
     // function mostrarResultadosRecomendacion(resultados) {
 
     //     console.log("resultados")
