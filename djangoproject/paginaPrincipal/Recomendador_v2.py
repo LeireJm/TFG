@@ -21,7 +21,7 @@ from sklearn.metrics.pairwise import euclidean_distances
 from itertools import zip_longest, chain
 from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_distances
-
+from datetime import datetime
 
 # Comenzamos cargando los datasets de las canciones junto a los ratings. El archivo original del dataset de las canciones incluía 1.2 millones de canciones por lo que se ha reducido el dataset a 50000 porque al no usar librerías específicas como Surprise no es eficiente y sobrepasa el uso de la memoria si utilizamos el dataset no reducido.
 
@@ -852,3 +852,24 @@ def recommender_songs(songs_id, options):
     print("explicacion final", aux_expl)
         
     return songs[:10], aux_expl[:10]
+
+def add_rating(song_id, user_id):
+    if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
+        return
+    # Obtener el timestamp actual
+    new_timestamp = datetime.timestamp(datetime.now())
+    # Crear una nueva fila como un diccionario
+    new_row = {'userId': user_id, 'songId': song_id,  'rating': 1, 'timestamp': new_timestamp}
+    # Añadir la nueva fila al DataFrame
+    #global ratings
+    ratings.loc[len(ratings)] = new_row
+    
+def delete_rating(song_id, user_id):
+    if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
+        return
+    # Obtener el timestamp actual
+    new_timestamp = datetime.timestamp(datetime.now())
+    # Añadir la nueva fila al DataFrame
+    #global ratings
+    ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'rating'] = 0
+    ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'timestamp'] = new_timestamp
