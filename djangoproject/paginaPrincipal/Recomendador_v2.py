@@ -873,3 +873,6 @@ def delete_rating(song_id, user_id):
     #global ratings
     ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'rating'] = 0
     ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'timestamp'] = new_timestamp
+    
+def update_ratings():   
+    ratings.to_csv('ratings.csv', index=False)
