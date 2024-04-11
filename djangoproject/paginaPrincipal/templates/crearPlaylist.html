@@ -22,7 +22,7 @@
     {% if opcion %}
     <button id="botonEnviar" hidden>Enviar</button>
     <div class="explanation-container">
-      <div class="text" id="explanation" data-explanation="{{ explanation }}"> Te la recomendamos porque está en tu lista de favoritos</div>
+      <div class="text" id="explanation" data-explanation="{{ explanation }}"> </div>
     </div>
     
       <div class="song_box">
@@ -35,6 +35,8 @@
         <div class="text" id="id" data-id="{{ id }}"></div>
         <div class="text" id="playlistId" data-playlistid="{{ playlistId }}"></div>
 
+        <!-- indica si la primera canción es de favoritos o de populares (populares: 0, favoritos: 1) -->
+        <div class="text" id="primer" data-primer="{{ primer }}"></div>
       </div>
       <div class="icons">
 

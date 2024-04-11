@@ -11,12 +11,18 @@ $(document).ready(function() {
 
     var selecciones = [];
 
-    //por ahora sólo con una canción
     var nombre = document.getElementById('nombre').dataset.nombre;
     var artista = document.getElementById('artista').dataset.artista;
     var elementoId = document.getElementById('id').dataset.id;
 
     var playlistId = document.getElementById('playlistId').dataset.playlistid;
+    //indica si la primera canción es de favoritos o de populares (populares: 0, favoritos: 1)
+    var primer = document.getElementById('primer').dataset.primer; 
+
+    if (primer == 0)
+        $("#explanation").text("Te la recomendamos porque esta canción es popular");
+    else
+        $("#explanation").text("Te la recomendamos porque está en tu lista de favoritos");
 
     console.log("Nombre:", nombre);
     console.log("Artista:", artista);
@@ -320,43 +326,4 @@ $(document).ready(function() {
             });
         }
     }
-    // function mostrarResultadosRecomendacion(resultados) {
-
-    //     console.log("resultados")
-    //     console.log(resultados);
-    //     var cancionesRecomendadas = resultados.recomendaciones;
-    
-    //     // Limpiar el contenido anterior en #resultados-seleccion
-    //     var resultadosDiv = $("#resultados-seleccion");
-    //     resultadosDiv.empty();
-
-    //     if (cancionesRecomendadas.length > 0) {
-    //         console.log(cancionesRecomendadas);
-    //         console.log(cancionesRecomendadas.length);
-    //         var resultadosHTML = "<h2>Canciones recomendadas:</h2><ul>";
-            
-    //         var jsonArray = JSON.parse(cancionesRecomendadas);
-
-
-    //         for (var i = 0; i < jsonArray.length; i++) {
-    //             var song = jsonArray[i];
-    //             resultadosHTML += "<li>" + song.track_name + " - " + song.artist_name + "</li>";
-    //         }
-    //         resultadosHTML += "</ul>";
-
-    //         // for (var i = 0; i < cancionesRecomendadas.length; i++) {
-    //         //     var song = cancionesRecomendadas[i];
-    //         //     console.log(cancionesRecomendadas[i]);
-    //         //     resultadosHTML += "<li>" + song.track_name + " - " + song.artist_name + "</li>";
-    //         // }
-    //         // resultadosHTML += "</ul>";
-    
-    //         // Agregar la lista al contenedor #resultados-seleccion
-    //         resultadosDiv.html(resultadosHTML);
-    //     } else {
-    //         // Mostrar un mensaje si no hay canciones recomendadas
-    //         resultadosDiv.html("<p>No hay canciones recomendadas.</p>");
-    //     }
-    // }
-    
 });

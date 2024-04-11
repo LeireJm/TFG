@@ -57,13 +57,21 @@ def descubrir_listaCanciones(request):
 
     usuario = Usuario.objects.get(userId=user.userId)
 
-    favoritos_usuario = usuario.favoritos
-
-    # Si el usuario tiene más de 20 favoritas
-    if len(favoritos_usuario) > 20: 
-        canciones_aleatorias = random.sample(list(favoritos_usuario), 20)
-    else: #si no tiene más de 20 favoritas
-        canciones_aleatorias = favoritos_usuario
+    #el usuario no tiene ninguna canción en favoritos, mostramos algunas por popularidad
+    if len(usuario.favoritos) == 0:
+        print("EL USUARIO NO TIENE CANCIONES EN FAVORITOS")
+        canciones_populares = Cancion.objects.order_by('-popularity')[:50]
+        canciones_aleatorias_json = random.sample(list(canciones_populares), 20)
+        canciones_aleatorias = []
+        for cancion in canciones_aleatorias_json:
+            canciones_aleatorias.append(cancion.id)
+    else: #si el usuario tiene canciones en favoritos
+        favoritos_usuario = usuario.favoritos
+        # Si el usuario tiene más de 20 favoritas
+        if len(favoritos_usuario) > 20: 
+            canciones_aleatorias = random.sample(list(favoritos_usuario), 20)
+        else: #si no tiene más de 20 favoritas
+            canciones_aleatorias = favoritos_usuario
 
     print("canciones aleatorias: ", canciones_aleatorias)
 
@@ -90,15 +98,6 @@ def descubrir_listaCanciones(request):
     
     datos_json = json.dumps(datos)
 
-    # nombres_favoritos_json = json.dumps(nombreCanciones)
-    # artistas_favoritos_json = json.dumps(artistaCanciones)
-
-    # # print("artist_name: ", artistas_favoritos_json)
-    # # print("track_name: ", nombres_favoritos_json)
-
-
-    # datos = {'id_canciones': canciones_aleatorias, 'nombre_canciones': nombres_favoritos_json, 'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones}
-    
     print("datos: ", datos_json)
 
 
@@ -198,17 +197,28 @@ def crear_playlist(request):
         usuario.save()
    
         if nombreDC == None: #si estamos en crearPlaylist
-            favoritos_usuario = usuario.favoritos
-            
-            #una canción aleatoria de entre las favoritas del usuario
-            cancionAMostrar = random.choice(favoritos_usuario)
+            #si el usuario no tiene canciones en favoritos, mustra por popularidad
+            if len(usuario.favoritos) == 0:
+                canciones_populares = Cancion.objects.order_by('-popularity')[:50]
+
+                canciones_aleatorias = random.sample(list(canciones_populares), 1)
+
+                cancionAMostrar = canciones_aleatorias[0].id
+
+                primer = 0
+            else:
+                favoritos_usuario = usuario.favoritos
+                
+                #una canción aleatoria de entre las favoritas del usuario
+                cancionAMostrar = random.choice(favoritos_usuario)
+                primer = 1
 
             cancion = Cancion.objects.get(id=cancionAMostrar)
             idCancion = cancion.id
             nombre = cancion.track_name
             artista = cancion.artist_name
 
-            return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id})
+            return render(request, 'crearPlaylist.html', {"nombre": nombre, "artista": artista, "id": idCancion , "opcion": 1, 'playlistId': nueva_id, "primer": primer})
         else: #si estamos en descubre canciones
             print("Canciones para meter en la playlist al crearla")
             print(cancionesParaMeterPlaylist)
