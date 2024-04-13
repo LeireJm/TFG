@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Usuario, Playlist, Cancion
+from Recomendador_v2 import add_rating, delete_rating
 import json
 
 #muestra la pantalla de inicio de sesión (cuando /usuarios)
@@ -219,6 +220,8 @@ def eliminarCancionFav(request):
         
         lista_favoritos = usuario.favoritos
 
+        delete_rating(cancion_id, user.userId)
+
         if cancion_id in lista_favoritos:
             lista_favoritos.remove(cancion_id)
             usuario.save()
@@ -241,6 +244,8 @@ def anadirCancionFav(request):
         lista_favoritos = usuario.favoritos
 
         print("id de la cancion que vamos a añadir", cancion_id)
+
+        add_rating(cancion_id, user.userId)
 
         if cancion_id not in lista_favoritos:
 
