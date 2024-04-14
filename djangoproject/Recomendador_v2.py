@@ -853,6 +853,9 @@ def recommender_songs(songs_id, options):
         
     return songs[:10], aux_expl[:10]
 
+def update_ratings():   
+    ratings.to_csv('ratings.csv', index=False)
+
 def add_rating(song_id, user_id):
     if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
         return
@@ -863,6 +866,7 @@ def add_rating(song_id, user_id):
     # Añadir la nueva fila al DataFrame
     #global ratings
     ratings.loc[len(ratings)] = new_row
+    update_ratings()
     
 def delete_rating(song_id, user_id):
     if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
@@ -873,3 +877,4 @@ def delete_rating(song_id, user_id):
     #global ratings
     ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'rating'] = 0
     ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'timestamp'] = new_timestamp
+    update_ratings()
