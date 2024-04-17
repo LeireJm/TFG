@@ -26,6 +26,7 @@
       <div class="canciones-container">
         <h2>Lista de Canciones</h2>
         <!-- botón para enviar las canciones seleccionadas -->
+        <p id="explicacion">Selecciona al menos una canción a partir de las cuale(s) quieres que se te recomiende una lista de canciones</p>
         <button id="botonEnviar">Enviar</button>
           {% for cancion in datos %}
               <div class="cancion" data-id="{{ cancion.id }}" onclick="seleccionarCancion(this)">
@@ -34,8 +35,6 @@
                   <p>Duración: <span class="duracion">{{ cancion.duracion }}</span></p>
               </div>
           {% endfor %}
-          <!-- muestra los resultados de la recomendacion -->
-          
       </div>
     {% elif opcion == 2 %}
     <form method="post" action="/paginaPrincipal/crear_playlist/">

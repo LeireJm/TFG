@@ -32,6 +32,9 @@ $(document).ready(function() {
         corazon.classList.add("fas", "fa-heart", "corazon");
         corazon.setAttribute("estado", "vacio"); // Agregar un atributo personalizado para rastrear el estado
 
+        //miro a ver si el usuario tiene la canción en favoritos
+        estaEnFavoritos(canciones[i].id, corazon)
+
         manejarClicCorazon(corazon, canciones[i].nombre, canciones[i].id); // Pasa el nombre de la canción como parámetro
         cancionElement.appendChild(corazon);
 
@@ -44,15 +47,50 @@ $(document).ready(function() {
         cancionesContainer.appendChild(cancionElement);
     }
 
+    function estaEnFavoritos(elementoId, corazon) {
+        //miro a ver si el usuario tiene la canción en favoritos
+        console.log("elemento id: ", elementoId)
+        $.ajax({
+            url: '/paginaPrincipal/crear_playlist/estaEnFavoritos',
+            type: 'POST',
+            data: {
+                idCancion: elementoId
+            },
+            success: function(response) {
+                console.log(response);
+                //la canción está en mis favoritos, muestro el corazón lleno
+                if (response.mensaje === '0') {
+                    console.log("hemos determinado que la canción está")
+                    corazon.classList.remove("far");
+                    corazon.classList.add("fas");
+                    corazon.setAttribute("estado", "lleno");
+                }
+                else{
+                    console.log("hemos determinado que la canción no está")
+                    corazon.classList.remove("fas");
+                    corazon.classList.add("far");
+                    corazon.setAttribute("estado", "vacio");
+                }
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    }
+
     function manejarClicCorazon(corazon, nombreCancion, idCancion) {
         corazon.addEventListener("click", function() {
+            // Verificar el estado actual del corazón
+            var estadoActual = corazon.getAttribute("estado");
+        
             // Alternar entre los estados lleno/vacío
-            if (corazon.getAttribute("estado") === "vacio") {
+            if (estadoActual === "vacio") {
                 corazon.classList.remove("far");
                 corazon.classList.add("fas");
                 corazon.setAttribute("estado", "lleno");
                 console.log("Le gusta la canción:", nombreCancion);
-
+                console.log("id de la cancion que le gusta", idCancion);
+        
                 $.ajax({
                     url: '/usuarios/mostrar_favoritos/anadir_cancion_fav/',
                     type: 'POST',
@@ -71,7 +109,7 @@ $(document).ready(function() {
                 corazon.classList.add("far");
                 corazon.setAttribute("estado", "vacio");
                 console.log("No le gusta la canción:", idCancion);
-
+        
                 $.ajax({
                     url: '/usuarios/mostrar_favoritos/eliminar_cancion_fav/',
                     type: 'POST',
@@ -86,8 +124,6 @@ $(document).ready(function() {
                     }
                 });
             }
-
-            
-        });  
+        });
     }
 });

@@ -79,6 +79,7 @@ function mostrarResultadosRecomendacion(resultados, explicacion) {
 
     if (resultados.length > 0) {
         var resultadosHTML = "<h2>Playlist recomendada: </h2><ul>";;
+        resultadosHTML += "<p id='explicacion'>A continuación hay una lista con las canciones recomendadas a partir de las seleccionadas.<br> Puedes guardar la playlist o volver a la página principal sin guardarla. </p><ul>";
 
         for (var i = 0; i < resultados.length; i++) {
             var song = resultados[i];

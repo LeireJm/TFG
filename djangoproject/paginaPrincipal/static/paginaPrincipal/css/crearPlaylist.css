@@ -5,6 +5,12 @@ body, html {
     background-color: #333;
 }
 
+p{
+    margin-left: 10%;    
+    color: #f0f0f0;
+    margin-right:10%;
+}
+
 /* pantalla donde pones el nombre de la playlist */
 #contenedor {
     display: flex;
@@ -125,3 +131,7 @@ button {
 .icon .fa-redo-alt{
     color: #363dfc;
 }
+
+
+
+

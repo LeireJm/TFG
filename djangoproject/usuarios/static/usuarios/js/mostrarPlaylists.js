@@ -5,7 +5,6 @@ $(document).ready(function() {
     console.log("id play")
     console.log(idsPlaylists)
 
-    // Llena la lista de canciones
     nombresPlaylists.forEach(function(cancion, index) {
         var cancionElement = document.createElement("div");
         cancionElement.classList.add("cancion"); // Agrega la clase 'cancion'

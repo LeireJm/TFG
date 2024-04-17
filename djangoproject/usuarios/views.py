@@ -185,7 +185,6 @@ def mostrarCancionesPlaylist(request, id):
     artistaCanciones = []
     duracionCanciones = []
 
-
     for cancion in canciones_playlist:
         p = Cancion.objects.get(id=cancion)
         nombreCanciones.append(p.track_name)
@@ -195,6 +194,7 @@ def mostrarCancionesPlaylist(request, id):
     nombres_favoritos_json = json.dumps(nombreCanciones)
     artistas_favoritos_json = json.dumps(artistaCanciones)
 
+    print("id canciones: ", canciones_playlist)
     print("nombres canciones", nombres_favoritos_json)
     print("artistas: ", artistas_favoritos_json)
     print("duracion:", duracionCanciones)
@@ -203,7 +203,7 @@ def mostrarCancionesPlaylist(request, id):
 
     print("datos: ", datos)
 
-    return render(request, 'mostrarCancionesPlaylist.html', {'nombre_playlist': nombre_playlist, 'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
+    return render(request, 'mostrarCancionesPlaylist.html', {'id_canciones': canciones_playlist, 'nombre_playlist': nombre_playlist, 'nombre_canciones': nombres_favoritos_json,'artistas_canciones': artistas_favoritos_json, 'duracion_canciones': duracionCanciones, 'datos': datos})
     # return JsonResponse({'error': 'Se esperaba una solicitud POST y AJAX'})
 
 #eliminar cancion favorita del usuario

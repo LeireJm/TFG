@@ -41,29 +41,24 @@
       <div class="icons">
 
         <div class="icon">
-          <i id="btn-like" class="fas fa-heart"></i>
+          <i id="btn-like" class="fas fa-heart" title="Favoritos"></i>
         </div>
         <div class="icon">
-          <i id="btn-check" class="fas fa-check"></i>
+          <i id="btn-check" class="fas fa-check" title="Meter en la playlist"></i>
         </div>
         <div class="icon">
-          <i id="btn-rep" class="fas fa-redo-alt"></i>
+          <i id="btn-rep" class="fas fa-redo-alt" title="Siguiente canción"></i>
         </div>
         <div class="icon">
-          <i id="btn-enviar" class="fas fa-arrow-right"></i>
+          <i id="btn-enviar" class="fas fa-arrow-right" title="Terminar playlist"></i>
         </div>
-      
 
-        <!-- <button type="button" id="btn-enviar" aria-label="Enviar selecciones">
-          Enviar selecciones
-          <i class="fas fa-arrow-right"></i>
-          <div id="resultados-seleccion"></div>
-      </button> -->
     {% else %}  
       <form method="post" action="/paginaPrincipal/crear_playlist/">
         {% csrf_token %}
         <div id="contenedor">
           <h2>Introduce el nombre de tu playlist:</h2>
+          <p>Instrucciones: se irán mostrando diferentes canciones para que el usuario elija lo que quiere hacer con ella.<br> Pasando el ratón por cada uno de los botones te mostrará la información de cada uno</p>
           <input type="text" id="nombreInput" name="nombreCrearPlaylist" placeholder="Ingresa aquí el nombre" required>
           <button id="botonEnviar">Enviar</button>
         </div>
