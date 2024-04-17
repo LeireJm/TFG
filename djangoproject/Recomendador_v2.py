@@ -361,18 +361,10 @@ def content_based_features(title):
 
 # La función ***intercale_lists*** sirve para mezclar los resultados del recomendador basado en contenido y el colaborativo.
 
-def intercalate_lists(*l):
-
-    print("aqui hay un error: ", l)
-
-    zipped = zip_longest(*l)
-    
-    list_final = list(chain.from_iterable(zipped))
-    
-    # Elimina duplicados usando un conjunto (set)
-    list_final_no_dup = list(set(list_final))
-    
-    return list_final_no_dup
+def intercalate_lists(*lists):
+    max_length = max(len(lst) for lst in lists)
+    interleaved = [item for sublist in zip_longest(*lists) for item in sublist if item is not None]
+    return interleaved[:max_length]
 
 # Ahora vamos a hacer una función que se aquella que se llame cuando se le de al botón de recomendadar (***recommender*** es la función).
 
@@ -517,10 +509,27 @@ def features_clustering(options, song_id):
 
     return closest_songs
 
+def option_toSpanish(options):
+    opciones = []
+    #col_optional = ["popularity", "year", "genres",	"duration_ms"]
+    for o in options:
+        if o == 'popularity':
+            opciones.append('con una popularidad de')
+        if o == 'year':
+            opciones.append('en el año')
+        if o == 'genres':
+            opciones.append('cuyo(s) género(s) son')
+        if o == 'duration_ms':
+            opciones.append('una duración de')
+        
+    return opciones
+
 def explanation_content(similar_songs, options, song_id):
     explanation = []
 
     song_id = int(song_id)
+        
+    opciones = option_toSpanish(options)
         
     for i in range(0, len(similar_songs)):
         song_name = songs[songs["songId"] == song_id]["track_name"].iloc[0]
@@ -531,21 +540,21 @@ def explanation_content(similar_songs, options, song_id):
             stri += "la opción seleccionada ("
         
         options_value = songs[songs["songId"] == song_id][options[0]].iloc[0]
-        stri += options[0] + "=" + str(options_value)
+        stri += opciones[0] + " " + str(options_value)
         
-        for j in range(1, len(options)):
+        for j in range(1, len(opciones)):
             options_value = songs[songs["songId"] == song_id][options[j]].iloc[0]
-            stri += ', ' + options[j] + "=" + str(options_value)
+            stri += ', ' + opciones[j] + "" + str(options_value)
         
         song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
-        stri += "): te recomendamos la canción " + song_name_sim
+        stri += "): te recomendamos la canción " + song_name_sim + ' '
         
         options_value = songs[songs["songId"] == similar_songs[i]][options[0]].iloc[0]
-        stri += options[0] + "=" + str(options_value)
+        stri += opciones[0] + " " + str(options_value) 
         
         for j in range(1, len(options)):
             options_value = songs[songs["songId"] == similar_songs[i]][options[j]].iloc[0]
-            stri += ', ' + options[j] + "=" + str(options_value)
+            stri += ', ' + opciones[j] + " " + str(options_value)
         
         stri += ")"
         
@@ -612,10 +621,8 @@ def explanation_collaborative(similar_songs, song_id):
     for i in range(0, len(similar_songs)):
 
         song_name = songs[songs['songId'] == song_id]["track_name"].iloc[0]
-
-        song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
         
-        str = "Te lo recomendamos porque te ha gustado " + song_name + " y teniendo en cuenta los gustos similares a otros usuarios te recomendamos la canción " + song_name_sim 
+        str = "Te lo recomendamos porque te ha gustado " + song_name + " y teniendo en cuenta los gustos similares a otros usuarios"
         
         explanation.append(str)
 
@@ -685,25 +692,10 @@ def third_stage(song_id):
         
     for i in range(0, len(closest_songs)):
         song_name = songs[songs["songId"] == song_id]["track_name"].iloc[0]
-        stri = "Porque te ha gustado " + song_name + " y teniendo en cuenta las características de la canción ("
-        
-        options_value = songs[songs["songId"] == song_id][features[0]].iloc[0]
-        stri += features[0] + "=" + str(options_value)
-        
-        for j in range(1, len(features)):
-            options_value = songs[songs["songId"] == song_id][features[j]].iloc[0]
-            stri += ', ' + features[j] + "=" + str(options_value)
+        stri = "Porque te ha gustado " + song_name + " y teniendo en cuenta todas las características de la canción"
         
         song_name_sim = songs[songs["songId"] == closest_songs[i]]["track_name"].iloc[0]
-        stri += "): te recomendamos la canción " + song_name_sim 
-        
-        options_value = songs[songs["songId"] == closest_songs[i]][features[0]].iloc[0]
-        stri += features[0] + "=" + str(options_value)
-        
-        for j in range(1, len(features)):
-            options_value = songs[songs["songId"] == closest_songs[i]][features[j]].iloc[0]
-            stri += ', ' + features[j] + "=" + str(options_value)
-        stri += ")"
+        stri += " te recomendamos la canción " + song_name_sim 
         
         explanation.append(stri)
 
