@@ -30,7 +30,10 @@
                 {% if user.is_authenticated %} <!-- si el usuario está auntenticado, le muestra su perfil-->
                     <a href="/usuarios/miPerfil"><i class="fas fa-user"></i>{{ user.userName }}</a>
                 {% else %} <!-- si el usuario no está auntenticado, inicia sesión -->
-                    <a href="/usuarios">Iniciar sesión</a>
+                    <div class="regIni">
+                        <a href="/usuarios">Iniciar sesión</a>
+                        <a href="/usuarios/registro/">Registrarse</a>
+                    </div>
                 {% endif %}
 
             </div>

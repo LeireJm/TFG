@@ -13,7 +13,6 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('miPerfil/', views.perfil, name='miPerfil'),
 
-
     path('registro/', views.registro, name='registro'),
     path('registro/validarRegistro/', views.validarRegistro, name='validar_registro'),
 

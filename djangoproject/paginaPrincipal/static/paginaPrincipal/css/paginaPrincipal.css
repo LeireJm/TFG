@@ -19,15 +19,6 @@ body, html {
     margin-right: 20%;
 }
 
-.conte {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* Alinea los elementos verticalmente */
-    width: 100%;
-    justify-content: flex-start; /* Alinea todos los elementos hacia la derecha */
-    text-decoration: none;
-}
-
 .conte a i.fas.fa-home {
     margin-left: 10%;
     font-size: 24px; /* Aquí puedes ajustar el tamaño según tus necesidades */
@@ -46,6 +37,24 @@ body, html {
     text-decoration: none;
     align-items: center;
 }
+
+.conte {
+    display: flex;
+    align-items: center; /* Centra verticalmente los elementos */
+}
+
+.home-icon {
+    margin-right: 10px; /* Margen entre el icono y el contenedor de inicio de sesión */
+}
+
+.regIni {
+    margin-left: auto; 
+}
+
+.regIni a {
+    margin-left: 10px; 
+}
+  
 
 .conte a i {
     margin-right: 5px;
