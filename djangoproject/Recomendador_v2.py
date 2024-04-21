@@ -525,10 +525,8 @@ def option_toSpanish(options):
     return opciones
 
 def explanation_content(similar_songs, options, song_id):
+    
     explanation = []
-
-    song_id = int(song_id)
-        
     opciones = option_toSpanish(options)
         
     for i in range(0, len(similar_songs)):
@@ -539,12 +537,34 @@ def explanation_content(similar_songs, options, song_id):
         else:
             stri += "la opción seleccionada ("
         
-        options_value = songs[songs["songId"] == song_id][options[0]].iloc[0]
-        stri += opciones[0] + " " + str(options_value)
+        if "duration_ms" != options[0]:
+            options_value = songs[songs["songId"] == song_id][options[0]].iloc[0]
+            stri += opciones[0] + " " + str(options_value)
+        else:
+            options_value = songs[songs["songId"] == song_id][options[0]].iloc[0]
+            # Convertir milisegundos a segundos
+            total_seconds = options_value / 1000
+
+            # Calcular minutos y segundos
+            mins = int(total_seconds // 60)
+            secs = int(total_seconds % 60)
+            
+            stri += opciones[0] + " " + str(mins) + ":" + str(secs)
         
         for j in range(1, len(opciones)):
-            options_value = songs[songs["songId"] == song_id][options[j]].iloc[0]
-            stri += ', ' + opciones[j] + "" + str(options_value)
+            if "duration_ms" != options[j]:
+                options_value = songs[songs["songId"] == song_id][options[j]].iloc[0]
+                stri += ', ' + opciones[j] + "" + str(options_value)
+            else:
+                options_value = songs[songs["songId"] == song_id][options[j]].iloc[0]
+                # Convertir milisegundos a segundos
+                total_seconds = options_value / 1000
+
+                # Calcular minutos y segundos
+                mins = int(total_seconds // 60)
+                secs = int(total_seconds % 60)
+                
+                stri += opciones[j] + " " + str(mins) + ":" + str(secs)
         
         song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
         stri += "): te recomendamos la canción " + song_name_sim + ' '
