@@ -496,13 +496,10 @@ def features_clustering(options, song_id):
     same_cluster_df = df[df['cluster'] == song_cluster]
 
     # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
-    distances = cosine_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.loc[song_id].drop('cluster').values.reshape(1, -1))
-
-    # Calcula las similitudes como el exponencial negativo de las distancias
-    similarities = np.exp(-distances)
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.drop('cluster', axis=1).loc[song_id].values.reshape(1, -1))
 
     # Obtiene los índices de las canciones ordenadas por similitud (de mayor a menor)
-    closest_song_ids = np.argsort(similarities.squeeze())[::-1]
+    closest_song_ids = np.argsort(distances.squeeze())
 
     # Obtiene los índices de las canciones más similares
     closest_songs = closest_song_ids[:20]
@@ -570,13 +567,34 @@ def explanation_content(similar_songs, options, song_id):
         
         song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
         stri += "): te recomendamos la canción " + song_name_sim + ' '
-        
-        options_value = songs[songs["songId"] == similar_songs[i]][options[0]].iloc[0]
-        stri += opciones[0] + " " + str(options_value) 
+        if "duration_ms" != options[0]:
+            options_value = songs[songs["songId"] == similar_songs[i]][options[0]].iloc[0]
+            stri += opciones[0] + " " + str(options_value)
+        else:
+            options_value = songs[songs["songId"] == similar_songs[i]][options[0]].iloc[0]
+            # Convertir milisegundos a segundos
+            total_seconds = options_value / 1000
+
+            # Calcular minutos y segundos
+            mins = int(total_seconds // 60)
+            secs = int(total_seconds % 60)
+            
+            stri += opciones[0] + " " + str(mins) + ":" + str(secs)
         
         for j in range(1, len(options)):
-            options_value = songs[songs["songId"] == similar_songs[i]][options[j]].iloc[0]
-            stri += ', ' + opciones[j] + " " + str(options_value)
+            if "duration_ms" != options[j]:
+                options_value = songs[songs["songId"] == similar_songs[i]][options[j]].iloc[0]
+                stri += ', ' + opciones[j] + "" + str(options_value)
+            else:
+                options_value = songs[songs["songId"] == similar_songs[i]][options[j]].iloc[0]
+                # Convertir milisegundos a segundos
+                total_seconds = options_value / 1000
+
+                # Calcular minutos y segundos
+                mins = int(total_seconds // 60)
+                secs = int(total_seconds % 60)
+                
+                stri += opciones[j] + " " + str(mins) + ":" + str(secs)
         
         stri += ")"
         
@@ -699,7 +717,7 @@ def third_stage(song_id):
     same_cluster_df = df[df['cluster'] == song_cluster]
 
     # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
-    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.loc[song_id].drop('cluster').values.reshape(1, -1))
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.drop('cluster', axis=1).loc[song_id].values.reshape(1, -1))
 
     # Obtiene los índices de las canciones ordenadas por distancia (de menor a mayor)
     closest_song_ids = np.argsort(distances.squeeze())
@@ -739,11 +757,11 @@ def idANombre(songs_id):
 
 # La función ***recommender*** es el recomendador final que devuelve las canciones más parecidas dada una canción seleccionada y los atributos a tener en cuenta, estos últimos pueden ser ninguno y directamente se pasa a un filtrado colaborativo.
 # ÚNICA FUNCIÓN A USAR!!!
-def recommender(song_id, options):
+def recommender(song_id, options, user_id):
     # Primera fase: consiste en la obtención de la lista de canciones parecidas que cumplan con los atributos que el usuario ha elegido.
     list_songs_content = [] # Lista de canciones recomendadas basadas
 
-    
+    user_id = int(user_id)
     
     if len(options) != 0:  #si hemos marcado opciones
         list_songs_content, explanation_1 = first_stage(song_id, options)
@@ -751,12 +769,13 @@ def recommender(song_id, options):
     print("Primera fase superada: ", list_songs_content)
 
     # Segunda fase: filtrado colaborativo (si la lista es demasiado grande)
-    list_songs_collaborative, explanation_2 = second_stage(song_id)
-
+    num_ratings = len(ratings[ratings['userId'] == user_id])
+    
+    if num_ratings > 0:
+        list_songs_collaborative, explanation_2 = second_stage(song_id)
     list_final = []
 
-
-    if len(list_songs_content) > 10: # Es necesario hacer la intersección -> segunda fase
+    if len(list_songs_content) > 10 and len(list_songs_collaborative) != 0: # Es necesario hacer la intersección -> segunda fase
         aux = intercalate_lists(list_songs_content, list_songs_collaborative)
         aux_explanation = intercalate_lists(explanation_1, explanation_2)
 
@@ -769,7 +788,7 @@ def recommender(song_id, options):
         explanation = aux_explanation.copy()[:10]
         
     elif len(list_songs_content) == 0:
-        if len(list_songs_collaborative) == 0:
+        if len(list_songs_collaborative) == 0 or num_ratings == 0:
             aux, aux_explanation = third_stage(song_id)
         else: 
             aux = list_songs_collaborative
@@ -828,7 +847,7 @@ def merge_lists(l1, l2, l3):
 # In[97]:
 
 
-def recommender_songs(songs_id, options):
+def recommender_songs(songs_id, options, user_id):
 
     ret = []
     
@@ -840,7 +859,7 @@ def recommender_songs(songs_id, options):
     # Luego se hace intersección
     # De la intersección si no se ha llegado a 10 canciones en común, con esa intersección se vuelve a buscar las similares y comunes pero a estas y se añaden en la lista final las que no estén ya.
     for song_id in ids:
-        s, e = recommender(song_id,options) 
+        s, e = recommender(song_id,options,user_id) 
         similar_songs.append(s)
         explanation_songs.append(e)
 
