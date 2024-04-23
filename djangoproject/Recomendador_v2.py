@@ -496,13 +496,15 @@ def features_clustering(options, song_id):
     same_cluster_df = df[df['cluster'] == song_cluster]
 
     # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
-    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.drop('cluster', axis=1).loc[song_id].values.reshape(1, -1))
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), df.loc[song_id].drop('cluster').values.reshape(1, -1))
 
     # Obtiene los índices de las canciones ordenadas por similitud (de mayor a menor)
     closest_song_ids = np.argsort(distances.squeeze())
 
     # Obtiene los índices de las canciones más similares
-    closest_songs = closest_song_ids[:20]
+    closest_songs = closest_song_ids[:21]
+
+    closest_songs = [songid for songid in closest_songs if songid != song_id][:20]
 
     return closest_songs
 
@@ -717,14 +719,15 @@ def third_stage(song_id):
     same_cluster_df = df[df['cluster'] == song_cluster]
 
     # Calcula las distancias euclidianas entre la canción y todas las demás canciones en el mismo cluster
-    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), same_cluster_df.drop('cluster', axis=1).loc[song_id].values.reshape(1, -1))
+    distances = euclidean_distances(same_cluster_df.drop('cluster', axis=1), df.loc[song_id].drop('cluster').values.reshape(1, -1))
 
     # Obtiene los índices de las canciones ordenadas por distancia (de menor a mayor)
     closest_song_ids = np.argsort(distances.squeeze())
 
     # Obtiene los índices de las canciones más cercanas
-    closest_songs = closest_song_ids[:20]
-    #closest_songs = same_cluster_df.iloc[closest_song_ids[:20]]
+    closest_songs = closest_song_ids[:21]
+
+    closest_songs = [songid for songid in closest_songs if songid != song_id][:20]
     
     features = ['popularity', 'year', 'danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms', 'time_signature']
     
