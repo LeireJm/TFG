@@ -22,16 +22,22 @@
     <header id="myHeader">
         <section>
             <h1>Music4U</h1>
-            <div class="conte">
-                <br>
+            <div class="header-content">
 
+                <div class="left-content">
                 <a href="/paginaPrincipal"><i class="fas fa-home"></i></a>
+                </div>
 
+                <div class="right-content">
                 {% if user.is_authenticated %} <!-- si el usuario está auntenticado, le muestra su perfil-->
                     <a href="/usuarios/miPerfil"><i class="fas fa-user"></i>{{ user.userName }}</a>
                 {% else %} <!-- si el usuario no está auntenticado, inicia sesión -->
-                    <a href="/usuarios">Iniciar sesión</a>
+                    <div class="regIni">
+                        <a href="/usuarios">Iniciar sesión</a>
+                        <a href="/usuarios/registro/">Registrarse</a>
+                    </div>
                 {% endif %}
+                </div>
 
             </div>
         </section>

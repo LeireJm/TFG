@@ -528,6 +528,8 @@ def explanation_content(similar_songs, options, song_id):
     
     explanation = []
     opciones = option_toSpanish(options)
+
+    song_id = int(song_id)
         
     for i in range(0, len(similar_songs)):
         song_name = songs[songs["songId"] == song_id]["track_name"].iloc[0]

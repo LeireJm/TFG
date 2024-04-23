@@ -6,64 +6,56 @@ body, html {
 
 /* HEADER */
 #myHeader {
-    background-color: #333; /* Color de fondo del encabezado */
-    color: #fff; /* Color del texto en el encabezado */
-    padding: 0.5%; /* Espaciado interno del encabezado */
-    text-align: center; /* Alineación del texto en el centro */
-    display: flex;
-    flex-direction: column;
+    background-color: #333;
+    color: #fff;
+    padding: 0.5%;
+    text-align: center;
 }
 
-#myHeader h1 {
-    margin: 0.5%; /* Elimina el margen superior e inferior del título */
+#myHeader h1{
     margin-right: 20%;
 }
 
-.conte a i.fas.fa-home {
-    margin-left: 10%;
-    font-size: 24px; /* Aquí puedes ajustar el tamaño según tus necesidades */
-}
-
-.conte a i.fas.fa-user {
-    margin-left: 10%;
-    font-size: 20px; /* Aquí puedes ajustar el tamaño según tus necesidades */
-}
-
-.conte a {
-    display: inline-flex;
-    color: #fff; /* Color del texto de los enlaces */
-    margin-left: 10px; /* Ajusta la separación entre los elementos */
-    margin-right: 1150px; /* Ajusta la separación entre los elementos */
-    text-decoration: none;
+.header-content {
+    display: flex;
     align-items: center;
 }
 
-.conte {
-    display: flex;
-    align-items: center; /* Centra verticalmente los elementos */
+.header-content .left-content {
+    margin-left: 1%;
 }
 
-.home-icon {
-    margin-right: 10px; /* Margen entre el icono y el contenedor de inicio de sesión */
+.header-content .right-content {
+    margin-left: 68%;
 }
 
 .regIni {
-    margin-left: auto; 
+    display: flex;
+    align-items: center;
+}
+
+.header-content a {
+    color: #fff; 
+}
+
+.header-content a .fa-home {
+    font-size: 27px; 
+    color: #fff; 
+}
+
+.header-content a .fa-user {
+    font-size: 20px; 
+    color: #fff; 
+}
+
+.regIni {
+    margin-left: auto; /* Empuja los enlaces a la derecha */
 }
 
 .regIni a {
-    margin-left: 10px; 
+    margin-left: 10px;
+    color: #fff;
 }
-  
-
-.conte a i {
-    margin-right: 5px;
-}
-
-.conte a:hover {
-    text-decoration: underline; /* Subrayado de los enlaces al pasar el mouse */
-} 
-
 
 /* Barra lateral */
 .sidebar {
@@ -235,7 +227,6 @@ body, html {
     background-color: #ccc; 
     color: #666;
 }
-
 
 .section h2 {
     margin-bottom: 10px;
