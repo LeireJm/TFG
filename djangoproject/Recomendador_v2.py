@@ -894,18 +894,25 @@ def update_ratings():
 
 def add_rating(song_id, user_id):
     if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
-        return
-    # Obtener el timestamp actual
-    new_timestamp = datetime.timestamp(datetime.now())
-    # Crear una nueva fila como un diccionario
-    new_row = {'userId': user_id, 'songId': song_id,  'rating': 1, 'timestamp': new_timestamp}
-    # Añadir la nueva fila al DataFrame
-    #global ratings
-    ratings.loc[len(ratings)] = new_row
+        # Obtener el timestamp actual
+        new_timestamp = datetime.timestamp(datetime.now())
+        # Añadir la nueva fila al DataFrame
+        #global ratings
+        ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'rating'] = 1
+        ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'timestamp'] = new_timestamp
+    else:
+        # Obtener el timestamp actual
+        new_timestamp = datetime.timestamp(datetime.now())
+        # Crear una nueva fila como un diccionario
+        new_row = {'userId': user_id, 'songId': song_id,  'rating': 1, 'timestamp': new_timestamp}
+        # Añadir la nueva fila al DataFrame
+        #global ratings
+        ratings.loc[len(ratings)] = new_row
+    
     update_ratings()
     
 def delete_rating(song_id, user_id):
-    if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
+    if not((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
         return
     # Obtener el timestamp actual
     new_timestamp = datetime.timestamp(datetime.now())
