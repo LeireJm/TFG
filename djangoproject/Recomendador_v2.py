@@ -779,10 +779,10 @@ def recommender(song_id, options, user_id):
         aux = intercalate_lists(list_songs_content, list_songs_collaborative)
         aux_explanation = intercalate_lists(explanation_1, explanation_2)
 
-        if song_id in aux: 
-            index_aux = aux.index(song_id)
-            aux_explanation.pop(index_aux)             
-            aux.remove(song_id)
+        #if song_id in aux: 
+        #    index_aux = aux.index(song_id)
+        #    aux_explanation.pop(index_aux)             
+        #    aux.remove(song_id)
             
         list_final = aux.copy()[:10]
         explanation = aux_explanation.copy()[:10]
@@ -794,10 +794,10 @@ def recommender(song_id, options, user_id):
             aux = list_songs_collaborative
             aux_explanation = explanation_2
         
-        if song_id in aux:
-            index_aux = aux.index(song_id)
-            aux_explanation.pop(index_aux)       
-            aux.remove(song_id)
+        #if song_id in aux:
+        #    index_aux = aux.index(song_id)
+        #    aux_explanation.pop(index_aux)       
+        #    aux.remove(song_id)
             
         list_final = aux.copy()[:10]
         explanation = aux_explanation.copy()[:10]
@@ -805,10 +805,10 @@ def recommender(song_id, options, user_id):
         aux = list_songs_content
         aux_explanation = explanation_1
         
-        if song_id in aux:
-            index_aux = aux.index(song_id)
-            aux_explanation.pop(index_aux)            
-            aux.remove(song_id)
+        #if song_id in aux:
+        #    index_aux = aux.index(song_id)
+        #    aux_explanation.pop(index_aux)            
+        #    aux.remove(song_id)
             
         list_final = aux.copy()[:10]
         explanation = aux_explanation.copy()[:10]   
