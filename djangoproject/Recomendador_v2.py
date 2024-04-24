@@ -46,7 +46,6 @@ import os
 songs = pd.read_csv('spotify_data_mod_llaves.csv')
 ratings = pd.read_csv('rating2.csv')
 
-
 # ### Explicación de los atributos de las canciones
 
 # cargamos las primeras filas para ver las columnas del dataset

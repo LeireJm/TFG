@@ -334,7 +334,9 @@ def recomendar_canciones(request):
         print("CANCIONES SELECCIONADAS AHORA")
         print(canciones_seleccionadas)
 
-        canciones_similares, explanation = recommender_songs(canciones_seleccionadas, opciones) #pasamos la cancion seleccionada y las opciones
+        user = request.user
+
+        canciones_similares, explanation = recommender_songs(canciones_seleccionadas, opciones, user.userId) #pasamos la cancion seleccionada y las opciones
 
         
         canciones_similares_JSON = canciones_similares.to_json(orient='records')
