@@ -89,37 +89,32 @@
                 </div>
                 
             </div>
-            <!-- redimensionar la sidebar -->
-            <!-- <div class="resize-handle" id="resizeHandle"></div>  -->
         </div>
 
         <div class="main-content">
             <!-- Descubre nuevas canciones -->
             <div class="section">
                 <h2>Descubre nuevas canciones</h2>
-                <p>¡Explora nuevas canciones y encuentra nueva música a partir de las canciones que te gustan!</p>
                 {% if user.is_authenticated %}
                     <!-- Si el usuario está autenticado, el botón estará habilitado -->
-                    <!-- <a href="/paginaPrincipal/lista_canciones"><button>Descubrir</button></a> -->
+                    <p>¡Explora nuevas canciones y encuentra nueva música a partir de las canciones que te gustan!</p>
                     <button id="descubrir">Descubrir</button></a>
-                    <!-- <img src="ruta_de_la_imagen.jpg" alt="Imagen rectangular"> -->
                 {% else %}
                 <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
-                    <p>Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
+                    <p id="aviso">Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
                     <button id="descubrir" disabled>Descubrir</button></a>
                 {% endif %}
             </div>
             <!-- Crear nueva playlist -->
             <div class="section">
                 <h2>Crear playlist</h2>
-                <p>¡Crea una playlist perfecta y fusiona las canciones que prefieras para escucharlas sin parar!</p>
                 {% if user.is_authenticated %}
                     <!-- Si el usuario está autenticado, el botón estará habilitado -->
-                    <!-- <a href="/paginaPrincipal/crear_playlist" id="crear_playlist"><button>Crear</button></a> -->
+                    <p>¡Crea una playlist perfecta y fusiona las canciones que prefieras para escucharlas sin parar!</p>
                     <button id="crear_playlist">Crear</button></a>
                 {% else %}
                 <!-- Si el usuario no está autenticado, el botón estará deshabilitado -->
-                    <p>Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
+                    <p id="aviso">Debes iniciar sesión para acceder a las funcionalidades de la web.</p>
                     <button id="crear_playlist" disabled>Crear</button></a>
                 {% endif %}
             </div>

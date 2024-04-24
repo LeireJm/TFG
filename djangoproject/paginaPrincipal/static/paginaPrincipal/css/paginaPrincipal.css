@@ -183,12 +183,13 @@ body, html {
 }
 
 .main-content .section {
-    display: flex;
+    width: 40%; 
+    height: 60%;
     flex-direction: column;
-    align-items: center; /* Centra el contenido horizontalmente */
-    text-align: center; /* Centra el texto horizontalmente */
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
     margin-right: 300px;
-    margin-bottom: 20px; /* Margen entre las secciones */
     padding: 20px;
     background-color: #6c6161;
     border-radius: 50px;
@@ -235,6 +236,10 @@ body, html {
   
 .section p {
     margin-bottom: 10px;
+}
+
+#aviso {
+    color: red;
 }
 
 /* Crear playlist (botón 2) */
