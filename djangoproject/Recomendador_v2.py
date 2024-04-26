@@ -920,3 +920,7 @@ def delete_rating(song_id, user_id):
     ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'rating'] = 0
     ratings.loc[(ratings['userId'] == user_id) & (ratings['songId'] == song_id), 'timestamp'] = new_timestamp
     update_ratings()
+    
+def new_ratings(user_id):
+    global ratings
+    ratings = ratings[ratings["userId"] != user_id]
