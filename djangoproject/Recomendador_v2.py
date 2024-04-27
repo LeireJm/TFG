@@ -856,6 +856,8 @@ def recommender_songs(songs_id, options, user_id):
     similar_songs = []
     explanation_songs = []
 
+    user_id = int(user_id)
+
     ids = songs_id.copy() # Copiamos los ids pasados
     # Recorremos todas para obtener la lista de canciones similares de cada canción de seleccionada
     # Luego se hace intersección

@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Usuario, Playlist, Cancion
-from Recomendador_v2 import add_rating, delete_rating
+from Recomendador_v2 import add_rating, delete_rating, new_ratings
 import json
 
 #muestra la pantalla de inicio de sesión (cuando /usuarios)
@@ -59,6 +58,8 @@ def validarRegistro(request):
                     #autenticar usuario
                     user = authenticate(request, email=email, password=password)
                     login(request, user)
+
+                    new_ratings(user.userId)
                     return redirect('/paginaPrincipal')  # Redirige a la página principal si el registro es exitoso
 
 
