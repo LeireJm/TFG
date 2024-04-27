@@ -891,9 +891,11 @@ def recommender_songs(songs_id, options, user_id):
     return songs[:10], aux_expl[:10]
 
 def update_ratings():   
+    global ratings
     ratings.to_csv('ratings.csv', index=False)
 
 def add_rating(song_id, user_id):
+    global ratings
     if ((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
         # Obtener el timestamp actual
         new_timestamp = datetime.timestamp(datetime.now())
@@ -913,6 +915,7 @@ def add_rating(song_id, user_id):
     update_ratings()
     
 def delete_rating(song_id, user_id):
+    global ratings
     if not((ratings['userId'] == user_id) & (ratings['songId'] == song_id)).any():
         return
     # Obtener el timestamp actual
