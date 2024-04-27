@@ -926,3 +926,4 @@ def delete_rating(song_id, user_id):
 def new_ratings(user_id):
     global ratings
     ratings = ratings[ratings["userId"] != user_id]
+    update_ratings()
