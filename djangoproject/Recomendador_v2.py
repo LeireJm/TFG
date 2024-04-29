@@ -514,7 +514,7 @@ def option_toSpanish(options):
         if o == 'popularity':
             opciones.append('con una popularidad de')
         if o == 'year':
-            opciones.append('en el año')
+            opciones.append('del año')
         if o == 'genres':
             opciones.append('cuyo(s) género(s) son')
         if o == 'duration_ms':
@@ -552,9 +552,14 @@ def explanation_content(similar_songs, options, song_id):
             stri += opciones[0] + " " + str(mins) + ":" + str(secs)
         
         for j in range(1, len(opciones)):
+            if j == len(opciones)-1:
+                stri += ' y '
+            else:
+                stri += ', '
+            
             if "duration_ms" != options[j]:
                 options_value = songs[songs["songId"] == song_id][options[j]].iloc[0]
-                stri += ', ' + opciones[j] + "" + str(options_value)
+                stri += opciones[j] + " " + str(options_value)
             else:
                 options_value = songs[songs["songId"] == song_id][options[j]].iloc[0]
                 # Convertir milisegundos a segundos
@@ -567,7 +572,8 @@ def explanation_content(similar_songs, options, song_id):
                 stri += opciones[j] + " " + str(mins) + ":" + str(secs)
         
         song_name_sim = songs[songs["songId"] == similar_songs[i]]["track_name"].iloc[0]
-        stri += "): te recomendamos la canción " + song_name_sim + ' '
+        stri += "): te recomendamos la canción " + song_name_sim + ' ('
+                
         if "duration_ms" != options[0]:
             options_value = songs[songs["songId"] == similar_songs[i]][options[0]].iloc[0]
             stri += opciones[0] + " " + str(options_value)
@@ -583,9 +589,14 @@ def explanation_content(similar_songs, options, song_id):
             stri += opciones[0] + " " + str(mins) + ":" + str(secs)
         
         for j in range(1, len(options)):
+            if j == len(options)-1:
+                stri += ' y '
+            else:
+                stri += ', '
+                
             if "duration_ms" != options[j]:
                 options_value = songs[songs["songId"] == similar_songs[i]][options[j]].iloc[0]
-                stri += ', ' + opciones[j] + "" + str(options_value)
+                stri += opciones[j] + " " + str(options_value)
             else:
                 options_value = songs[songs["songId"] == similar_songs[i]][options[j]].iloc[0]
                 # Convertir milisegundos a segundos
@@ -640,7 +651,7 @@ def first_stage(song_id, options):
             options_aux.remove('genres') 
             
             similar_songs_features = features_clustering(options_aux,song_id)
-            explanation2 = explanation_content(similar_songs_features, options, song_id)
+            explanation2 = explanation_content(similar_songs_features, options_aux, song_id)
             
             similar_songs = intercalate_lists(similar_songs_genres, similar_songs_features)[:20]
             explanation = intercalate_lists(explanation1, explanation2)[:20]
