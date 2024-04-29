@@ -773,6 +773,7 @@ def idANombre(songs_id):
 def recommender(song_id, options, user_id):
     # Primera fase: consiste en la obtención de la lista de canciones parecidas que cumplan con los atributos que el usuario ha elegido.
     list_songs_content = [] # Lista de canciones recomendadas basadas
+    list_songs_collaborative = []
 
     user_id = int(user_id)
     
@@ -801,6 +802,7 @@ def recommender(song_id, options, user_id):
         explanation = aux_explanation.copy()[:10]
         
     elif len(list_songs_content) == 0:
+        print("list_songs collaborative: ", list_songs_collaborative)
         if len(list_songs_collaborative) == 0 or num_ratings == 0:
             aux, aux_explanation = third_stage(song_id)
         else: 
