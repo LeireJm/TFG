@@ -78,12 +78,16 @@ def descubrir_listaCanciones(request):
     nombreCanciones = []
     artistaCanciones = []
     duracionCanciones = []
+    generoCanciones = []
+    anoCanciones = []
 
     for cancion in canciones_aleatorias:
         p = Cancion.objects.get(id=cancion)
         nombreCanciones.append(p.track_name)
         artistaCanciones.append(p.artist_name)
         duracionCanciones.append(p.duration_ms)
+        generoCanciones.append(p.genres)
+        anoCanciones.append(p.year)
     
     datos = []
 
@@ -92,7 +96,9 @@ def descubrir_listaCanciones(request):
             'id': canciones_aleatorias[i],
             'nombre': nombreCanciones[i],
             'artista': artistaCanciones[i],
-            'duracion': duracionCanciones[i]
+            'duracion': duracionCanciones[i],
+            'genero': generoCanciones[i],
+            'ano': anoCanciones[i]
         }
         datos.append(cancion_info)
     
