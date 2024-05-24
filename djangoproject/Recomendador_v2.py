@@ -905,7 +905,7 @@ def recommender_songs(songs_id, options, user_id):
 
 def update_ratings():   
     global ratings
-    ratings.to_csv('ratings.csv', index=False)
+    ratings.to_csv('rating2.csv', index=False)
 
 def add_rating(song_id, user_id):
     global ratings
